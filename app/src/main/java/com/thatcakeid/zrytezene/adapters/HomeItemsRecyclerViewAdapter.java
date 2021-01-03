@@ -105,9 +105,6 @@ public class HomeItemsRecyclerViewAdapter extends RecyclerView.Adapter<HomeItems
         TextView music_comment_count;
 
         ImageView music_like;
-        ImageView music_dislike;
-
-        ImageView music_share;
 
         ImageView music_comment;
 
@@ -133,9 +130,6 @@ public class HomeItemsRecyclerViewAdapter extends RecyclerView.Adapter<HomeItems
             music_comment_count = itemView.findViewById(R.id.textView4);
 
             music_like = itemView.findViewById(R.id.like_item);
-            music_dislike = itemView.findViewById(R.id.dislike_item);
-
-            music_share = itemView.findViewById(R.id.share_item);
 
             music_comment = itemView.findViewById(R.id.comment_item);
 

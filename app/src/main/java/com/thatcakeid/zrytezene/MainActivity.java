@@ -51,12 +51,12 @@ public class MainActivity extends AppCompatActivity {
                                 PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
 
                                 // Get the client's app version and compare it with the one in the server
-                                if ((int)document.get("version") > packageInfo.versionCode) {
+                                if ((int)((long)document.get("version")) > packageInfo.versionCode) {
                                     // There's a newer version!
                                     // TODO: implements update dialog here
                                 } else {
                                     // Go to the home screen
-                                    Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                                    Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
                                     startActivity(intent);
                                 }
 

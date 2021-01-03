@@ -26,45 +26,20 @@
             android:id="@+id/item_top_part"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:drawable/sym_def_app_icon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/image_overlay"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:background="#900DDF6C"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <TextView
-                android:id="@+id/uploader_item"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:text="Uploaded by Someone"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/musicname_item"
-                app:layout_constraintTop_toBottomOf="@+id/musicname_item" />
-
             <ImageView
-                android:id="@+id/share_item"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:id="@+id/image_overlay"
+                android:layout_width="75dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_share"
-                app:tint="#000000" />
+                app:srcCompat="@drawable/ic_zrytezene">
+
+            </ImageView>
 
             <TextView
                 android:id="@+id/musicname_item"
@@ -72,11 +47,23 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                android:singleLine="true"
                 android:text="Music Name"
                 android:textColor="#000000"
-                android:textSize="24sp"
-                app:layout_constraintStart_toStartOf="parent"
+                android:textSize="18sp"
+                app:layout_constraintStart_toEndOf="@id/image_overlay"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/uploader_item"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:singleLine="true"
+                android:text="Someone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/musicname_item"
+                app:layout_constraintTop_toBottomOf="@+id/musicname_item" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -91,19 +78,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/item_top_part"
-            app:srcCompat="@drawable/ic_thumb_up"
+            app:srcCompat="@drawable/ic_favorite"
             app:tint="@color/colorAccent" />
-
-        <ImageView
-            android:id="@+id/dislike_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            app:layout_constraintBottom_toBottomOf="@+id/like_item"
-            app:layout_constraintStart_toEndOf="@+id/like_item"
-            app:layout_constraintTop_toTopOf="@+id/like_item"
-            app:srcCompat="@drawable/ic_thumb_down" />
 
         <ImageView
             android:id="@+id/comment_item"
@@ -114,14 +90,15 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/ic_comment" />
+            app:srcCompat="@drawable/ic_comment"
+            app:tint="@android:color/secondary_text_light" />
 
         <TextView
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:text="8"
+            android:text="0"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@+id/comment_item"
             app:layout_constraintEnd_toStartOf="@+id/comment_item"
@@ -133,9 +110,9 @@
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
             android:background="?android:attr/listDivider"
-            app:layout_constraintBottom_toBottomOf="@+id/dislike_item"
-            app:layout_constraintStart_toEndOf="@+id/dislike_item"
-            app:layout_constraintTop_toTopOf="@+id/dislike_item" />
+            app:layout_constraintBottom_toBottomOf="@id/like_item"
+            app:layout_constraintStart_toEndOf="@id/like_item"
+            app:layout_constraintTop_toTopOf="@id/like_item" />
 
         <TextView
             android:id="@+id/textView5"

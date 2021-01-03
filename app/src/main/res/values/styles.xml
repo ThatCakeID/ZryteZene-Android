@@ -16,4 +16,9 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <!-- Custom font style -->
+    <style name="GoogleSans.TextAppearance.Toolbar.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name='android:fontFamily'>@font/googlesans</item>
+    </style>
+
 </resources>
