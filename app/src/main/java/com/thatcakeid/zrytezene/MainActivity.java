@@ -1,8 +1,9 @@
 package com.thatcakeid.zrytezene;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -13,8 +14,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class MainActivity extends AppCompatActivity {
@@ -25,26 +26,56 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Tuman
+
+        // Initialize Firebase for this current activity/session
         FirebaseApp.initializeApp(this);
+
+        // Initialize 'versions_db' with default settings
         versions_db = FirebaseFirestore.getInstance();
+
+        // Set collection reference (or database path in /versions) to 'versions_db'
         versions_db.collection("versions")
-                .get()
+                .get() // Fetch the data to client
+
+                // Set a listener that listen if the data is already received
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        // Check if the task is executed successfully or not
                         if (task.isSuccessful()) {
-                            /* for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d("tes", document.getId() + " => " + document.getData());
-                            } */
-                            Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                            startActivity(intent);
-                        } else
+                            // Convert the result to List<DocumentSnapshot> and get the first item
+                            // NOTE: This implementation will be changed soon
+                            DocumentSnapshot document = task.getResult().getDocuments().get(0);
+
+                            try {
+                                // Get the app's package informations
+                                PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+
+                                // Get the client's app version and compare it with the one in the server
+                                if ((int)document.get("version") > packageInfo.versionCode) {
+                                    // There's a newer version!
+                                    // TODO: implements update dialog here
+                                } else {
+                                    // Go to the home screen
+                                    Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                                    startActivity(intent);
+                                }
+
+                            } catch (PackageManager.NameNotFoundException ignored) {} // Ignored, this error shouldn't happen
+
+                        } else {
+                            // The task isn't executed successfully, show warning to user
                             Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_LONG).show();
+                        }
                     }
                 })
+
+                // Set a listener that will listen if there are any errors
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        // Show the error to user
                         Toast.makeText(MainActivity.this, e.toString(), Toast.LENGTH_LONG).show();
                     }
                 });
