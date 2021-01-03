@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "310657099805",
+    "project_id": "zrytezene-thatcakeid",
+    "storage_bucket": "zrytezene-thatcakeid.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:310657099805:android:04d0724661c1e3c9177ef4",
+        "android_client_info": {
+          "package_name": "com.thatcakeid.zrytezene"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "310657099805-84uf575p67fi5hoqs2uasrpdogmimb43.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.thatcakeid.zrytezene",
+            "certificate_hash": "08f94b11f322b5870a12a1b94086aa65528d339d"
+          }
+        },
+        {
+          "client_id": "310657099805-99dio2q4q3vmslh4g7a0s3fivcmpq7jh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAPpGm7fiW8-OY2C4YcPTJ8avmRAENCFzI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "310657099805-99dio2q4q3vmslh4g7a0s3fivcmpq7jh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
