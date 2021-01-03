@@ -1,5 +1,10 @@
 package com.thatcakeid.zrytezene.adapters;
 
+import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.thatcakeid.zrytezene.R;
 import com.thatcakeid.zrytezene.models.HomeItem;
+import com.thatcakeid.zrytezene.models.HomeItemMusic;
+import com.thatcakeid.zrytezene.models.HomeItemTitle;
 
 import java.util.ArrayList;
 
@@ -37,6 +44,48 @@ public class HomeItemsRecyclerViewAdapter extends RecyclerView.Adapter<HomeItems
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         HomeItem homeItem = items.get(position);
+
+        if (homeItem instanceof HomeItemTitle) {
+            // Hide the music
+            holder.music_item.setVisibility(View.GONE);
+
+            holder.title_text.setText(((HomeItemTitle) homeItem).title);
+            holder.subtitle_text.setText(((HomeItemTitle) homeItem).subtitle);
+
+        } else if (homeItem instanceof HomeItemMusic) {
+            // Hide the title
+            holder.title_item.setVisibility(View.GONE);
+
+            // ((HomeItemMusic) homeItem).music_id;
+
+            holder.music_name.setText(((HomeItemMusic) homeItem).music_name);
+            holder.music_uploader.setText(((HomeItemMusic) homeItem).uploader_name);
+
+            holder.music_upload_date.setText(((HomeItemMusic) homeItem).upload_date);
+
+            holder.music_comment_count.setText(((HomeItemMusic) homeItem).comments_count);
+
+            if ((((HomeItemMusic) homeItem).isLiked)) {
+                // TODO: DO THIS
+                // holder.music_like.setImageTintList(new ColorStateList());
+            }
+
+            if (((HomeItemMusic) homeItem).isDisliked) {
+                // TODO: ALSO DO THIS
+                // holder.music_dislike.setImageTintList(new ColorStateList());
+            }
+
+            // TODO: ADD TOTAL LIKES TEXTVIEW
+            // holder.music_total_likes.setText(((HomeItemMusic) homeItem).total_likes);
+
+            // uhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+            holder.music_top_part.setBackground(
+                    new BitmapDrawable(
+                            ((HomeItemMusic) homeItem).music_image
+                    )
+            );
+        }
+        // else { /* Impossible */ }
     }
 
     @Override
