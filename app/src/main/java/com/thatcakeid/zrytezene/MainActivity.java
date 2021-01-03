@@ -26,8 +26,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Tuman
-
         // Initialize Firebase for this current activity/session
         FirebaseApp.initializeApp(this);
 
