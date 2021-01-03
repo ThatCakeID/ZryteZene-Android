@@ -31,27 +31,16 @@
             app:srcCompat="@drawable/ic_menu" />
 
         <TextView
-            android:id="@+id/zryte_appbar_home"
+            android:id="@+id/title_appbar_home"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="Zryte"
+            android:fontFamily="@font/googlesans"
+            android:text="@string/app_name"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/menu_appbar_home"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/zene_appbar_home"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="1dp"
-            android:text="Zene"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/zryte_appbar_home"
-            app:layout_constraintStart_toEndOf="@+id/zryte_appbar_home"
-            app:layout_constraintTop_toTopOf="@+id/zryte_appbar_home" />
 
         <ImageView
             android:id="@+id/search_appbar_home"
