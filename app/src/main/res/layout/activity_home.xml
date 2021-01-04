@@ -14,6 +14,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/floating_app_bar_bg"
+        android:backgroundTint="?attr/colorPrimary"
         android:elevation="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,7 +30,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_menu"
-            app:tint="@android:color/secondary_text_light" />
+            app:tint="@color/imageTint" />
 
         <TextView
             android:id="@+id/title_appbar_home"
@@ -53,7 +54,7 @@
             app:layout_constraintEnd_toStartOf="@id/user_appbar_home"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_search"
-            app:tint="@android:color/secondary_text_light" />
+            app:tint="@color/imageTint" />
 
         <ImageView
             android:id="@+id/user_appbar_home"
@@ -64,7 +65,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_account_circle"
-            app:tint="@android:color/secondary_text_light" />
+            app:tint="@color/imageTint" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView

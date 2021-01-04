@@ -13,7 +13,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:background="#FFFFFF"
+        android:background="?attr/colorPrimary"
         android:elevation="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,7 +33,7 @@
             <ImageView
                 android:id="@+id/image_overlay"
                 android:layout_width="75dp"
-                android:layout_height="0dp"
+                android:layout_height="75dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -47,9 +47,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
+                android:fontFamily="@font/googlesans"
                 android:singleLine="true"
                 android:text="Music Name"
-                android:textColor="#000000"
+                android:textColor="@color/titleText"
                 android:textSize="18sp"
                 app:layout_constraintStart_toEndOf="@id/image_overlay"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -91,7 +92,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/ic_comment"
-            app:tint="@android:color/secondary_text_light" />
+            app:tint="@color/imageTint" />
 
         <TextView
             android:id="@+id/textView4"
