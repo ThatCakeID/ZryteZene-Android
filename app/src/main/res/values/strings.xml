@@ -12,6 +12,10 @@
     <string name="imagep_title">Show music thumbnail</string>
     <string name="imagep_summary_on">Show music thumbnail preview at home screen</string>
     <string name="imagep_summary_off">Don\'t show music thumbnail preview at home screen</string>
+    <string name="time_header">Uploaded on</string>
+    <string name="new_update">New update is available</string>
+    <string name="version">Version:</string>
+    <string name="released_in">Released in:</string>
 
     <!-- Audio Playback Preferences -->
 

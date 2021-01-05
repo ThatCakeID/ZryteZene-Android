@@ -14,28 +14,28 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class MainActivity extends AppCompatActivity {
-    FirebaseFirestore versions_db;
+    private FirebaseFirestore versions_db;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize Firebase for this current activity/session
+        // Initialize Firebase
         FirebaseApp.initializeApp(this);
-
-        // Initialize 'versions_db' with default settings
+        auth = FirebaseAuth.getInstance();
         versions_db = FirebaseFirestore.getInstance();
 
-        // Set collection reference (or database path in /versions) to 'versions_db'
+        // Set collection reference to 'versions'
         versions_db.collection("versions")
                 .get() // Fetch the data to client
-
                 // Set a listener that listen if the data is already received
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -47,23 +47,30 @@ public class MainActivity extends AppCompatActivity {
                             DocumentSnapshot document = task.getResult().getDocuments().get(0);
 
                             try {
-                                // Get the app's package informations
+                                // Get the app's package information
                                 PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
 
                                 // Get the client's app version and compare it with the one in the server
                                 if ((int)((long)document.get("version")) > packageInfo.versionCode) {
                                     // There's a newer version!
-                                    // TODO: implements update dialog here
-                                } else {
-                                    // Go to the home screen
-                                    Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                                    Intent intent = new Intent(getApplicationContext(), UpdateActivity.class);
                                     startActivity(intent);
+                                } else {
+                                    if (auth.getCurrentUser() != null) {
+                                        // Go to the home screen
+                                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                                        startActivity(intent);
+                                    } else {
+                                        // Go to the wizard screen
+                                        Intent intent = new Intent(getApplicationContext(), WizardActivity.class);
+                                        startActivity(intent);
+                                    }
                                 }
 
                             } catch (PackageManager.NameNotFoundException ignored) {} // Ignored, this error shouldn't happen
 
                         } else {
-                            // The task isn't executed successfully, show warning to user
+                            // Show warning to user
                             Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_LONG).show();
                         }
                     }

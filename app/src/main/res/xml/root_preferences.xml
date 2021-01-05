@@ -10,13 +10,13 @@
             app:title="@string/theme_title"
             app:useSimpleSummaryProvider="true" />
 
-        <ListPreference
+        <!--ListPreference
             app:defaultValue="full"
             app:entries="@array/player_entries"
             app:entryValues="@array/player_values"
             app:key="player"
             app:title="@string/player_title"
-            app:useSimpleSummaryProvider="true" />
+            app:useSimpleSummaryProvider="true" /-->
 
         <SwitchPreferenceCompat
             app:defaultValue="true"
