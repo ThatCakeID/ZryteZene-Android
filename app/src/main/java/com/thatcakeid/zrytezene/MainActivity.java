@@ -14,14 +14,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseFirestore versions_db;
-    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize Firebase
         FirebaseApp.initializeApp(this);
-        auth = FirebaseAuth.getInstance();
         versions_db = FirebaseFirestore.getInstance();
 
         // Set collection reference to 'versions'
@@ -56,15 +53,9 @@ public class MainActivity extends AppCompatActivity {
                                     Intent intent = new Intent(getApplicationContext(), UpdateActivity.class);
                                     startActivity(intent);
                                 } else {
-                                    if (auth.getCurrentUser() != null) {
-                                        // Go to the home screen
-                                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                                        startActivity(intent);
-                                    } else {
-                                        // Go to the wizard screen
-                                        Intent intent = new Intent(getApplicationContext(), WizardActivity.class);
-                                        startActivity(intent);
-                                    }
+                                    // Go to the home screen
+                                    Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                                    startActivity(intent);
                                 }
 
                             } catch (PackageManager.NameNotFoundException ignored) {} // Ignored, this error shouldn't happen
