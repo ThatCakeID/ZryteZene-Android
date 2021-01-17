@@ -24,7 +24,6 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
         rv_items_home = findViewById(R.id.rv_items_home);
         musics_entries = new ArrayList<>();
         user_indexes = new HashMap<>();
