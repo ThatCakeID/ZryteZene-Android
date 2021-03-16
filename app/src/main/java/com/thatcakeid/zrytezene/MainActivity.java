@@ -51,12 +51,10 @@ public class MainActivity extends AppCompatActivity {
                             // Get the client's app version and compare it with the one in the server
                             if ((int)((long)document.get("version")) > packageInfo.versionCode) {
                                 // There's a newer version!
-                                Intent intent = new Intent(getApplicationContext(), UpdateActivity.class);
-                                startActivity(intent);
+                                startActivity(new Intent(getApplicationContext(), UpdateActivity.class));
                                 finish();
                             } else {
-                                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                                startActivity(intent);
+                                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                                 finish();
                             }
 

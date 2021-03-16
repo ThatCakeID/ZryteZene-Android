@@ -39,10 +39,10 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til1"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        app:boxBackgroundMode="outline"
         app:layout_constraintBottom_toTopOf="@id/til2"
         app:layout_constraintEnd_toEndOf="@id/imageView"
         app:layout_constraintStart_toStartOf="@id/textView3">
@@ -58,10 +58,10 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til2"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        app:boxBackgroundMode="outline"
         app:layout_constraintBottom_toTopOf="@id/til3"
         app:layout_constraintEnd_toEndOf="@id/til1"
         app:layout_constraintStart_toStartOf="@id/til1">
@@ -77,10 +77,10 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til3"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        app:boxBackgroundMode="outline"
         app:layout_constraintBottom_toTopOf="@id/til4"
         app:layout_constraintEnd_toEndOf="@id/til2"
         app:layout_constraintStart_toStartOf="@id/til2"
@@ -98,10 +98,10 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til4"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
-        app:boxBackgroundMode="outline"
         app:layout_constraintBottom_toTopOf="@+id/button_continue"
         app:layout_constraintEnd_toEndOf="@id/til3"
         app:layout_constraintStart_toStartOf="@id/til3"
@@ -122,10 +122,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="64dp"
-        android:backgroundTint="@color/colorAccent"
+        android:text="@string/signup"
+        app:backgroundTint="?attr/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/imageView"
-        app:layout_constraintStart_toStartOf="@id/textView3"
-        tools:text="@string/signup" />
+        app:layout_constraintStart_toStartOf="@id/textView3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

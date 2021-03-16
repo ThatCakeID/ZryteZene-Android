@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.thatcakeid.zrytezene.R;
@@ -44,6 +45,9 @@ public class LoginFragment extends Fragment {
         tie2 = view.findViewById(R.id.tie2);
         button_continue = view.findViewById(R.id.button_continue);
 
+        FirebaseApp.initializeApp(getActivity());
+        auth = FirebaseAuth.getInstance();
+
         button_continue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -53,21 +57,11 @@ public class LoginFragment extends Fragment {
                     if (tie2.getText().toString().length() == 0)
                         Snackbar.make(view, "Password field can't be empty!", Snackbar.LENGTH_LONG);
                     else {
-                        auth.createUserWithEmailAndPassword(tie1.getText().toString().trim(),
+                        auth.signInWithEmailAndPassword(tie1.getText().toString().trim(),
                                 tie2.getText().toString()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                             @Override
                             public void onSuccess(AuthResult authResult) {
-                                auth.getCurrentUser().sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Snackbar.make(view, "A verification link has been sent to your email. Please check your inbox or spam box.", Snackbar.LENGTH_LONG);
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG);
-                                    }
-                                });
+                                getActivity().finish();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
