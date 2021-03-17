@@ -1,14 +1,12 @@
-package com.thatcakeid.zrytezene.ui.login;
+package com.thatcakeid.zrytezene;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -19,54 +17,42 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.thatcakeid.zrytezene.R;
 
-public class RegisterFragment extends Fragment {
-    private View view;
+public class RegisterActivity extends AppCompatActivity {
     private TextInputEditText tie1, tie2, tie3, tie4;
     private TextInputLayout til1, til2, til3, til4;
     private MaterialButton button_continue;
     private FirebaseAuth auth;
 
-    public static RegisterFragment newInstance() {
-        return new RegisterFragment();
-    }
-
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.register_fragment, container, false);
-        return view;
-    }
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_register);
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        tie1 = view.findViewById(R.id.tie1);
-        tie2 = view.findViewById(R.id.tie2);
-        tie3 = view.findViewById(R.id.tie3);
-        tie4 = view.findViewById(R.id.tie4);
-        til1 = view.findViewById(R.id.til1);
-        til2 = view.findViewById(R.id.til2);
-        til3 = view.findViewById(R.id.til3);
-        til4 = view.findViewById(R.id.til4);
-        button_continue = view.findViewById(R.id.button_continue);
+        tie1 = findViewById(R.id.tie1);
+        tie2 = findViewById(R.id.tie2);
+        tie3 = findViewById(R.id.tie3);
+        tie4 = findViewById(R.id.tie4);
+        til1 = findViewById(R.id.til1);
+        til2 = findViewById(R.id.til2);
+        til3 = findViewById(R.id.til3);
+        til4 = findViewById(R.id.til4);
+        button_continue = findViewById(R.id.button_continue);
 
-        FirebaseApp.initializeApp(getActivity());
+        FirebaseApp.initializeApp(getApplicationContext());
         auth = FirebaseAuth.getInstance();
 
         button_continue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (tie1.getText().toString().trim().length() == 0)
-                    til1.setError("Email field can't be empty!");
+                    til1.setError("Invalid email");
                 else {
                     if (tie2.getText().toString().trim().length() < 4)
-                        til2.setError("Username field can't be empty or less than 4 characters!");
+                        til2.setError("Username field can't be less than 4 characters");
                     else {
                         if (tie3.getText().toString().length() == 0)
-                            til3.setError("Password field can't be empty!");
+                            til3.setError("Password can't be empty");
                         else {
                             if (!tie3.getText().toString().equals(tie4.getText().toString()))
                                 til4.setError("Password does not match");
@@ -78,12 +64,14 @@ public class RegisterFragment extends Fragment {
                                         auth.getCurrentUser().sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
-                                                Snackbar.make(view, "A verification link has been sent to your email. Please check your inbox or spam box.", Snackbar.LENGTH_LONG);
+                                                //Snackbar.make(view, "A verification link has been sent to your email. Please check your inbox or spam box.", Snackbar.LENGTH_LONG);
+                                                Toast.makeText(RegisterActivity.this, "A verification link has been sent to your email. Please check your inbox or spam box.", Toast.LENGTH_LONG).show();
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
-                                                Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG);
+                                                //Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG);
+                                                Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                                             }
                                         });
                                         auth.signOut();
@@ -91,7 +79,8 @@ public class RegisterFragment extends Fragment {
                                 }).addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG);
+                                        //Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG);
+                                        Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                                     }
                                 });
                             }
@@ -101,5 +90,4 @@ public class RegisterFragment extends Fragment {
             }
         });
     }
-
 }

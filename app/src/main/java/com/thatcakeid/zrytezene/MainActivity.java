@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -14,24 +13,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseFirestore versions_db;
-    private TextView zz_text;
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        zz_text = findViewById(R.id.zz_text);
-
         // Initialize Firebase
         FirebaseApp.initializeApp(this);
         versions_db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
 
         // Set collection reference to 'versions'
         versions_db.collection("versions")
@@ -54,8 +53,13 @@ public class MainActivity extends AppCompatActivity {
                                 startActivity(new Intent(getApplicationContext(), UpdateActivity.class));
                                 finish();
                             } else {
-                                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                                finish();
+                                if (auth.getCurrentUser() == null) {
+                                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                                    finish();
+                                } else {
+                                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                                    finish();
+                                }
                             }
 
                         } catch (PackageManager.NameNotFoundException ignored) {} // Ignored, this error shouldn't happen

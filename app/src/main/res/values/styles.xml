@@ -3,8 +3,6 @@
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.Bridge">
         <!-- Customize your theme here. -->
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColorPrimary">@color/colorAccent</item>
-        <item name="actionMenuTextColor">@color/colorAccent</item>
 
         <!-- Shared element transition -->
         <item name="android:windowActivityTransitions">true</item>
