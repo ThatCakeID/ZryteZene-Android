@@ -7,7 +7,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -25,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputLayout til1, til2;
     private MaterialButton button_continue;
     private FirebaseAuth auth;
+    private TextView textView4, textView6;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,17 +41,43 @@ public class LoginActivity extends AppCompatActivity {
         til2 = findViewById(R.id.til2);
         button_continue = findViewById(R.id.button_continue);
 
+        textView4 = findViewById(R.id.textView4);
+        textView6 = findViewById(R.id.textView6);
+
         FirebaseApp.initializeApp(getApplicationContext());
         auth = FirebaseAuth.getInstance();
+
+        tie1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Empty
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (tie1.getText().toString().trim().matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
+                    til1.setError("Invalid email!");
+                } else {
+                    til1.setError(null);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Empty
+            }
+        });
 
         button_continue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (tie1.getText().toString().trim().length() == 0)
-                    til1.setError("Invalid email");
+                if (tie1.getText().toString().trim().matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"))
+                    //Snackbar.make(view, "Invalid email!", Snackbar.LENGTH_LONG);
+                    Toast.makeText(LoginActivity.this, "Invalid email!", Toast.LENGTH_LONG).show();
                 else {
                     if (tie2.getText().toString().length() == 0)
-                        til2.setError("Password can't be empty");
+                        //Snackbar.make(view, "Password can't be empty!", Snackbar.LENGTH_LONG);
+                        Toast.makeText(LoginActivity.this, "Password can't be empty!", Toast.LENGTH_LONG).show();
                     else {
                         auth.signInWithEmailAndPassword(tie1.getText().toString().trim(),
                                 tie2.getText().toString()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
@@ -98,6 +128,27 @@ public class LoginActivity extends AppCompatActivity {
                         });
                     }
                 }
+            }
+        });
+
+        textView6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (tie1.getText().toString().trim().matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
+                    auth.sendPasswordResetEmail(tie1.getText().toString());
+                } else {
+                    //Snackbar.make(view, "Invalid email!", Snackbar.LENGTH_LONG);
+                    Toast.makeText(LoginActivity.this, "Please enter a valid email!", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        textView4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
+                i.putExtra("email", tie1.getText().toString());
+                startActivity(i);
             }
         });
     }

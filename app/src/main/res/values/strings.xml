@@ -29,5 +29,6 @@
     <string name="username">Username</string>
     <string name="new_user">New User? Click here!</string>
     <string name="old_user">Already signed-up? Click here!</string>
+    <string name="forgot_pass">Forgot Password?</string>
 
 </resources>

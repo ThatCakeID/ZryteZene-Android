@@ -80,8 +80,8 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@id/textView6"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toTopOf="@id/button_continue"
         app:layout_constraintEnd_toEndOf="@id/til2"
         app:layout_constraintStart_toStartOf="@id/til2"
         app:passwordToggleEnabled="true">
@@ -95,16 +95,6 @@
             android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:fontFamily="@font/googlesans"
-        android:text="Forgot Password?"
-        app:layout_constraintBottom_toTopOf="@id/button_continue"
-        app:layout_constraintStart_toStartOf="@id/til3" />
-
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_continue"
         android:layout_width="0dp"
@@ -114,7 +104,7 @@
         app:backgroundTint="?attr/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/imageView"
-        app:layout_constraintStart_toStartOf="@id/textView6" />
+        app:layout_constraintStart_toStartOf="@id/til3" />
 
     <TextView
         android:id="@+id/textView5"
