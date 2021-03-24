@@ -57,8 +57,15 @@ public class MainActivity extends AppCompatActivity {
                                     startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                                     finish();
                                 } else {
-                                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                                    finish();
+                                    if (auth.getCurrentUser().isEmailVerified()) {
+                                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                                        finish();
+                                    } else {
+                                        auth.signOut();
+                                        Toast.makeText(MainActivity.this, "You've been signed out because your current account's email is not verified.", Toast.LENGTH_LONG).show();
+                                        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                                        finish();
+                                    }
                                 }
                             }
 

@@ -136,6 +136,9 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (tie1.getText().toString().trim().matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
                     auth.sendPasswordResetEmail(tie1.getText().toString());
+                    //Snackbar.make(view, "A verification link has been sent to your email. Please check your inbox or spam box.", Snackbar.LENGTH_LONG);
+                    Toast.makeText(LoginActivity.this, "A verification link has been sent to your email. Please check your inbox or spam box.", Toast.LENGTH_LONG).show();
+
                 } else {
                     //Snackbar.make(view, "Invalid email!", Snackbar.LENGTH_LONG);
                     Toast.makeText(LoginActivity.this, "Please enter a valid email!", Toast.LENGTH_LONG).show();
