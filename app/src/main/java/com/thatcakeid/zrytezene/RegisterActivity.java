@@ -55,9 +55,9 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (tie1.getText().toString().trim().matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
-                    til1.setError("Invalid email!");
-                } else {
                     til1.setError(null);
+                } else {
+                    til1.setError("Invalid email!");
                 }
             }
 
@@ -73,10 +73,7 @@ public class RegisterActivity extends AppCompatActivity {
         button_continue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (tie1.getText().toString().trim().matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"))
-                    //Snackbar.make(view, "Invalid email!", Snackbar.LENGTH_LONG);
-                    Toast.makeText(RegisterActivity.this, "Invalid email!", Toast.LENGTH_LONG).show();
-                else {
+                if (tie1.getText().toString().trim().matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
                     if (tie2.getText().toString().length() == 0)
                         //Snackbar.make(view, "Password can't be empty!", Snackbar.LENGTH_LONG);
                         Toast.makeText(RegisterActivity.this, "Password can't be empty!", Toast.LENGTH_LONG).show();
@@ -112,6 +109,9 @@ public class RegisterActivity extends AppCompatActivity {
                             });
                         }
                     }
+                } else {
+                    //Snackbar.make(view, "Invalid email!", Snackbar.LENGTH_LONG);
+                    Toast.makeText(RegisterActivity.this, "Invalid email!", Toast.LENGTH_LONG).show();
                 }
             }
         });
