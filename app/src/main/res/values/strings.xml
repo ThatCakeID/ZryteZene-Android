@@ -27,5 +27,7 @@
     <string name="password">Password</string>
     <string name="repassword">Re-type password</string>
     <string name="username">Username</string>
+    <string name="new_user">New User? Click here!</string>
+    <string name="old_user">Already signed-up? Click here!</string>
 
 </resources>
