@@ -17,74 +17,41 @@
 
     </ImageView>
 
-    <androidx.constraintlayout.helper.widget.Flow
-        android:id="@+id/flow"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:orientation="vertical"
-        app:constraint_referenced_ids="musicname_item,uploader_item"
-        app:flow_wrapMode="none"
-        app:layout_constraintBottom_toBottomOf="@+id/image_overlay"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/image_overlay"
-        app:layout_constraintTop_toTopOf="@+id/image_overlay" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/uploader_item"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:text="\<Artist\>"
-        tools:layout_editor_absoluteX="150dp"
-        tools:layout_editor_absoluteY="64dp" />
+        <TextView
+            android:id="@+id/musicname_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/googlesans"
+            android:singleLine="true"
+            android:text="&lt;Title&gt;"
+            android:textColor="@color/titleText"
+            android:textSize="18sp" />
 
-    <TextView
-        android:id="@+id/musicname_item"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/googlesans"
-        android:singleLine="true"
-        android:text="\<Title\>"
-        android:textColor="@color/titleText"
-        android:textSize="18sp"
-        tools:layout_editor_absoluteX="107dp"
-        tools:layout_editor_absoluteY="23dp" />
+        <TextView
+            android:id="@+id/uploader_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="&lt;Artist&gt;" />
 
-    <ImageView
-        android:id="@+id/fav_item"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        app:srcCompat="@drawable/ic_favorite"
-        tools:layout_editor_absoluteX="44dp"
-        tools:layout_editor_absoluteY="160dp" />
-
-    <TextView
-        android:id="@+id/date_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/time_header"
-        android:textSize="12sp"
-        tools:layout_editor_absoluteX="107dp"
-        tools:layout_editor_absoluteY="201dp" />
-
-    <TextView
-        android:id="@+id/comments_count_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0"
-        android:textSize="18sp"
-        tools:layout_editor_absoluteX="258dp"
-        tools:layout_editor_absoluteY="160dp" />
-
-    <ImageView
-        android:id="@+id/comment_item"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        app:srcCompat="@drawable/ic_comment"
-        app:tint="@color/imageTint"
-        tools:layout_editor_absoluteX="338dp"
-        tools:layout_editor_absoluteY="160dp" />
+        <TextView
+            android:id="@+id/date_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="@string/time_header"
+            android:textSize="12sp" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -26,7 +27,8 @@ public class HomeActivity extends AppCompatActivity {
     private ImageView user_appbar_home;
     private RecyclerView rv_items_home;
     private ArrayList<HashMap<String, Object>> musics_entries;
-    private HashMap<String, String> user_indexes, comments_count;
+    private ArrayList<HashMap<String, Object>> users_entries;
+    private HashMap<String, String> user_indexes;
     private FirebaseFirestore users_db, musics_db;
     private FirebaseAuth auth;
 
@@ -37,8 +39,8 @@ public class HomeActivity extends AppCompatActivity {
         user_appbar_home = findViewById(R.id.user_appbar_home);
         rv_items_home = findViewById(R.id.rv_items_home);
         musics_entries = new ArrayList<>();
+        users_entries = new ArrayList<>();
         user_indexes = new HashMap<>();
-        comments_count = new HashMap<>();
 
         FirebaseApp.initializeApp(this);
         auth = FirebaseAuth.getInstance();
@@ -58,8 +60,37 @@ public class HomeActivity extends AppCompatActivity {
 
         rv_items_home.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         HomeItemsRecyclerViewAdapter adapter = new HomeItemsRecyclerViewAdapter(musics_entries,
-                user_indexes, comments_count);
+                user_indexes);
         rv_items_home.setAdapter(adapter);
+
+        users_db.collection("users").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                for (DocumentChange dc : value.getDocumentChanges()) {
+                    switch (dc.getType()) {
+                        case ADDED:
+                            users_entries.add((HashMap<String, Object>) dc.getDocument().getData());
+                            user_indexes.put(((HashMap<String, Object>) dc.getDocument().getData()).get("uid").toString(),
+                                    ((HashMap<String, Object>) dc.getDocument().getData()).get("username").toString());
+                            rv_items_home.getAdapter().notifyDataSetChanged();
+                            break;
+                        case MODIFIED:
+                            int mod_pos = users_entries.indexOf((HashMap<String, Object>) dc.getDocument().getData());
+                            users_entries.remove(mod_pos);
+                            users_entries.add(mod_pos, (HashMap<String, Object>) dc.getDocument().getData());
+                            user_indexes.remove(((HashMap<String, Object>) dc.getDocument().getData()).get("uid").toString());
+                            user_indexes.put(((HashMap<String, Object>) dc.getDocument().getData()).get("uid").toString(),
+                                    ((HashMap<String, Object>) dc.getDocument().getData()).get("username").toString());
+                            break;
+                        case REMOVED:
+                            users_entries.remove((HashMap<String, Object>) dc.getDocument().getData());
+                            user_indexes.remove(((HashMap<String, Object>) dc.getDocument().getData()).get("uid").toString());
+                            rv_items_home.getAdapter().notifyDataSetChanged();
+                            break;
+                    }
+                }
+            }
+        });
 
         musics_db.collection("musics").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -70,10 +101,16 @@ public class HomeActivity extends AppCompatActivity {
                             musics_entries.add((HashMap<String, Object>) dc.getDocument().getData());
                             rv_items_home.getAdapter().notifyDataSetChanged();
                             break;
-                        /*case MODIFIED:
+                        case MODIFIED:
+                            int mod_pos = musics_entries.indexOf((HashMap<String, Object>) dc.getDocument().getData());
+                            musics_entries.remove(mod_pos);
+                            musics_entries.add(mod_pos, (HashMap<String, Object>) dc.getDocument().getData());
+                            rv_items_home.getAdapter().notifyDataSetChanged();
                             break;
                         case REMOVED:
-                            break;*/
+                            musics_entries.remove((HashMap<String, Object>) dc.getDocument().getData());
+                            rv_items_home.getAdapter().notifyDataSetChanged();
+                            break;
                     }
                 }
             }
