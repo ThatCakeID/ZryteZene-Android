@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/android:windowBackground"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="56dp"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <ImageView
         android:id="@+id/imageView2"
@@ -75,7 +78,7 @@
         android:id="@+id/imageView4"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="4dp"
         android:padding="6dp"
         app:layout_constraintBottom_toBottomOf="@id/imageView5"
         app:layout_constraintEnd_toStartOf="@id/imageView5"
@@ -98,7 +101,7 @@
         android:id="@+id/imageView6"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="4dp"
         android:padding="6dp"
         app:layout_constraintBottom_toBottomOf="@id/imageView5"
         app:layout_constraintStart_toEndOf="@id/imageView5"

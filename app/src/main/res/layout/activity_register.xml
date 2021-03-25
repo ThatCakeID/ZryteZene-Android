@@ -115,6 +115,6 @@
         android:text="@string/old_user"
         android:textColor="?attr/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@id/button_continue" />
+        app:layout_constraintEnd_toEndOf="@id/button_continue" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
