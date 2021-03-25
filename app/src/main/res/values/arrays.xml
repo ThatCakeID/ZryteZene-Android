@@ -1,0 +1,25 @@
+<resources>
+    <!-- Theme Preference -->
+    <string-array name="theme_entries">
+        <item>Use system preferences</item>
+        <item>Light mode</item>
+        <item>Dark Mode</item>
+    </string-array>
+
+    <string-array name="theme_values">
+        <item>system</item>
+        <item>light</item>
+        <item>dark</item>
+    </string-array>
+
+    <!-- Player Preference -->
+    <string-array name="player_entries">
+        <item>Full Screen</item>
+        <item>Compact</item>
+    </string-array>
+
+    <string-array name="player_values">
+        <item>full</item>
+        <item>compact</item>
+    </string-array>
+</resources>

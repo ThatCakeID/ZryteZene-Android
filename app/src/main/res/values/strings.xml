@@ -1,12 +1,34 @@
 <resources>
+
+    <!-- Preference Titles -->
+    <string name="ui_header">User Interface</string>
+    <string name="audiop_header">Audio Playback</string>
+
+    <!-- UI Preferences -->
+    <string name="theme_title">Theme</string>
+    <string name="player_title">Player Mode</string>
+    <string name="imagep_title">Show music thumbnail</string>
+    <string name="imagep_summary_on">Show music thumbnail preview at home screen</string>
+    <string name="imagep_summary_off">Don\'t show music thumbnail preview at home screen</string>
+
+    <!-- Audio Playback Preferences -->
+
+
     <string name="app_name">ZryteZene</string>
     <string name="action_settings">Settings</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
+    <string name="time_header">Uploaded on</string>
+    <string name="new_update">New update is available</string>
+    <string name="version">Version:</string>
+    <string name="released_in">Released in:</string>
+    <string name="welcome">Welcome</string>
+    <string name="signin">Sign In</string>
+    <string name="signup">Sign Up</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="repassword">Re-type password</string>
+    <string name="username">Username</string>
+    <string name="new_user">New User? Click here!</string>
+    <string name="old_user">Already signed-up? Click here!</string>
+    <string name="forgot_pass">Forgot Password?</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 </resources>
