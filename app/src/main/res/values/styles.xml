@@ -3,6 +3,7 @@
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.Bridge">
         <!-- Customize your theme here. -->
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textCursorDrawable">@drawable/text_cursor_material</item>
 
         <!-- Shared element transition -->
         <item name="android:windowActivityTransitions">true</item>
@@ -17,13 +18,13 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.DayNight" />
 
-    <!-- Custom font style -->
-    <style name="GoogleSans.TextAppearance.Toolbar.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name='android:fontFamily'>@font/googlesans</item>
+    <style name="AppTheme.TextInputLayout.OutlinedBox" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="hintTextColor">?attr/colorAccent</item>
     </style>
 
-    <style name="GoogleSans.TextAppearance.Toolbar.Title.Wizard">
-        <item name='android:textSize'>34sp</item>
+    <!-- Custom font style -->
+    <style name="AppTheme.Toolbar.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name='android:fontFamily'>@font/googlesans</item>
     </style>
 
 </resources>
