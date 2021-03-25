@@ -1,116 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="8dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginEnd="8dp"
-    android:layout_marginBottom="8dp"
-    android:background="?attr/colorPrimary"
-    android:elevation="4dp">
+    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/item_top_part"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
+    <ImageView
+        android:id="@+id/image_overlay"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_zrytezene">
 
-        <ImageView
-            android:id="@+id/image_overlay"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_zrytezene">
+    </ImageView>
 
-        </ImageView>
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@id/image_overlay"
+        app:layout_constraintStart_toEndOf="@id/image_overlay"
+        app:layout_constraintTop_toTopOf="@id/image_overlay">
 
         <TextView
             android:id="@+id/musicname_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
             android:fontFamily="@font/googlesans"
             android:singleLine="true"
-            android:text="Music Name"
+            android:text="\<Title\>"
             android:textColor="@color/titleText"
-            android:textSize="18sp"
-            app:layout_constraintStart_toEndOf="@id/image_overlay"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/uploader_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
             android:singleLine="true"
-            android:text="Someone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/musicname_item"
-            app:layout_constraintTop_toBottomOf="@+id/musicname_item" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:text="\<Artist\>" />
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/fav_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/item_top_part"
         app:srcCompat="@drawable/ic_favorite"
-        app:tint="?attr/colorAccent" />
-
-    <View
-        android:id="@+id/divider"
-        android:layout_width="1dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toBottomOf="@id/fav_item"
-        app:layout_constraintStart_toEndOf="@id/fav_item"
-        app:layout_constraintTop_toTopOf="@id/fav_item" />
+        tools:layout_editor_absoluteX="44dp"
+        tools:layout_editor_absoluteY="160dp" />
 
     <TextView
         android:id="@+id/date_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:text="@string/time_header"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/divider"
-        app:layout_constraintStart_toEndOf="@+id/divider"
-        app:layout_constraintTop_toTopOf="@+id/divider" />
+        tools:layout_editor_absoluteX="107dp"
+        tools:layout_editor_absoluteY="201dp" />
 
     <TextView
         android:id="@+id/comments_count_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
         android:text="0"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/comment_item"
-        app:layout_constraintEnd_toStartOf="@+id/comment_item"
-        app:layout_constraintTop_toTopOf="@+id/comment_item" />
+        tools:layout_editor_absoluteX="258dp"
+        tools:layout_editor_absoluteY="160dp" />
 
     <ImageView
         android:id="@+id/comment_item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
         android:background="?attr/selectableItemBackgroundBorderless"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_comment"
-        app:tint="@color/imageTint" />
+        app:tint="@color/imageTint"
+        tools:layout_editor_absoluteX="338dp"
+        tools:layout_editor_absoluteY="160dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

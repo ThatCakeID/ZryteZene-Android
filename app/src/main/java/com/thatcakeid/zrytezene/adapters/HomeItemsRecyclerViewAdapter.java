@@ -9,10 +9,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.Timestamp;
 import com.thatcakeid.zrytezene.R;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 public class HomeItemsRecyclerViewAdapter extends RecyclerView.Adapter<HomeItemsRecyclerViewAdapter.ViewHolder> {
@@ -48,8 +50,8 @@ public class HomeItemsRecyclerViewAdapter extends RecyclerView.Adapter<HomeItems
         //        .isEmpty() ? "Deleted User" : users.get(items.get(position).get("author").toString()));
         holder.uploader_item.setText(items.get(position).get("author").toString());
 
-        //holder.date_text.setText(new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss")
-        //        .format(items.get(position).get("time")));
+        holder.date_text.setText(new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss")
+                .format(((Timestamp)items.get(position).get("time")).toDate()));
         //holder.comments_count_text.setText(comments_count.get(items.get(position).get("title").toString()));
     }
 
