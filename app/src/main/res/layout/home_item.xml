@@ -17,32 +17,38 @@
 
     </ImageView>
 
-    <LinearLayout
-        android:layout_width="0dp"
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flow"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="@id/image_overlay"
-        app:layout_constraintStart_toEndOf="@id/image_overlay"
-        app:layout_constraintTop_toTopOf="@id/image_overlay">
+        app:constraint_referenced_ids="musicname_item,uploader_item"
+        app:flow_wrapMode="none"
+        app:layout_constraintBottom_toBottomOf="@+id/image_overlay"
+        app:layout_constraintStart_toEndOf="@+id/image_overlay"
+        app:layout_constraintTop_toTopOf="@+id/image_overlay" />
 
-        <TextView
-            android:id="@+id/musicname_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/googlesans"
-            android:singleLine="true"
-            android:text="\<Title\>"
-            android:textColor="@color/titleText"
-            android:textSize="18sp" />
+    <TextView
+        android:id="@+id/uploader_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:text="\<Artist\>"
+        tools:layout_editor_absoluteX="150dp"
+        tools:layout_editor_absoluteY="64dp" />
 
-        <TextView
-            android:id="@+id/uploader_item"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:text="\<Artist\>" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/musicname_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/googlesans"
+        android:singleLine="true"
+        android:text="\<Title\>"
+        android:textColor="@color/titleText"
+        android:textSize="18sp"
+        tools:layout_editor_absoluteX="107dp"
+        tools:layout_editor_absoluteY="23dp" />
 
     <ImageView
         android:id="@+id/fav_item"
@@ -80,4 +86,5 @@
         app:tint="@color/imageTint"
         tools:layout_editor_absoluteX="338dp"
         tools:layout_editor_absoluteY="160dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
