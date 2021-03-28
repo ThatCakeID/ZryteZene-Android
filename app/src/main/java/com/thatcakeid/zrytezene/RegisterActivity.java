@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,57 +67,46 @@ public class RegisterActivity extends AppCompatActivity {
         Intent intent = new Intent();
         if (intent.getStringExtra("email") != null) email_tie.setText(intent.getStringExtra("email"));
 
-        button_continue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (email_tie.getText().toString().trim().matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
-                    if (passw_tie.getText().toString().length() == 0)
-                        //Snackbar.make(view, "Password can't be empty!", Snackbar.LENGTH_LONG);
-                        Toast.makeText(RegisterActivity.this, "Password can't be empty!", Toast.LENGTH_LONG).show();
+        button_continue.setOnClickListener(v -> {
+            if (email_tie.getText().toString().trim().matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
+                if (passw_tie.getText().toString().length() == 0)
+                    //Snackbar.make(view, "Password can't be empty!", Snackbar.LENGTH_LONG);
+                    Toast.makeText(RegisterActivity.this, "Password can't be empty!", Toast.LENGTH_LONG).show();
+                else {
+                    if (!passw2_tie.getText().toString().equals(passw2_tie.getText().toString()))
+                        passw2_til.setError("Password does not match");
                     else {
-                        if (!passw2_tie.getText().toString().equals(passw2_tie.getText().toString()))
-                            passw2_til.setError("Password does not match");
-                        else {
-                            auth.createUserWithEmailAndPassword(email_tie.getText().toString().trim(),
-                                    passw_tie.getText().toString()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
-                                @Override
-                                public void onSuccess(AuthResult authResult) {
-                                    auth.getCurrentUser().sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            //Snackbar.make(view, "A verification link has been sent to your email. Please check your inbox or spam box.", Snackbar.LENGTH_LONG);
-                                            Toast.makeText(RegisterActivity.this, "A verification link has been sent to your email. Please check your inbox or spam box.", Toast.LENGTH_LONG).show();
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            //Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG);
-                                            Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                                        }
-                                    });
-                                    auth.signOut();
-                                }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    //Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG);
-                                    Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                                }
-                            });
-                        }
+                        auth.createUserWithEmailAndPassword(email_tie.getText().toString().trim(),
+                                passw_tie.getText().toString()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                            @Override
+                            public void onSuccess(AuthResult authResult) {
+                                auth.getCurrentUser().sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        //Snackbar.make(view, "A verification link has been sent to your email. Please check your inbox or spam box.", Snackbar.LENGTH_LONG);
+                                        Toast.makeText(RegisterActivity.this, "A verification link has been sent to your email. Please check your inbox or spam box.", Toast.LENGTH_LONG).show();
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        //Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG);
+                                        Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                                auth.signOut();
+                            }
+                        }).addOnFailureListener(e -> {
+                            //Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG);
+                            Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                        });
                     }
-                } else {
-                    //Snackbar.make(view, "Invalid email!", Snackbar.LENGTH_LONG);
-                    Toast.makeText(RegisterActivity.this, "Invalid email!", Toast.LENGTH_LONG).show();
                 }
+            } else {
+                //Snackbar.make(view, "Invalid email!", Snackbar.LENGTH_LONG);
+                Toast.makeText(RegisterActivity.this, "Invalid email!", Toast.LENGTH_LONG).show();
             }
         });
 
-        textView5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        textView5.setOnClickListener(v -> finish());
     }
 }

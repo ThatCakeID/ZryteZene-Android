@@ -38,17 +38,17 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til1"
+        android:id="@+id/login_email_til"
         style="@style/AppTheme.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/til2"
+        app:layout_constraintBottom_toTopOf="@+id/login_passw_til"
         app:layout_constraintEnd_toEndOf="@id/imageView"
         app:layout_constraintStart_toStartOf="@id/textView3">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tie1"
+            android:id="@+id/login_email_tie"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/email"
@@ -56,18 +56,18 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til2"
+        android:id="@+id/login_passw_til"
         style="@style/AppTheme.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@id/textView6"
-        app:layout_constraintEnd_toEndOf="@id/til1"
-        app:layout_constraintStart_toStartOf="@id/til1"
+        app:layout_constraintEnd_toEndOf="@id/login_email_til"
+        app:layout_constraintStart_toStartOf="@id/login_email_til"
         app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/tie2"
+            android:id="@+id/login_passw_tie"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/password"
@@ -83,7 +83,7 @@
         android:fontFamily="@font/googlesans"
         android:text="@string/forgot_pass"
         app:layout_constraintBottom_toTopOf="@id/button_continue"
-        app:layout_constraintStart_toStartOf="@id/til2" />
+        app:layout_constraintStart_toStartOf="@id/login_passw_til" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button_continue"
