@@ -60,56 +60,62 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         button_continue.setOnClickListener(v -> {
-            if (email_tie.getText().toString().trim().matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
-                if (passw_tie.getText().toString().length() == 0)
-                    //Snackbar.make(view, "Password can't be empty!", Snackbar.LENGTH_LONG);
-                    Toast.makeText(LoginActivity.this, "Password can't be empty!", Toast.LENGTH_LONG).show();
-                else {
-                    auth.signInWithEmailAndPassword(email_tie.getText().toString().trim(),
-                            passw_tie.getText().toString()).addOnSuccessListener(authResult -> {
-                                if (auth.getCurrentUser().isEmailVerified()) {
-                                    Toast.makeText(LoginActivity.this, "Logged in", Toast.LENGTH_LONG).show();
-                                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                                    finish();
-                                } else {
-                                    AlertDialog.Builder alertDialog = new AlertDialog.Builder(LoginActivity.this);
-                                    alertDialog.setTitle("Unverified Email");
-                                    alertDialog.setMessage("Your email isn't verified. Do you want to re-send a new verification link to your email?");
-                                    alertDialog.setPositiveButton("Yes", (dialog, which) -> auth.getCurrentUser().sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            //Snackbar.make(view, "A verification link has been sent to your email. Please check your inbox or spam box.", Snackbar.LENGTH_LONG);
-                                            Toast.makeText(LoginActivity.this, "A verification link has been sent to your email. Please check your inbox or spam box.", Toast.LENGTH_LONG).show();
-                                        }
-                                    }).addOnFailureListener(e -> {
-                                        //Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG);
-                                        Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                                    }));
-                                    alertDialog.setNegativeButton("No", (dialog, which) -> auth.signOut());
-                                    alertDialog.setCancelable(false);
-                                    alertDialog.create().show();
-                                }
-                            }).addOnFailureListener(e -> {
-                                //Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG);
-                                Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                            });
-                }
-            } else {
-                //Snackbar.make(view, "Invalid email!", Snackbar.LENGTH_LONG);
+            String email = email_tie.getText().toString().trim();
+            String password = passw_tie.getText().toString();
+
+            if (!email.matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
                 Toast.makeText(LoginActivity.this, "Invalid email!", Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if (password.length() == 0) {
+                //Snackbar.make(view, "Password can't be empty!", Snackbar.LENGTH_LONG);
+                Toast.makeText(LoginActivity.this, "Password can't be empty!", Toast.LENGTH_LONG).show();
+
+            } else {
+                auth.signInWithEmailAndPassword(email, password).addOnSuccessListener(authResult -> {
+                    if (auth.getCurrentUser().isEmailVerified()) {
+                        Toast.makeText(LoginActivity.this, "Logged in", Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                        finish();
+
+                    } else {
+                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(LoginActivity.this);
+
+                        alertDialog.setTitle("Unverified Email");
+                        alertDialog.setMessage("Your email isn't verified. Do you want to re-send a new verification link to your email?");
+
+                        alertDialog.setPositiveButton("Yes", (dialog, which) -> auth.getCurrentUser().sendEmailVerification().addOnSuccessListener(aVoid -> {
+                            //Snackbar.make(view, "A verification link has been sent to your email. Please check your inbox or spam box.", Snackbar.LENGTH_LONG);
+                            Toast.makeText(LoginActivity.this, "A verification link has been sent to your email. Please check your inbox or spam box.", Toast.LENGTH_LONG).show();
+                        }).addOnFailureListener(e -> {
+                            //Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG);
+                            Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                        }));
+
+                        alertDialog.setNegativeButton("No", (dialog, which) -> auth.signOut());
+                        alertDialog.setCancelable(false);
+                        alertDialog.create().show();
+                    }
+
+                }).addOnFailureListener(e -> {
+                    //Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG);
+                    Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                });
             }
         });
 
         forgot_password_text.setOnClickListener(v -> {
-            if (email_tie.getText().toString().trim().matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
-                auth.sendPasswordResetEmail(email_tie.getText().toString());
-                //Snackbar.make(view, "A verification link has been sent to your email. Please check your inbox or spam box.", Snackbar.LENGTH_LONG);
-                Toast.makeText(LoginActivity.this, "A verification link has been sent to your email. Please check your inbox or spam box.", Toast.LENGTH_LONG).show();
+            String email = email_tie.getText().toString().trim();
 
-            } else {
-                //Snackbar.make(view, "Invalid email!", Snackbar.LENGTH_LONG);
+            if (email.matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
                 Toast.makeText(LoginActivity.this, "Please enter a valid email!", Toast.LENGTH_LONG).show();
+                return;
             }
+
+            auth.sendPasswordResetEmail(email);
+            //Snackbar.make(view, "A verification link has been sent to your email. Please check your inbox or spam box.", Snackbar.LENGTH_LONG);
+            Toast.makeText(LoginActivity.this, "A verification link has been sent to your email. Please check your inbox or spam box.", Toast.LENGTH_LONG).show();
         });
 
         register_text.setOnClickListener(v -> {
