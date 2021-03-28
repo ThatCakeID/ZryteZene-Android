@@ -22,8 +22,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class RegisterActivity extends AppCompatActivity {
-    private TextInputEditText tie1, tie2, tie3;
-    private TextInputLayout til1, til2, til3;
+    private TextInputEditText email_tie, passw_tie, passw2_tie;
+    private TextInputLayout email_til, passw_til, passw2_til;
     private MaterialButton button_continue;
     private FirebaseAuth auth;
     private TextView textView5;
@@ -33,12 +33,14 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        tie1 = findViewById(R.id.tie1);
-        tie2 = findViewById(R.id.tie2);
-        tie3 = findViewById(R.id.tie3);
-        til1 = findViewById(R.id.til1);
-        til2 = findViewById(R.id.til2);
-        til3 = findViewById(R.id.til3);
+        email_tie = findViewById(R.id.register_email_tie);
+        passw_tie = findViewById(R.id.register_passw_tie);
+        passw2_tie = findViewById(R.id.register_passw2_tie);
+
+        email_til = findViewById(R.id.register_email_til);
+        passw_til = findViewById(R.id.register_passw_til);
+        passw2_til = findViewById(R.id.register_passw2_til);
+
         button_continue = findViewById(R.id.button_continue);
 
         textView5 = findViewById(R.id.textView5);
@@ -46,43 +48,39 @@ public class RegisterActivity extends AppCompatActivity {
         FirebaseApp.initializeApp(getApplicationContext());
         auth = FirebaseAuth.getInstance();
 
-        tie1.addTextChangedListener(new TextWatcher() {
+        email_tie.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // Empty
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (tie1.getText().toString().trim().matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
-                    til1.setError(null);
+                if (email_tie.getText().toString().trim().matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
+                    email_til.setError(null);
                 } else {
-                    til1.setError("Invalid email!");
+                    email_til.setError("Invalid email!");
                 }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                // Empty
             }
         });
 
         Intent intent = new Intent();
-        if (intent.getStringExtra("email") != null) tie1.setText(intent.getStringExtra("email"));
+        if (intent.getStringExtra("email") != null) email_tie.setText(intent.getStringExtra("email"));
 
         button_continue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (tie1.getText().toString().trim().matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
-                    if (tie2.getText().toString().length() == 0)
+                if (email_tie.getText().toString().trim().matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
+                    if (passw_tie.getText().toString().length() == 0)
                         //Snackbar.make(view, "Password can't be empty!", Snackbar.LENGTH_LONG);
                         Toast.makeText(RegisterActivity.this, "Password can't be empty!", Toast.LENGTH_LONG).show();
                     else {
-                        if (!tie3.getText().toString().equals(tie3.getText().toString()))
-                            til3.setError("Password does not match");
+                        if (!passw2_tie.getText().toString().equals(passw2_tie.getText().toString()))
+                            passw2_til.setError("Password does not match");
                         else {
-                            auth.createUserWithEmailAndPassword(tie1.getText().toString().trim(),
-                                    tie2.getText().toString()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                            auth.createUserWithEmailAndPassword(email_tie.getText().toString().trim(),
+                                    passw_tie.getText().toString()).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                                 @Override
                                 public void onSuccess(AuthResult authResult) {
                                     auth.getCurrentUser().sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
