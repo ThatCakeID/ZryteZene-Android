@@ -22,10 +22,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class RegisterActivity extends AppCompatActivity {
     private TextInputEditText email_tie, passw_tie, passw2_tie;
-    private TextInputLayout email_til, passw_til, passw2_til;
-    private MaterialButton button_continue;
+    private TextInputLayout email_til, passw2_til;
     private FirebaseAuth auth;
-    private TextView textView5;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,12 +35,12 @@ public class RegisterActivity extends AppCompatActivity {
         passw2_tie = findViewById(R.id.register_passw2_tie);
 
         email_til = findViewById(R.id.register_email_til);
-        passw_til = findViewById(R.id.register_passw_til);
+        TextInputLayout passw_til = findViewById(R.id.register_passw_til);
         passw2_til = findViewById(R.id.register_passw2_til);
 
-        button_continue = findViewById(R.id.button_continue);
+        MaterialButton button_continue = findViewById(R.id.button_continue);
 
-        textView5 = findViewById(R.id.textView5);
+        TextView textView5 = findViewById(R.id.textView5);
 
         FirebaseApp.initializeApp(getApplicationContext());
         auth = FirebaseAuth.getInstance();
@@ -85,6 +83,9 @@ public class RegisterActivity extends AppCompatActivity {
 
                 auth.createUserWithEmailAndPassword(email_tie.getText().toString().trim(),
                     passw_tie.getText().toString()).addOnSuccessListener(authResult -> {
+
+                        // auth.getCurrentUser() will NEVER be null
+                        assert auth.getCurrentUser() != null;
 
                         auth.getCurrentUser().sendEmailVerification().addOnSuccessListener(aVoid -> {
                             //Snackbar.make(view, "A verification link has been sent to your email. Please check your inbox or spam box.", Snackbar.LENGTH_LONG);

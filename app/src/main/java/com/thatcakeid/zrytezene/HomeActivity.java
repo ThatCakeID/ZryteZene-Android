@@ -2,7 +2,6 @@ package com.thatcakeid.zrytezene;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -16,7 +15,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.thatcakeid.zrytezene.adapters.HomeItemsRecyclerViewAdapter;
 
@@ -24,14 +22,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class HomeActivity extends AppCompatActivity {
-    private ImageView user_appbar_home;
-    private RecyclerView rv_items_home;
 
     private ArrayList<HashMap<String, Object>> musics_entries, users_entries;
-
     private HashMap<String, String> user_indexes;
 
-    private FirebaseFirestore users_db, musics_db;
     private FirebaseAuth auth;
 
     @Override
@@ -39,8 +33,8 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        user_appbar_home = findViewById(R.id.user_appbar_home);
-        rv_items_home = findViewById(R.id.rv_items_home);
+        ImageView user_appbar_home = findViewById(R.id.user_appbar_home);
+        RecyclerView rv_items_home = findViewById(R.id.rv_items_home);
 
         musics_entries = new ArrayList<>();
         users_entries = new ArrayList<>();
@@ -50,8 +44,8 @@ public class HomeActivity extends AppCompatActivity {
         FirebaseApp.initializeApp(this);
 
         auth = FirebaseAuth.getInstance();
-        musics_db = FirebaseFirestore.getInstance();
-        users_db = FirebaseFirestore.getInstance();
+        FirebaseFirestore musics_db = FirebaseFirestore.getInstance();
+        FirebaseFirestore users_db = FirebaseFirestore.getInstance();
 
         user_appbar_home.setOnClickListener(v -> {
             if (auth.getCurrentUser() == null) {
@@ -61,7 +55,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        HomeItemsRecyclerViewAdapter adapter = new HomeItemsRecyclerViewAdapter(musics_entries, user_indexes);
+        final HomeItemsRecyclerViewAdapter adapter = new HomeItemsRecyclerViewAdapter(musics_entries, user_indexes);
         rv_items_home.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         rv_items_home.setAdapter(adapter);
 
@@ -74,14 +68,14 @@ public class HomeActivity extends AppCompatActivity {
             }
             
             for (DocumentChange dc : value.getDocumentChanges()) {
-                HashMap<String, Object> data = (HashMap<String, Object>) dc.getDocument().getData().get("uid");
+                HashMap<String, Object> data = (HashMap<String, Object>) dc.getDocument().getData();
 
                 switch (dc.getType()) {
                     case ADDED:
                         users_entries.add(data);
                         user_indexes.put((String) data.get("uid"), (String) data.get("username"));
 
-                        rv_items_home.getAdapter().notifyDataSetChanged();
+                        adapter.notifyDataSetChanged();
                         break;
 
                     case MODIFIED:
@@ -98,7 +92,7 @@ public class HomeActivity extends AppCompatActivity {
                         users_entries.remove(data);
                         user_indexes.remove((String) data.get("uid"));
 
-                        rv_items_home.getAdapter().notifyDataSetChanged();
+                        adapter.notifyDataSetChanged();
                         break;
                 }
             }
@@ -113,12 +107,12 @@ public class HomeActivity extends AppCompatActivity {
             }
 
             for (DocumentChange dc : value.getDocumentChanges()) {
-                HashMap<String, Object> data = (HashMap<String, Object>) dc.getDocument().getData().get("uid");
+                HashMap<String, Object> data = (HashMap<String, Object>) dc.getDocument().getData();
 
                 switch (dc.getType()) {
                     case ADDED:
                         musics_entries.add(data);
-                        rv_items_home.getAdapter().notifyDataSetChanged();
+                        adapter.notifyDataSetChanged();
                         break;
 
                     case MODIFIED:
@@ -127,12 +121,12 @@ public class HomeActivity extends AppCompatActivity {
                         musics_entries.remove(mod_pos);
                         musics_entries.add(mod_pos, data);
 
-                        rv_items_home.getAdapter().notifyDataSetChanged();
+                        adapter.notifyDataSetChanged();
                         break;
 
                     case REMOVED:
                         musics_entries.remove(data);
-                        rv_items_home.getAdapter().notifyDataSetChanged();
+                        adapter.notifyDataSetChanged();
                         break;
                 }
             }

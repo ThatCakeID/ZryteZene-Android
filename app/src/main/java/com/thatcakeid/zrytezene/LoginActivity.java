@@ -1,8 +1,5 @@
 package com.thatcakeid.zrytezene;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -10,7 +7,9 @@ import android.text.TextWatcher;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -19,10 +18,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
     private TextInputEditText email_tie, passw_tie;
-    private TextInputLayout email_til, passw_til;
-    private MaterialButton button_continue;
+    private TextInputLayout email_til;
     private FirebaseAuth auth;
-    private TextView register_text, forgot_password_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,12 +29,12 @@ public class LoginActivity extends AppCompatActivity {
         email_tie = findViewById(R.id.login_email_tie);
         passw_tie = findViewById(R.id.login_passw_tie);
         email_til = findViewById(R.id.login_email_til);
-        passw_til = findViewById(R.id.login_passw_til);
+        TextInputLayout passw_til = findViewById(R.id.login_passw_til);
 
-        button_continue = findViewById(R.id.button_continue);
+        MaterialButton button_continue = findViewById(R.id.button_continue);
 
-        register_text = findViewById(R.id.register_text);
-        forgot_password_text = findViewById(R.id.forgot_password_text);
+        TextView register_text = findViewById(R.id.register_text);
+        TextView forgot_password_text = findViewById(R.id.forgot_password_text);
 
         FirebaseApp.initializeApp(getApplicationContext());
         auth = FirebaseAuth.getInstance();
