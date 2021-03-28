@@ -18,59 +18,55 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
-    private TextInputEditText tie1, tie2;
-    private TextInputLayout til1, til2;
+    private TextInputEditText email_tie, passw_tie;
+    private TextInputLayout email_til, passw_til;
     private MaterialButton button_continue;
     private FirebaseAuth auth;
-    private TextView textView4, textView6;
+    private TextView register_text, forgot_password_text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        tie1 = findViewById(R.id.login_email_tie);
-        tie2 = findViewById(R.id.login_passw_tie);
-        til1 = findViewById(R.id.login_email_til);
-        til2 = findViewById(R.id.login_passw_til);
-        
+        email_tie = findViewById(R.id.login_email_tie);
+        passw_tie = findViewById(R.id.login_passw_tie);
+        email_til = findViewById(R.id.login_email_til);
+        passw_til = findViewById(R.id.login_passw_til);
+
         button_continue = findViewById(R.id.button_continue);
 
-        textView4 = findViewById(R.id.textView4);
-        textView6 = findViewById(R.id.textView6);
+        register_text = findViewById(R.id.register_text);
+        forgot_password_text = findViewById(R.id.forgot_password_text);
 
         FirebaseApp.initializeApp(getApplicationContext());
         auth = FirebaseAuth.getInstance();
 
-        tie1.addTextChangedListener(new TextWatcher() {
+        email_tie.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // Empty
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (tie1.getText().toString().trim().matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
-                    til1.setError(null);
+                if (email_tie.getText().toString().trim().matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
+                    email_til.setError(null);
                 } else {
-                    til1.setError("Invalid email!");
+                    email_til.setError("Invalid email!");
                 }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                // Empty
             }
         });
 
         button_continue.setOnClickListener(v -> {
-            if (tie1.getText().toString().trim().matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
-                if (tie2.getText().toString().length() == 0)
+            if (email_tie.getText().toString().trim().matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
+                if (passw_tie.getText().toString().length() == 0)
                     //Snackbar.make(view, "Password can't be empty!", Snackbar.LENGTH_LONG);
                     Toast.makeText(LoginActivity.this, "Password can't be empty!", Toast.LENGTH_LONG).show();
                 else {
-                    auth.signInWithEmailAndPassword(tie1.getText().toString().trim(),
-                            tie2.getText().toString()).addOnSuccessListener(authResult -> {
+                    auth.signInWithEmailAndPassword(email_tie.getText().toString().trim(),
+                            passw_tie.getText().toString()).addOnSuccessListener(authResult -> {
                                 if (auth.getCurrentUser().isEmailVerified()) {
                                     Toast.makeText(LoginActivity.this, "Logged in", Toast.LENGTH_LONG).show();
                                     startActivity(new Intent(getApplicationContext(), HomeActivity.class));
@@ -104,9 +100,9 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        textView6.setOnClickListener(v -> {
-            if (tie1.getText().toString().trim().matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
-                auth.sendPasswordResetEmail(tie1.getText().toString());
+        forgot_password_text.setOnClickListener(v -> {
+            if (email_tie.getText().toString().trim().matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
+                auth.sendPasswordResetEmail(email_tie.getText().toString());
                 //Snackbar.make(view, "A verification link has been sent to your email. Please check your inbox or spam box.", Snackbar.LENGTH_LONG);
                 Toast.makeText(LoginActivity.this, "A verification link has been sent to your email. Please check your inbox or spam box.", Toast.LENGTH_LONG).show();
 
@@ -116,9 +112,9 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        textView4.setOnClickListener(v -> {
+        register_text.setOnClickListener(v -> {
             Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
-            i.putExtra("email", tie1.getText().toString());
+            i.putExtra("email", email_tie.getText().toString());
             startActivity(i);
         });
     }
