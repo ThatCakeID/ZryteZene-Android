@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,9 +26,11 @@ import java.util.HashMap;
 public class HomeActivity extends AppCompatActivity {
     private ImageView user_appbar_home;
     private RecyclerView rv_items_home;
-    private ArrayList<HashMap<String, Object>> musics_entries;
-    private ArrayList<HashMap<String, Object>> users_entries;
+
+    private ArrayList<HashMap<String, Object>> musics_entries, users_entries;
+
     private HashMap<String, String> user_indexes;
+
     private FirebaseFirestore users_db, musics_db;
     private FirebaseAuth auth;
 
@@ -35,13 +38,17 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
         user_appbar_home = findViewById(R.id.user_appbar_home);
         rv_items_home = findViewById(R.id.rv_items_home);
+
         musics_entries = new ArrayList<>();
         users_entries = new ArrayList<>();
+
         user_indexes = new HashMap<>();
 
         FirebaseApp.initializeApp(this);
+
         auth = FirebaseAuth.getInstance();
         musics_db = FirebaseFirestore.getInstance();
         users_db = FirebaseFirestore.getInstance();
@@ -54,31 +61,43 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        HomeItemsRecyclerViewAdapter adapter = new HomeItemsRecyclerViewAdapter(musics_entries, user_indexes);
         rv_items_home.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        HomeItemsRecyclerViewAdapter adapter = new HomeItemsRecyclerViewAdapter(musics_entries,
-                user_indexes);
         rv_items_home.setAdapter(adapter);
 
         users_db.collection("users").addSnapshotListener((EventListener<QuerySnapshot>) (value, error) -> {
+            
+            if (value == null) {
+                Toast.makeText(HomeActivity.this, "An error occurred whilst trying to update users: value is null", Toast.LENGTH_SHORT).show();
+
+                return;
+            }
+            
             for (DocumentChange dc : value.getDocumentChanges()) {
+                HashMap<String, Object> data = (HashMap<String, Object>) dc.getDocument().getData().get("uid");
+
                 switch (dc.getType()) {
                     case ADDED:
-                        users_entries.add((HashMap<String, Object>) dc.getDocument().getData());
-                        user_indexes.put(((HashMap<String, Object>) dc.getDocument().getData()).get("uid").toString(),
-                                ((HashMap<String, Object>) dc.getDocument().getData()).get("username").toString());
+                        users_entries.add(data);
+                        user_indexes.put((String) data.get("uid"), (String) data.get("username"));
+
                         rv_items_home.getAdapter().notifyDataSetChanged();
                         break;
+
                     case MODIFIED:
-                        int mod_pos = users_entries.indexOf((HashMap<String, Object>) dc.getDocument().getData());
+                        int mod_pos = users_entries.indexOf(data);
+
                         users_entries.remove(mod_pos);
-                        users_entries.add(mod_pos, (HashMap<String, Object>) dc.getDocument().getData());
-                        user_indexes.remove(((HashMap<String, Object>) dc.getDocument().getData()).get("uid").toString());
-                        user_indexes.put(((HashMap<String, Object>) dc.getDocument().getData()).get("uid").toString(),
-                                ((HashMap<String, Object>) dc.getDocument().getData()).get("username").toString());
+                        users_entries.add(mod_pos, data);
+
+                        user_indexes.remove((String) data.get("uid"));
+                        user_indexes.put((String) data.get("uid"), (String) data.get("username"));
                         break;
+
                     case REMOVED:
-                        users_entries.remove((HashMap<String, Object>) dc.getDocument().getData());
-                        user_indexes.remove(((HashMap<String, Object>) dc.getDocument().getData()).get("uid").toString());
+                        users_entries.remove(data);
+                        user_indexes.remove((String) data.get("uid"));
+
                         rv_items_home.getAdapter().notifyDataSetChanged();
                         break;
                 }
@@ -86,20 +105,33 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         musics_db.collection("musics").addSnapshotListener((EventListener<QuerySnapshot>) (value, error) -> {
+
+            if (value == null) {
+                Toast.makeText(HomeActivity.this, "An error occurred whilst trying to update musics: value is null", Toast.LENGTH_SHORT).show();
+
+                return;
+            }
+
             for (DocumentChange dc : value.getDocumentChanges()) {
+                HashMap<String, Object> data = (HashMap<String, Object>) dc.getDocument().getData().get("uid");
+
                 switch (dc.getType()) {
                     case ADDED:
-                        musics_entries.add((HashMap<String, Object>) dc.getDocument().getData());
+                        musics_entries.add(data);
                         rv_items_home.getAdapter().notifyDataSetChanged();
                         break;
+
                     case MODIFIED:
-                        int mod_pos = musics_entries.indexOf((HashMap<String, Object>) dc.getDocument().getData());
+                        int mod_pos = musics_entries.indexOf(data);
+
                         musics_entries.remove(mod_pos);
-                        musics_entries.add(mod_pos, (HashMap<String, Object>) dc.getDocument().getData());
+                        musics_entries.add(mod_pos, data);
+
                         rv_items_home.getAdapter().notifyDataSetChanged();
                         break;
+
                     case REMOVED:
-                        musics_entries.remove((HashMap<String, Object>) dc.getDocument().getData());
+                        musics_entries.remove(data);
                         rv_items_home.getAdapter().notifyDataSetChanged();
                         break;
                 }
