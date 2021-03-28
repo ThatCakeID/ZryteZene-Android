@@ -1,5 +1,6 @@
 package com.thatcakeid.zrytezene;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -19,7 +20,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class MainActivity extends AppCompatActivity {
-    private FirebaseFirestore versions_db;
     private FirebaseAuth auth;
 
     @Override
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize Firebase
         FirebaseApp.initializeApp(this);
-        versions_db = FirebaseFirestore.getInstance();
+        FirebaseFirestore versions_db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
 
         // Set collection reference to 'versions'
@@ -47,28 +47,29 @@ public class MainActivity extends AppCompatActivity {
                             // Get the app's package information
                             PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
 
+                            Class<? extends Activity> startActivity;
+
                             // Get the client's app version and compare it with the one in the server
-                            if ((int)((long)document.get("version")) > packageInfo.versionCode) {
+                            if ((int) ((long) document.get("version")) > packageInfo.versionCode) {
                                 // There's a newer version!
-                                startActivity(new Intent(getApplicationContext(), UpdateActivity.class));
-                                finish();
+                                startActivity = UpdateActivity.class;
                             } else {
                                 if (auth.getCurrentUser() == null) {
-                                    startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                                    finish();
+                                    startActivity = LoginActivity.class;
                                 } else {
                                     if (auth.getCurrentUser().isEmailVerified()) {
-                                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                                        finish();
+                                        startActivity = HomeActivity.class;
                                     } else {
                                         auth.signOut();
+
                                         Toast.makeText(MainActivity.this, "You've been signed out because your current account's email is not verified.", Toast.LENGTH_LONG).show();
-                                        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                                        finish();
+                                        startActivity = LoginActivity.class;
                                     }
                                 }
                             }
 
+                            startActivity(new Intent(getApplicationContext(), startActivity));
+                            finish();
                         } catch (PackageManager.NameNotFoundException ignored) {} // Ignored, this error shouldn't happen
                     }
                 })
