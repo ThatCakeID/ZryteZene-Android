@@ -39,6 +39,7 @@
         <activity
             android:name=".RegisterActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <service android:name=".services.PlaybackService" />
     </application>
 
 </manifest>

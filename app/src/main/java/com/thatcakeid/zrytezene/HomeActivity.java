@@ -1,7 +1,11 @@
 package com.thatcakeid.zrytezene;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -11,8 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.exoplayer2.MediaItem;
-import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
@@ -20,13 +22,12 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.thatcakeid.zrytezene.adapters.HomeItemsRecyclerViewAdapter;
+import com.thatcakeid.zrytezene.services.PlaybackService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class HomeActivity extends AppCompatActivity {
-
-    private SimpleExoPlayer player;
 
     private ArrayList<HashMap<String, Object>> musics_entries;
     private ArrayList<String> musics_indexes;
@@ -34,12 +35,26 @@ public class HomeActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
 
+    private PlaybackService playbackService;
+    private boolean isServiceBounded = false;
+    private ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            PlaybackService.LocalBinder binder = (PlaybackService.LocalBinder) service;
+            playbackService = binder.getService();
+            isServiceBounded = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            isServiceBounded = false;
+        }
+    };
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
-        player = new SimpleExoPlayer.Builder(this).build();
 
         ImageView user_appbar_home = findViewById(R.id.user_appbar_home);
         RecyclerView rv_items_home = findViewById(R.id.rv_items_home);
@@ -65,9 +80,15 @@ public class HomeActivity extends AppCompatActivity {
         adapter.setOnItemClickListener(new HomeItemsRecyclerViewAdapter.ClickListener() {
             @Override
             public void onItemClick(int position, View v) {
-                player.setMediaItem(MediaItem.fromUri(musics_entries.get(position).get("music_url").toString()));
-                player.prepare();
-                player.play();
+                if (!isServiceBounded) {
+                    Intent playerIntent = new Intent(HomeActivity.this, PlaybackService.class);
+                    playerIntent.putExtra("source", (String) musics_entries.get(position).get("music_url"));
+                    startService(playerIntent);
+                    bindService(playerIntent, serviceConnection, Context.BIND_AUTO_CREATE);
+                } else {
+                    //Service is active
+                    //Send media with BroadcastReceiver
+                }
             }
 
             @Override
