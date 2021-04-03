@@ -22,6 +22,8 @@ public class HomeItemsRecyclerViewAdapter extends RecyclerView.Adapter<HomeItems
     private ArrayList<HashMap<String, Object>> items;
     private HashMap<String, String> users;
 
+    private static ClickListener clickListener;
+
     public HomeItemsRecyclerViewAdapter(ArrayList<HashMap<String, Object>> items,
                                         HashMap<String, String> users) {
         this.items = items;
@@ -56,7 +58,7 @@ public class HomeItemsRecyclerViewAdapter extends RecyclerView.Adapter<HomeItems
         return items.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
         ImageView image_overlay;
         TextView musicname_item;
@@ -66,10 +68,33 @@ public class HomeItemsRecyclerViewAdapter extends RecyclerView.Adapter<HomeItems
         public ViewHolder(View itemView) {
             super(itemView);
 
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
+
             image_overlay = itemView.findViewById(R.id.image_overlay);
             musicname_item = itemView.findViewById(R.id.musicname_item);
             uploader_item = itemView.findViewById(R.id.uploader_item);
             date_text = itemView.findViewById(R.id.date_text);
         }
+
+        @Override
+        public void onClick(View v) {
+            clickListener.onItemClick(getAdapterPosition(), v);
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            clickListener.onItemLongClick(getAdapterPosition(), v);
+            return false;
+        }
+    }
+
+    public void setOnItemClickListener(ClickListener clickListener) {
+        HomeItemsRecyclerViewAdapter.clickListener = clickListener;
+    }
+
+    public interface ClickListener {
+        void onItemClick(int position, View v);
+        void onItemLongClick(int position, View v);
     }
 }
