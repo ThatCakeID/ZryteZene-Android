@@ -99,7 +99,7 @@ public class HomeActivity extends AppCompatActivity {
         rv_items_home.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         rv_items_home.setAdapter(adapter);
 
-        users_db.collection("users").addSnapshotListener((EventListener<QuerySnapshot>) (value, error) -> {
+        users_db.collection("users").addSnapshotListener((value, error) -> {
             
             if (value == null) {
                 Toast.makeText(HomeActivity.this, "An error occurred whilst trying to update users: value is null", Toast.LENGTH_SHORT).show();
@@ -119,14 +119,14 @@ public class HomeActivity extends AppCompatActivity {
                         break;
 
                     case REMOVED:
-                        user_indexes.remove((String) data.get("uid"));
+                        user_indexes.remove(data.get("uid"));
                         adapter.notifyDataSetChanged();
                         break;
                 }
             }
         });
 
-        musics_db.collection("musics").addSnapshotListener((EventListener<QuerySnapshot>) (value, error) -> {
+        musics_db.collection("musics").addSnapshotListener((value, error) -> {
 
             if (value == null) {
                 Toast.makeText(HomeActivity.this, "An error occurred whilst trying to update musics: value is null", Toast.LENGTH_SHORT).show();
