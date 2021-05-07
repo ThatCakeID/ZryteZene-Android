@@ -9,9 +9,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.thatcakeid.zrytezene.databinding.ActivityProfileBinding;
+
+import java.util.Objects;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -19,6 +22,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     String uid;
     FirebaseFirestore database = FirebaseFirestore.getInstance();
+    FirebaseAuth auth = FirebaseAuth.getInstance();
     DocumentReference user_ref;
 
     String bio;
@@ -32,6 +36,11 @@ public class ProfileActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         uid = intent.getStringExtra("uid");
+
+        if (!Objects.equals(auth.getUid(), uid)) {
+            binding.editBio.setVisibility(View.GONE);
+        }
+
         user_ref = database.collection("users").document(uid);
 
         user_ref.get()
