@@ -29,6 +29,7 @@ import java.util.HashMap;
 public class HomeActivity extends AppCompatActivity {
 
     ActivityHomeBinding binding;
+    CurrentUserProfile profile = CurrentUserProfile.getInstance();
 
     private ArrayList<HashMap<String, Object>> musics_entries;
     private ArrayList<String> musics_indexes;
@@ -73,9 +74,11 @@ public class HomeActivity extends AppCompatActivity {
 
         user_appbar_home.setOnClickListener(v -> {
             if (auth.getCurrentUser() == null) {
-                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                startActivity(new Intent(HomeActivity.this, LoginActivity.class));
             } else {
-                // TODO: Implement profile
+                Intent profile_intent = new Intent(HomeActivity.this, ProfileActivity.class);
+                profile_intent.putExtra("uid", profile.uid);
+                startActivity(profile_intent);
             }
         });
 
@@ -99,6 +102,7 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
+
         rv_items_home.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         rv_items_home.setAdapter(adapter);
 

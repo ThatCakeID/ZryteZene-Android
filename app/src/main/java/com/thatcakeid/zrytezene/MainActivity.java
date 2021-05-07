@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
         FirebaseFirestore versions_db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
 
+        CurrentUserProfile.updateData();
+
         // Set collection reference to 'versions'
         versions_db.collection("versions")
                 .get() // Fetch the data to client
