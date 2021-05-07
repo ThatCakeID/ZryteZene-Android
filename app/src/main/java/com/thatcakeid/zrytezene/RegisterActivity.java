@@ -7,40 +7,40 @@ import android.text.TextWatcher;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+
+import com.thatcakeid.zrytezene.databinding.ActivityRegisterBinding;
 
 public class RegisterActivity extends AppCompatActivity {
     private TextInputEditText email_tie, passw_tie, passw2_tie;
     private TextInputLayout email_til, passw2_til;
     private FirebaseAuth auth;
 
+    ActivityRegisterBinding binding;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        email_tie = findViewById(R.id.register_email_tie);
-        passw_tie = findViewById(R.id.register_passw_tie);
-        passw2_tie = findViewById(R.id.register_passw2_tie);
+        email_tie = binding.registerEmailTie;
+        passw_tie = binding.registerPasswTie;
+        passw2_tie = binding.registerPassw2Tie;
 
-        email_til = findViewById(R.id.register_email_til);
-        TextInputLayout passw_til = findViewById(R.id.register_passw_til);
-        passw2_til = findViewById(R.id.register_passw2_til);
+        email_til = binding.registerEmailTil;
+        TextInputLayout passw_til = binding.registerPasswTil;
+        passw2_til = binding.registerPassw2Til;
 
-        MaterialButton button_continue = findViewById(R.id.button_continue);
+        MaterialButton button_continue = binding.buttonContinue;
 
-        TextView textView5 = findViewById(R.id.textView5);
+        TextView textView5 = binding.textView5;
 
         FirebaseApp.initializeApp(getApplicationContext());
         auth = FirebaseAuth.getInstance();

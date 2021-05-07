@@ -18,16 +18,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.thatcakeid.zrytezene.adapters.HomeItemsRecyclerViewAdapter;
+import com.thatcakeid.zrytezene.databinding.ActivityHomeBinding;
 import com.thatcakeid.zrytezene.services.PlaybackService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class HomeActivity extends AppCompatActivity {
+
+    ActivityHomeBinding binding;
 
     private ArrayList<HashMap<String, Object>> musics_entries;
     private ArrayList<String> musics_indexes;
@@ -56,8 +57,8 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        ImageView user_appbar_home = findViewById(R.id.user_appbar_home);
-        RecyclerView rv_items_home = findViewById(R.id.rv_items_home);
+        ImageView user_appbar_home = binding.userAppbarHome;
+        RecyclerView rv_items_home = binding.rvItemsHome;
 
         musics_entries = new ArrayList<>();
         musics_indexes = new ArrayList<>();

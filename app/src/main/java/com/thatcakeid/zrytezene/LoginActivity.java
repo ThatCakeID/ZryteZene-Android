@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,25 +17,32 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 
+import com.thatcakeid.zrytezene.databinding.ActivityLoginBinding;
+
 public class LoginActivity extends AppCompatActivity {
     private TextInputEditText email_tie, passw_tie;
     private TextInputLayout email_til;
     private FirebaseAuth auth;
 
+    ActivityLoginBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
-        email_tie = findViewById(R.id.login_email_tie);
-        passw_tie = findViewById(R.id.login_passw_tie);
-        email_til = findViewById(R.id.login_email_til);
-        TextInputLayout passw_til = findViewById(R.id.login_passw_til);
+        email_tie = binding.loginEmailTie;
+        passw_tie = binding.loginPasswTie;
+        email_til = binding.loginEmailTil;
 
-        MaterialButton button_continue = findViewById(R.id.button_continue);
+        TextInputLayout passw_til = binding.loginPasswTil;
 
-        TextView register_text = findViewById(R.id.register_text);
-        TextView forgot_password_text = findViewById(R.id.forgot_password_text);
+        MaterialButton button_continue = binding.buttonContinue;
+
+        TextView register_text = binding.registerText;
+        TextView forgot_password_text = binding.forgotPasswordText;
 
         FirebaseApp.initializeApp(getApplicationContext());
         auth = FirebaseAuth.getInstance();
