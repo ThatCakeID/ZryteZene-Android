@@ -3,7 +3,10 @@ package com.thatcakeid.zrytezene;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.DocumentReference;
@@ -17,6 +20,8 @@ public class ProfileActivity extends AppCompatActivity {
     String uid;
     FirebaseFirestore database = FirebaseFirestore.getInstance();
     DocumentReference user_ref;
+
+    String bio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +37,37 @@ public class ProfileActivity extends AppCompatActivity {
         user_ref.get()
                 .addOnSuccessListener(snapshot -> {
                     binding.userName.setText(snapshot.getString("username"));
-                    binding.userBio.setText(snapshot.getString("description"));
+
+                    bio = snapshot.getString("description");
+                    binding.userBio.setText(bio);
+                })
+                .addOnFailureListener(e -> {
+                    e.printStackTrace();
+                    Toast.makeText(this, "An error occurred: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 });
+    }
+
+    public void editBio(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Edit bio");
+
+        EditText bio_edit = new EditText(this);
+        bio_edit.setText(bio);
+
+        builder.setView(bio_edit);
+        builder.setPositiveButton("Ok", (dialog, which) ->
+            user_ref.update("description", bio_edit.getText().toString())
+                .addOnSuccessListener(aVoid -> Toast.makeText(this, "Bio edited.", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> {
+                    e.printStackTrace();
+                    Toast.makeText(this, "An error occurred: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                })
+        );
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> {
+            dialog.dismiss();
+        });
+
+        builder.create().show();
     }
 }
