@@ -32,7 +32,7 @@ public class RegisterActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-        ExtraMetadata.setWatermarkColors(binding.textWatermarkRegister);
+        ExtraMetadata.setWatermarkColors(binding.textWatermark, binding.watermarkRoot);
 
         email_tie = binding.registerEmailTie;
         passw_tie = binding.registerPasswTie;

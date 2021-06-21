@@ -1,81 +1,58 @@
 package com.thatcakeid.zrytezene;
 
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.exoplayer2.MediaItem;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.thatcakeid.zrytezene.adapters.HomeItemsRecyclerViewAdapter;
 import com.thatcakeid.zrytezene.databinding.ActivityHomeBinding;
-import com.thatcakeid.zrytezene.services.PlaybackService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class HomeActivity extends AppCompatActivity {
 
-    ActivityHomeBinding binding;
-    CurrentUserProfile profile = CurrentUserProfile.getInstance();
+    private View view;
+    private ActivityHomeBinding binding;
+    private CurrentUserProfile profile = CurrentUserProfile.getInstance();
+    private CardView cv_user_appbar;
+    private RecyclerView rv_items_home;
 
     private ArrayList<HashMap<String, Object>> musics_entries;
     private ArrayList<String> musics_indexes;
     private HashMap<String, String> user_indexes;
+    private SimpleExoPlayer simpleExoPlayer;
 
     private FirebaseAuth auth;
-
-    private PlaybackService playbackService;
-    private boolean isServiceBounded = false;
-    private ServiceConnection serviceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            PlaybackService.LocalBinder binder = (PlaybackService.LocalBinder) service;
-            playbackService = binder.getService();
-            isServiceBounded = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            isServiceBounded = false;
-        }
-    };
+    FirebaseFirestore musics_db, users_db;
+    private BottomSheetBehavior bottomSheetBehavior;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityHomeBinding.inflate(getLayoutInflater());
-        View view = binding.getRoot();
+        view = binding.getRoot();
         setContentView(view);
 
-        ExtraMetadata.setWatermarkColors(binding.textWatermarkHome);
+        initializeVar();
 
-        ImageView user_appbar_home = binding.userAppbarHome;
-        RecyclerView rv_items_home = binding.rvItemsHome;
-
-        musics_entries = new ArrayList<>();
-        musics_indexes = new ArrayList<>();
-        user_indexes = new HashMap<>();
-
-        FirebaseApp.initializeApp(this);
-        auth = FirebaseAuth.getInstance();
-        FirebaseFirestore musics_db = FirebaseFirestore.getInstance();
-        FirebaseFirestore users_db = FirebaseFirestore.getInstance();
-
-        user_appbar_home.setOnClickListener(v -> {
+        cv_user_appbar.setOnClickListener(v -> {
             if (auth.getCurrentUser() == null) {
                 startActivity(new Intent(HomeActivity.this, LoginActivity.class));
             } else {
@@ -89,15 +66,9 @@ public class HomeActivity extends AppCompatActivity {
         adapter.setOnItemClickListener(new HomeItemsRecyclerViewAdapter.ClickListener() {
             @Override
             public void onItemClick(int position, View v) {
-                if (!isServiceBounded) {
-                    Intent playerIntent = new Intent(HomeActivity.this, PlaybackService.class);
-                    playerIntent.putExtra("source", (String) musics_entries.get(position).get("music_url"));
-                    startService(playerIntent);
-                    bindService(playerIntent, serviceConnection, Context.BIND_AUTO_CREATE);
-                } else {
-                    //Service is active
-                    //Send media with BroadcastReceiver
-                }
+                MediaItem mediaItem = MediaItem.fromUri((String)musics_entries.get(position).get("music_url"));
+                simpleExoPlayer.setMediaItem(mediaItem);
+                simpleExoPlayer.prepare();
             }
 
             @Override
@@ -169,24 +140,38 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (isServiceBounded) {
-            unbindService(serviceConnection);
-            playbackService.stopSelf();
+    private class PlayerEventListener implements Player.Listener {
+
+        @Override
+        public void onPlaybackStateChanged(int state) {
+            switch (state) {
+                case Player.STATE_READY:
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    simpleExoPlayer.play();
+                    break;
+
+                case Player.STATE_ENDED:
+                    break;
+            }
         }
     }
 
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putBoolean("PlaybackServiceState", isServiceBounded);
-        super.onSaveInstanceState(outState);
-    }
+    private void initializeVar() {
+        ExtraMetadata.setWatermarkColors(binding.textWatermark, binding.watermarkRoot);
+        bottomSheetBehavior = BottomSheetBehavior.from(view.findViewById(R.id.sheet_root));
+        cv_user_appbar = binding.cvUserAppbar;
+        rv_items_home = binding.rvItemsHome;
 
-    @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        isServiceBounded = savedInstanceState.getBoolean("PlaybackServiceState");
+        musics_entries = new ArrayList<>();
+        musics_indexes = new ArrayList<>();
+        user_indexes = new HashMap<>();
+        simpleExoPlayer = new SimpleExoPlayer.Builder(this).build();
+        simpleExoPlayer.addListener(new PlayerEventListener());
+
+        FirebaseApp.initializeApp(this);
+        auth = FirebaseAuth.getInstance();
+        musics_db = FirebaseFirestore.getInstance();
+        users_db = FirebaseFirestore.getInstance();
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
     }
 }

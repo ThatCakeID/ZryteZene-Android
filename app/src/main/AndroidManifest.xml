@@ -30,7 +30,6 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".ProfileActivity" />
-        <service android:name=".services.PlaybackService" />
     </application>
 
 </manifest>

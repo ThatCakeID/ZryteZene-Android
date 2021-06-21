@@ -55,6 +55,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
+        android:id="@+id/watermark_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="end"
@@ -62,7 +63,7 @@
         android:visibility="gone">
 
         <TextView
-            android:id="@+id/text_watermark_update"
+            android:id="@+id/text_watermark"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:background="#000000"

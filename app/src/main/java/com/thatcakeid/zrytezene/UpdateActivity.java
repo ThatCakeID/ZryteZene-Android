@@ -12,6 +12,6 @@ public class UpdateActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update);
 
-        ExtraMetadata.setWatermarkColors(findViewById(R.id.text_watermark_update));
+        ExtraMetadata.setWatermarkColors(findViewById(R.id.text_watermark), findViewById(R.id.watermark_root));
     }
 }

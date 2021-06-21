@@ -15,7 +15,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        ExtraMetadata.setWatermarkColors(findViewById(R.id.text_watermark_settings));
+        ExtraMetadata.setWatermarkColors(findViewById(R.id.text_watermark), findViewById(R.id.watermark_root));
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

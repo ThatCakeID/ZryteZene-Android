@@ -33,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-        ExtraMetadata.setWatermarkColors(binding.textWatermarkLogin);
+        ExtraMetadata.setWatermarkColors(binding.textWatermark, binding.watermarkRoot);
 
         email_tie = binding.loginEmailTie;
         passw_tie = binding.loginPasswTie;

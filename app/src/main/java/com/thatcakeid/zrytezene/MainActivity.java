@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ExtraMetadata.setWatermarkColors(findViewById(R.id.text_watermark_main));
+        ExtraMetadata.setWatermarkColors(findViewById(R.id.text_watermark), findViewById(R.id.watermark_root));
 
         // Initialize Firebase
         FirebaseApp.initializeApp(this);
