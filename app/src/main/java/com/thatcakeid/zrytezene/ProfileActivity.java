@@ -34,6 +34,8 @@ public class ProfileActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
+        ExtraMetadata.setWatermarkColors(binding.textWatermarkProfile);
+
         Intent intent = getIntent();
         uid = intent.getStringExtra("uid");
 

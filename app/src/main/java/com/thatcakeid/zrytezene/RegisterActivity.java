@@ -32,6 +32,8 @@ public class RegisterActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
+        ExtraMetadata.setWatermarkColors(binding.textWatermarkRegister);
+
         email_tie = binding.registerEmailTie;
         passw_tie = binding.registerPasswTie;
         passw2_tie = binding.registerPassw2Tie;

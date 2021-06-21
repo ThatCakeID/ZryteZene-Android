@@ -61,6 +61,8 @@ public class HomeActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
+        ExtraMetadata.setWatermarkColors(binding.textWatermarkHome);
+
         ImageView user_appbar_home = binding.userAppbarHome;
         RecyclerView rv_items_home = binding.rvItemsHome;
 

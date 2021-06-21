@@ -29,5 +29,6 @@
     <string name="new_user">New User?</string>
     <string name="old_user">Already signed-up?</string>
     <string name="forgot_pass">Forgot Password?</string>
+    <string name="uploaded_musics">Uploaded Music(s)</string>
 
 </resources>
