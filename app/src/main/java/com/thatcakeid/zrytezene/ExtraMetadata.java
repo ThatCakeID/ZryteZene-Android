@@ -10,17 +10,18 @@ import android.widget.TextView;
  * the app's build extra information
  */
 public class ExtraMetadata {
-    public static boolean SHOW_WATERMARK = true;
-    public static String BUILD_INFO = "dev";
+    public static final boolean SHOW_WATERMARK = true;
+    public static final String BUILD_INFO = "dev";
 
+    @SuppressWarnings("ALL")
     public static void setWatermarkColors(TextView watermark, LinearLayout root) {
-        if (BUILD_INFO == "dev") {
+        if (BUILD_INFO.equals("dev")) {
             watermark.setBackgroundColor(Color.parseColor("#B71C1C"));
         }
-        if (BUILD_INFO == "beta") {
+        if (BUILD_INFO.equals("beta")) {
             watermark.setBackgroundColor(Color.parseColor("#E65100"));
         }
-        if (BUILD_INFO == "stable") {
+        if (BUILD_INFO.equals("stable")) {
             watermark.setBackgroundColor(Color.parseColor("#2196F3"));
         }
         watermark.setTextColor(Color.parseColor("#FFFFFF"));

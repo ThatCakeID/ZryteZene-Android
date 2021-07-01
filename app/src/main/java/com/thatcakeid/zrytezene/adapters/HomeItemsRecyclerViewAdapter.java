@@ -1,5 +1,6 @@
 package com.thatcakeid.zrytezene.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.Timestamp;
 import com.thatcakeid.zrytezene.R;
 
@@ -21,17 +23,20 @@ public class HomeItemsRecyclerViewAdapter extends RecyclerView.Adapter<HomeItems
 
     private ArrayList<HashMap<String, Object>> items;
     private HashMap<String, String> users;
+    private Context mContext;
 
     private static ClickListener clickListener;
 
-    public HomeItemsRecyclerViewAdapter(ArrayList<HashMap<String, Object>> items,
+    public HomeItemsRecyclerViewAdapter(Context mContext, ArrayList<HashMap<String, Object>> items,
                                         HashMap<String, String> users) {
+        this.mContext = mContext;
         this.items = items;
         this.users = users;
     }
 
-    public void updateItems(ArrayList<HashMap<String, Object>> items,
+    public void updateItems(Context mContext, ArrayList<HashMap<String, Object>> items,
                             HashMap<String, String> users) {
+        this.mContext = mContext;
         this.items = items;
         this.users = users;
     }
@@ -51,6 +56,12 @@ public class HomeItemsRecyclerViewAdapter extends RecyclerView.Adapter<HomeItems
                 items.get(position).get("author").toString());
         holder.date_text.setText(new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss")
                 .format(((Timestamp)items.get(position).get("time")).toDate()));
+        if (items.get(position).get("thumb").toString().equals("")) {
+            holder.image_overlay.setImageResource(R.drawable.ic_zrytezene);
+        } else {
+             Glide.with(mContext).load(items.get(position).get("thumb").toString())
+                     .into(holder.image_overlay);
+        }
     }
 
     @Override
