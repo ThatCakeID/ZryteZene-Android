@@ -3,6 +3,7 @@ package com.thatcakeid.zrytezene;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -58,6 +59,8 @@ public class HomeActivity extends AppCompatActivity {
     private AudioAttributes audioAttributes;
     private PlaybackStateListener playbackStateListener;
     private ArrayList<HashMap<String, Object>> currentPlaylist;
+    private Handler handler;
+    private Runnable runnable;
     private int currentPos = -1;
     private boolean isReady = false;
     private boolean isDragging = false;
@@ -86,6 +89,11 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         imageView5.setOnClickListener(v -> {
+            if (exoPlayer.isPlaying()) {
+                exoPlayer.pause();
+            } else {
+                exoPlayer.play();
+            }
         });
 
         imageView6.setOnClickListener(v -> {
@@ -221,6 +229,21 @@ public class HomeActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         seekBar = findViewById(R.id.seekBar);
 
+        handler = new Handler();
+        // IDK why lambda broke something
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (exoPlayer.isPlaying()) {
+                    seekBar.setProgress((int) exoPlayer.getCurrentPosition() / 100);
+                    imageView5.setImageResource(R.drawable.ic_pause);
+                } else {
+                    imageView5.setImageResource(R.drawable.ic_play_arrow);
+                }
+                handler.postDelayed(this, 100);
+            }
+        };
+
         musics_entries = new ArrayList<>();
         musics_indexes = new ArrayList<>();
         user_indexes = new HashMap<>();
@@ -244,6 +267,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private void play() {
         if (currentPlaylist != null && currentPos > -1) {
+            handler.removeCallbacks(runnable);
             exoPlayer.stop();
             isReady = false;
             exoPlayer.setMediaItem(MediaItem.fromUri((String) currentPlaylist.get(currentPos)
@@ -295,6 +319,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void stop() {
+        handler.removeCallbacks(runnable);
         exoPlayer.stop();
         isReady = false;
         currentPos = -1;
@@ -308,6 +333,7 @@ public class HomeActivity extends AppCompatActivity {
             switch(state) {
                 case ExoPlayer.STATE_READY:
                     if (!isReady) {
+                        handler.post(runnable);
                         textView9.setText("0:00");
                         textView10.setText(HelperClass.parseDuration(exoPlayer.getDuration()));
                         seekBar.setMax((int)exoPlayer.getDuration() / 100);
