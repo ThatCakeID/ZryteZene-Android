@@ -11,6 +11,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -44,7 +45,7 @@ public class HomeActivity extends AppCompatActivity {
     private CardView cv_user_appbar;
     private RecyclerView rv_items_home;
     private TextView textView7, textView8, textView9, textView10;
-    private ImageView user_appbar_home, imageView3, imageView4, imageView5, imageView6;
+    private ImageView user_appbar_home, imageView2, imageView3, imageView4, imageView5, imageView6;
     private ProgressBar progressBar;
     private SeekBar seekBar;
 
@@ -214,6 +215,18 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
         });
+
+        bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                imageView2.setRotation(slideOffset * 180);
+            }
+        });
     }
 
     private void initializeVar() {
@@ -227,6 +240,7 @@ public class HomeActivity extends AppCompatActivity {
         textView8 = findViewById(R.id.textView8);
         textView9 = findViewById(R.id.textView9);
         textView10 = findViewById(R.id.textView10);
+        imageView2 = findViewById(R.id.imageView2);
         imageView3 = findViewById(R.id.imageView3);
         imageView4 = findViewById(R.id.imageView4);
         imageView5 = findViewById(R.id.imageView5);
