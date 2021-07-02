@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -157,9 +158,11 @@ public class HomeActivity extends AppCompatActivity {
                         user_indexes.put((String) data.get("uid"), (String) data.get("username"));
                         if (data.get("uid").equals(auth.getUid())) {
                             if (data.get("img_url").equals("")) {
+                                user_appbar_home.setImageTintList(ContextCompat
+                                        .getColorStateList(getApplicationContext(), R.color.imageTint));
                                 user_appbar_home.setImageResource(R.drawable.ic_account_circle);
                             } else {
-                                user_appbar_home.clearColorFilter();
+                                user_appbar_home.setImageTintList(null);
                                 Glide.with(getApplicationContext())
                                         .load((String) data.get("img_url")).into(user_appbar_home);
                             }
@@ -170,6 +173,8 @@ public class HomeActivity extends AppCompatActivity {
                     case REMOVED:
                         user_indexes.remove((String) data.get("uid"));
                         if (data.get("uid").equals(auth.getUid())) {
+                            user_appbar_home.setImageTintList(ContextCompat
+                                    .getColorStateList(getApplicationContext(), R.color.imageTint));
                             user_appbar_home.setImageResource(R.drawable.ic_account_circle);
                         }
                         adapter.notifyDataSetChanged();
@@ -240,6 +245,7 @@ public class HomeActivity extends AppCompatActivity {
                 } else {
                     imageView5.setImageResource(R.drawable.ic_play_arrow);
                 }
+                seekBar.setSecondaryProgress(exoPlayer.getBufferedPercentage() * (int)exoPlayer.getDuration() / 10000);
                 handler.postDelayed(this, 100);
             }
         };
