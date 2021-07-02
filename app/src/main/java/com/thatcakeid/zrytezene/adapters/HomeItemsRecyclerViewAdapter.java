@@ -50,16 +50,16 @@ public class HomeItemsRecyclerViewAdapter extends RecyclerView.Adapter<HomeItems
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.musicname_item.setText(items.get(position).get("title").toString());
-        holder.uploader_item.setText(users.containsKey(items.get(position).get("author").toString()) ?
-                users.get(items.get(position).get("author").toString()) :
-                items.get(position).get("author").toString());
+        holder.musicname_item.setText((String) items.get(position).get("title"));
+        holder.uploader_item.setText(users.containsKey((String) items.get(position).get("author")) ?
+                users.get((String) items.get(position).get("author")) :
+                (String) items.get(position).get("author"));
         holder.date_text.setText(new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss")
                 .format(((Timestamp)items.get(position).get("time")).toDate()));
-        if (items.get(position).get("thumb").toString().equals("")) {
+        if (items.get(position).get("thumb").equals("")) {
             holder.image_overlay.setImageResource(R.drawable.ic_zrytezene);
         } else {
-             Glide.with(mContext).load(items.get(position).get("thumb").toString())
+             Glide.with(mContext).load((String) items.get(position).get("thumb"))
                      .into(holder.image_overlay);
         }
     }

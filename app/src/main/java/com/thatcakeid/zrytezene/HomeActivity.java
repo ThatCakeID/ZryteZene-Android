@@ -1,10 +1,12 @@
 package com.thatcakeid.zrytezene;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,8 +42,9 @@ public class HomeActivity extends AppCompatActivity {
     private CardView cv_user_appbar;
     private RecyclerView rv_items_home;
     private TextView textView7, textView8, textView9, textView10;
-    private ImageView imageView3, imageView4, imageView5, imageView6;
+    private ImageView user_appbar_home, imageView3, imageView4, imageView5, imageView6;
     private ProgressBar progressBar;
+    private SeekBar seekBar;
 
     private ArrayList<HashMap<String, Object>> musics_entries;
     private ArrayList<String> musics_indexes;
@@ -55,7 +58,9 @@ public class HomeActivity extends AppCompatActivity {
     private AudioAttributes audioAttributes;
     private PlaybackStateListener playbackStateListener;
     private ArrayList<HashMap<String, Object>> currentPlaylist;
-    private int currentPos;
+    private int currentPos = -1;
+    private boolean isReady = false;
+    private boolean isDragging = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -103,6 +108,26 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                textView9.setText(HelperClass.parseDuration(progress * 100));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                isDragging = true;
+                exoPlayer.pause();
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                isDragging = false;
+                exoPlayer.seekTo(seekBar.getProgress() * 100);
+                exoPlayer.play();
+            }
+        });
+
         rv_items_home.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         rv_items_home.setAdapter(adapter);
 
@@ -122,11 +147,23 @@ public class HomeActivity extends AppCompatActivity {
 
                     case MODIFIED:
                         user_indexes.put((String) data.get("uid"), (String) data.get("username"));
+                        if (data.get("uid").equals(auth.getUid())) {
+                            if (data.get("img_url").equals("")) {
+                                user_appbar_home.setImageResource(R.drawable.ic_account_circle);
+                            } else {
+                                user_appbar_home.clearColorFilter();
+                                Glide.with(getApplicationContext())
+                                        .load((String) data.get("img_url")).into(user_appbar_home);
+                            }
+                        }
                         adapter.notifyDataSetChanged();
                         break;
 
                     case REMOVED:
-                        user_indexes.remove(data.get("uid"));
+                        user_indexes.remove((String) data.get("uid"));
+                        if (data.get("uid").equals(auth.getUid())) {
+                            user_appbar_home.setImageResource(R.drawable.ic_account_circle);
+                        }
                         adapter.notifyDataSetChanged();
                         break;
                 }
@@ -172,6 +209,7 @@ public class HomeActivity extends AppCompatActivity {
         bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.sheet_root));
         cv_user_appbar = binding.cvUserAppbar;
         rv_items_home = binding.rvItemsHome;
+        user_appbar_home = binding.userAppbarHome;
         textView7 = findViewById(R.id.textView7);
         textView8 = findViewById(R.id.textView8);
         textView9 = findViewById(R.id.textView9);
@@ -181,11 +219,11 @@ public class HomeActivity extends AppCompatActivity {
         imageView5 = findViewById(R.id.imageView5);
         imageView6 = findViewById(R.id.imageView6);
         progressBar = findViewById(R.id.progressBar);
+        seekBar = findViewById(R.id.seekBar);
 
         musics_entries = new ArrayList<>();
         musics_indexes = new ArrayList<>();
         user_indexes = new HashMap<>();
-        currentPos = -1;
 
         exoPlayer = new SimpleExoPlayer.Builder(this).build();
         audioAttributes = new AudioAttributes.Builder()
@@ -207,22 +245,29 @@ public class HomeActivity extends AppCompatActivity {
     private void play() {
         if (currentPlaylist != null && currentPos > -1) {
             exoPlayer.stop();
-            exoPlayer.setMediaItem(MediaItem.fromUri(currentPlaylist.get(currentPos)
-                    .get("music_url").toString()));
+            isReady = false;
+            exoPlayer.setMediaItem(MediaItem.fromUri((String) currentPlaylist.get(currentPos)
+                    .get("music_url")));
             exoPlayer.prepare();
-            textView7.setText(currentPlaylist.get(currentPos).get("title").toString());
-            textView8.setText(user_indexes.containsKey(currentPlaylist
-                    .get(currentPos).get("author").toString()) ? user_indexes.get(currentPlaylist
-                    .get(currentPos).get("author").toString()) : currentPlaylist.get(currentPos)
-                    .get("author").toString());
+            textView7.setText((String) currentPlaylist.get(currentPos).get("title"));
+            textView8.setText(user_indexes.containsKey((String) currentPlaylist
+                    .get(currentPos).get("author")) ? user_indexes.get((String) currentPlaylist
+                    .get(currentPos).get("author")) : (String) currentPlaylist.get(currentPos)
+                    .get("author"));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                seekBar.setProgress(0, true);
+            } else {
+                seekBar.setProgress(0);
+            }
             textView9.setText("--:--");
             textView10.setText("--:--");
-            if (currentPlaylist.get(currentPos).get("thumb").toString().equals("")) {
+            if (currentPlaylist.get(currentPos).get("thumb").equals("")) {
                 imageView3.setImageResource(R.drawable.ic_zrytezene);
             } else {
                 Glide.with(getApplicationContext())
-                        .load(currentPlaylist.get(currentPos).get("thumb").toString()).into(imageView3);
+                        .load((String) currentPlaylist.get(currentPos).get("thumb")).into(imageView3);
             }
+            seekBar.setEnabled(false);
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         } else {
             Toast.makeText(this,
@@ -232,7 +277,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void playNext() {
-        if (currentPos++ < currentPlaylist.size()) {
+        if (currentPos + 1 < currentPlaylist.size()) {
             currentPos++;
             play();
         } else {
@@ -241,7 +286,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void playPrevious() {
-        if (currentPos-- >= 0) {
+        if (currentPos - 1 >= 0) {
             currentPos--;
             play();
         } else {
@@ -251,6 +296,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private void stop() {
         exoPlayer.stop();
+        isReady = false;
         currentPos = -1;
         currentPlaylist = null;
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
@@ -261,7 +307,13 @@ public class HomeActivity extends AppCompatActivity {
         public void onPlaybackStateChanged(int state) {
             switch(state) {
                 case ExoPlayer.STATE_READY:
-                    textView10.setText(HelperClass.parseDuration(exoPlayer.getDuration()));
+                    if (!isReady) {
+                        textView9.setText("0:00");
+                        textView10.setText(HelperClass.parseDuration(exoPlayer.getDuration()));
+                        seekBar.setMax((int)exoPlayer.getDuration() / 100);
+                        seekBar.setEnabled(true);
+                        isReady = true;
+                    }
                     progressBar.setVisibility(View.INVISIBLE);
                     imageView5.setVisibility(View.VISIBLE);
                     break;
