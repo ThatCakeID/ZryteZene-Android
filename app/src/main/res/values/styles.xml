@@ -4,6 +4,7 @@
         <!-- Customize your theme here. -->
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textCursorDrawable">@drawable/text_cursor_material</item>
+        <item name="android:windowBackground">@color/backgroundColor</item>
 
         <!-- Shared element transition -->
         <item name="android:windowActivityTransitions">true</item>

@@ -4,4 +4,5 @@
     <color name="imageTint">#BEBEBE</color>
     <color name="titleText">#FFFFFF</color>
     <color name="customAppBar">#212121</color>
+    <color name="backgroundColor">#303030</color>
 </resources>

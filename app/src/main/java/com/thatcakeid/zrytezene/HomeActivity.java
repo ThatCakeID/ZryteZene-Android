@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -42,10 +43,11 @@ public class HomeActivity extends AppCompatActivity {
     private View view;
     private ActivityHomeBinding binding;
     private CurrentUserProfile profile;
+    private ConstraintLayout compactPlayer;
     private CardView cv_user_appbar;
     private RecyclerView rv_items_home;
-    private TextView textView7, textView8, textView9, textView10;
-    private ImageView user_appbar_home, imageView2, imageView3, imageView4, imageView5, imageView6;
+    private TextView textView4, textView6, textView7, textView8, textView9, textView10;
+    private ImageView user_appbar_home, imageView2, imageView3, imageView4, imageView5, imageView6, imageView7;
     private ProgressBar progressBar;
     private SeekBar seekBar;
 
@@ -219,12 +221,16 @@ public class HomeActivity extends AppCompatActivity {
         bottomSheetBehavior.addBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
-
+                if (newState == BottomSheetBehavior.STATE_HIDDEN && currentPos != -1) {
+                    stop();
+                }
             }
 
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                imageView2.setRotation(slideOffset * 180);
+                imageView2.setRotation(slideOffset >= 0 ? slideOffset * 180 : 0);
+                compactPlayer.setAlpha(slideOffset >= 0 ? 1 - slideOffset : slideOffset + 1);
+                compactPlayer.setVisibility(slideOffset < 1 && slideOffset > -1 ? View.VISIBLE : View.INVISIBLE);
             }
         });
     }
@@ -236,6 +242,9 @@ public class HomeActivity extends AppCompatActivity {
         cv_user_appbar = binding.cvUserAppbar;
         rv_items_home = binding.rvItemsHome;
         user_appbar_home = binding.userAppbarHome;
+        compactPlayer = findViewById(R.id.compactPlayer);
+        textView4 = findViewById(R.id.textView4);
+        textView6 = findViewById(R.id.textView6);
         textView7 = findViewById(R.id.textView7);
         textView8 = findViewById(R.id.textView8);
         textView9 = findViewById(R.id.textView9);
@@ -245,6 +254,7 @@ public class HomeActivity extends AppCompatActivity {
         imageView4 = findViewById(R.id.imageView4);
         imageView5 = findViewById(R.id.imageView5);
         imageView6 = findViewById(R.id.imageView6);
+        imageView7 = findViewById(R.id.imageView7);
         progressBar = findViewById(R.id.progressBar);
         seekBar = findViewById(R.id.seekBar);
 
@@ -282,6 +292,7 @@ public class HomeActivity extends AppCompatActivity {
         musics_db = FirebaseFirestore.getInstance();
         users_db = FirebaseFirestore.getInstance();
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        textView4.setSelected(true);
         textView7.setSelected(true);
     }
 
@@ -298,6 +309,11 @@ public class HomeActivity extends AppCompatActivity {
                     .get(currentPos).get("author")) ? user_indexes.get((String) currentPlaylist
                     .get(currentPos).get("author")) : (String) currentPlaylist.get(currentPos)
                     .get("author"));
+            textView4.setText((String) currentPlaylist.get(currentPos).get("title"));
+            textView6.setText(user_indexes.containsKey((String) currentPlaylist
+                    .get(currentPos).get("author")) ? user_indexes.get((String) currentPlaylist
+                    .get(currentPos).get("author")) : (String) currentPlaylist.get(currentPos)
+                    .get("author"));
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 seekBar.setProgress(0, true);
             } else {
@@ -307,12 +323,16 @@ public class HomeActivity extends AppCompatActivity {
             textView10.setText("--:--");
             if (currentPlaylist.get(currentPos).get("thumb").equals("")) {
                 imageView3.setImageResource(R.drawable.ic_zrytezene);
+                imageView7.setImageResource(R.drawable.ic_zrytezene);
             } else {
                 Glide.with(getApplicationContext())
                         .load((String) currentPlaylist.get(currentPos).get("thumb")).into(imageView3);
+                Glide.with(getApplicationContext())
+                        .load((String) currentPlaylist.get(currentPos).get("thumb")).into(imageView7);
             }
             seekBar.setEnabled(false);
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN)
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         } else {
             Toast.makeText(this,
                     "An error occurred while trying to play a music, playlist is empty",

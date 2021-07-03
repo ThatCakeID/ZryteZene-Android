@@ -4,4 +4,5 @@
     <color name="imageTint">#323232</color>
     <color name="titleText">#000000</color>
     <color name="customAppBar">#FFFFFF</color>
+    <color name="backgroundColor">#FFFFFF</color>
 </resources>
