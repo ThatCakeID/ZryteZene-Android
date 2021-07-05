@@ -42,13 +42,13 @@ public class HomeActivity extends AppCompatActivity {
 
     private View view;
     private ActivityHomeBinding binding;
-    private CurrentUserProfile profile;
     private ConstraintLayout compactPlayer;
     private CardView cv_user_appbar;
     private RecyclerView rv_items_home;
     private TextView textView4, textView6, textView7, textView8, textView9, textView10;
-    private ImageView user_appbar_home, imageView2, imageView3, imageView4, imageView5, imageView6, imageView7;
-    private ProgressBar progressBar;
+    private ImageView user_appbar_home, imageView2, imageView3, imageView4, imageView5, imageView6,
+            imageView7, imageView8;
+    private ProgressBar progressBar, progressBar2, progressBar3;
     private SeekBar seekBar;
 
     private ArrayList<HashMap<String, Object>> musics_entries;
@@ -83,9 +83,15 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(new Intent(HomeActivity.this, LoginActivity.class));
             } else {
                 Intent profile_intent = new Intent(HomeActivity.this, ProfileActivity.class);
-                profile_intent.putExtra("uid", profile.uid);
+                profile_intent.putExtra("uid", auth.getUid());
                 startActivity(profile_intent);
             }
+        });
+
+        imageView2.setOnClickListener(v -> {
+            bottomSheetBehavior.setState(bottomSheetBehavior.getState() ==
+                    BottomSheetBehavior.STATE_COLLAPSED ? BottomSheetBehavior.STATE_EXPANDED :
+                    BottomSheetBehavior.STATE_COLLAPSED);
         });
 
         imageView4.setOnClickListener(v -> {
@@ -102,6 +108,14 @@ public class HomeActivity extends AppCompatActivity {
 
         imageView6.setOnClickListener(v -> {
             playNext();
+        });
+
+        imageView8.setOnClickListener(v -> {
+            if (exoPlayer.isPlaying()) {
+                exoPlayer.pause();
+            } else {
+                exoPlayer.play();
+            }
         });
 
         final HomeItemsRecyclerViewAdapter adapter = new HomeItemsRecyclerViewAdapter(
@@ -124,6 +138,11 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 textView9.setText(HelperClass.parseDuration(progress * 100));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    progressBar3.setProgress(progress, true);
+                } else {
+                    progressBar3.setProgress(progress);
+                }
             }
 
             @Override
@@ -236,7 +255,6 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void initializeVar() {
-        profile = CurrentUserProfile.getInstance();
         ExtraMetadata.setWatermarkColors(binding.textWatermark, binding.watermarkRoot);
         bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.sheet_root));
         cv_user_appbar = binding.cvUserAppbar;
@@ -255,21 +273,26 @@ public class HomeActivity extends AppCompatActivity {
         imageView5 = findViewById(R.id.imageView5);
         imageView6 = findViewById(R.id.imageView6);
         imageView7 = findViewById(R.id.imageView7);
+        imageView8 = findViewById(R.id.imageView8);
         progressBar = findViewById(R.id.progressBar);
+        progressBar2 = findViewById(R.id.progressBar2);
+        progressBar3 = findViewById(R.id.progressBar3);
         seekBar = findViewById(R.id.seekBar);
 
         handler = new Handler();
-        // IDK why lambda broke something
         runnable = new Runnable() {
             @Override
             public void run() {
                 if (exoPlayer.isPlaying()) {
                     seekBar.setProgress((int) exoPlayer.getCurrentPosition() / 100);
                     imageView5.setImageResource(R.drawable.ic_pause);
+                    imageView8.setImageResource(R.drawable.ic_pause);
                 } else {
                     imageView5.setImageResource(R.drawable.ic_play_arrow);
+                    imageView8.setImageResource(R.drawable.ic_play_arrow);
                 }
                 seekBar.setSecondaryProgress(exoPlayer.getBufferedPercentage() * (int)exoPlayer.getDuration() / 10000);
+                progressBar3.setSecondaryProgress(exoPlayer.getBufferedPercentage() * (int)exoPlayer.getDuration() / 10000);
                 handler.postDelayed(this, 100);
             }
         };
@@ -376,16 +399,21 @@ public class HomeActivity extends AppCompatActivity {
                         handler.post(runnable);
                         textView9.setText("0:00");
                         textView10.setText(HelperClass.parseDuration(exoPlayer.getDuration()));
-                        seekBar.setMax((int)exoPlayer.getDuration() / 100);
+                        seekBar.setMax((int) exoPlayer.getDuration() / 100);
                         seekBar.setEnabled(true);
+                        progressBar3.setMax((int) exoPlayer.getDuration() / 100);
                         isReady = true;
                     }
                     progressBar.setVisibility(View.INVISIBLE);
+                    progressBar2.setVisibility(View.INVISIBLE);
                     imageView5.setVisibility(View.VISIBLE);
+                    imageView8.setVisibility(View.VISIBLE);
                     break;
                 case ExoPlayer.STATE_BUFFERING:
                     imageView5.setVisibility(View.INVISIBLE);
+                    imageView8.setVisibility(View.INVISIBLE);
                     progressBar.setVisibility(View.VISIBLE);
+                    progressBar2.setVisibility(View.VISIBLE);
                     break;
                 case ExoPlayer.STATE_ENDED:
                     playNext();

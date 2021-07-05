@@ -30,8 +30,6 @@ public class MainActivity extends AppCompatActivity {
         FirebaseFirestore versions_db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
 
-        CurrentUserProfile.updateData();
-
         // Set collection reference to 'versions'
         versions_db.collection("versions")
                 .get() // Fetch the data to client
@@ -56,7 +54,17 @@ public class MainActivity extends AppCompatActivity {
                                 startActivity = LoginActivity.class;
                             } else {
                                 if (auth.getCurrentUser().isEmailVerified()) {
-                                    startActivity = HomeActivity.class;
+                                    FirebaseFirestore users_db = FirebaseFirestore.getInstance();
+                                    users_db.collection("users")
+                                            .document(auth.getUid())
+                                            .get()
+                                            .addOnSuccessListener(snapshot -> {
+                                                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                                            })
+                                            .addOnFailureListener(e -> {
+                                                //TODO: implement this
+                                            });
+                                    return;
                                 } else {
                                     auth.signOut();
 
