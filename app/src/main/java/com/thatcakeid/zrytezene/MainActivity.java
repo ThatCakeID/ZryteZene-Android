@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
                             } else {
                                 if (auth.getCurrentUser().isEmailVerified()) {
                                     FirebaseFirestore users_db = FirebaseFirestore.getInstance();
+
                                     users_db.collection("users")
                                             .document(auth.getUid())
                                             .get()
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
                                             .addOnFailureListener(e -> {
                                                 //TODO: implement this
                                             });
+
                                     return;
                                 } else {
                                     auth.signOut();
@@ -76,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
                         startActivity(new Intent(getApplicationContext(), startActivity));
                         finish();
+
                     } catch (PackageManager.NameNotFoundException ignored) {} // Ignored, this error shouldn't happen
                 })
 

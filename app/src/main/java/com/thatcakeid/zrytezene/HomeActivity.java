@@ -37,6 +37,7 @@ import com.thatcakeid.zrytezene.databinding.ActivityHomeBinding;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -83,6 +84,7 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(new Intent(HomeActivity.this, LoginActivity.class));
             } else {
                 Intent profile_intent = new Intent(HomeActivity.this, ProfileActivity.class);
+
                 profile_intent.putExtra("uid", auth.getUid());
                 startActivity(profile_intent);
             }
@@ -90,54 +92,40 @@ public class HomeActivity extends AppCompatActivity {
 
         imageView2.setOnClickListener(v -> {
             bottomSheetBehavior.setState(bottomSheetBehavior.getState() ==
-                    BottomSheetBehavior.STATE_COLLAPSED ? BottomSheetBehavior.STATE_EXPANDED :
-                    BottomSheetBehavior.STATE_COLLAPSED);
+                    BottomSheetBehavior.STATE_COLLAPSED
+                        ? BottomSheetBehavior.STATE_EXPANDED : BottomSheetBehavior.STATE_COLLAPSED);
         });
 
-        imageView4.setOnClickListener(v -> {
-            playPrevious();
-        });
+        imageView4.setOnClickListener(v -> playPrevious());
+        imageView6.setOnClickListener(v -> playNext());
 
-        imageView5.setOnClickListener(v -> {
-            if (exoPlayer.isPlaying()) {
-                exoPlayer.pause();
-            } else {
-                exoPlayer.play();
-            }
-        });
+        imageView5.setOnClickListener(v -> togglePlay());
+        imageView8.setOnClickListener(v -> togglePlay());
 
-        imageView6.setOnClickListener(v -> {
-            playNext();
-        });
+        final HomeItemsRecyclerViewAdapter adapter =
+                new HomeItemsRecyclerViewAdapter(
+                        getApplicationContext(),
+                        musics_entries,
+                        user_indexes
+                );
 
-        imageView8.setOnClickListener(v -> {
-            if (exoPlayer.isPlaying()) {
-                exoPlayer.pause();
-            } else {
-                exoPlayer.play();
-            }
-        });
-
-        final HomeItemsRecyclerViewAdapter adapter = new HomeItemsRecyclerViewAdapter(
-                getApplicationContext(), musics_entries, user_indexes);
         adapter.setOnItemClickListener(new HomeItemsRecyclerViewAdapter.ClickListener() {
             @Override
             public void onItemClick(int position, View v) {
                 currentPlaylist = new ArrayList<>(musics_entries);
                 currentPos = position;
+
                 play();
             }
 
-            @Override
-            public void onItemLongClick(int position, View v) {
-
-            }
+            @Override public void onItemLongClick(int position, View v) { }
         });
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 textView9.setText(HelperClass.parseDuration(progress * 100));
+
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     progressBar3.setProgress(progress, true);
                 } else {
@@ -154,6 +142,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 isDragging = false;
+
                 exoPlayer.seekTo(seekBar.getProgress() * 100);
                 exoPlayer.play();
             }
@@ -163,53 +152,64 @@ public class HomeActivity extends AppCompatActivity {
         rv_items_home.setAdapter(adapter);
 
         users_db.collection("users").addSnapshotListener((value, error) -> {
-            
             if (value == null) {
                 Toast.makeText(HomeActivity.this, "An error occurred whilst trying to update users: value is null", Toast.LENGTH_SHORT).show();
-
                 return;
             }
-            
+
             for (DocumentChange dc : value.getDocumentChanges()) {
                 HashMap<String, Object> data = (HashMap<String, Object>) dc.getDocument().getData();
 
                 switch (dc.getType()) {
                     case ADDED:
-
                     case MODIFIED:
                         user_indexes.put((String) data.get("uid"), (String) data.get("username"));
-                        if (data.get("uid").equals(auth.getUid())) {
+
+                        if (Objects.equals(data.get("uid"), auth.getUid())) {
                             if (data.get("img_url").equals("")) {
-                                user_appbar_home.setImageTintList(ContextCompat
-                                        .getColorStateList(getApplicationContext(), R.color.imageTint));
+                                user_appbar_home.setImageTintList(
+                                        ContextCompat.getColorStateList(
+                                                getApplicationContext(),
+                                                R.color.imageTint
+                                        )
+                                );
+
                                 user_appbar_home.setImageResource(R.drawable.ic_account_circle);
+
                             } else {
                                 user_appbar_home.setImageTintList(null);
                                 Glide.with(getApplicationContext())
-                                        .load((String) data.get("img_url")).into(user_appbar_home);
+                                     .load((String) data.get("img_url"))
+                                     .into(user_appbar_home);
                             }
                         }
-                        adapter.notifyDataSetChanged();
+
                         break;
 
                     case REMOVED:
-                        user_indexes.remove((String) data.get("uid"));
-                        if (data.get("uid").equals(auth.getUid())) {
-                            user_appbar_home.setImageTintList(ContextCompat
-                                    .getColorStateList(getApplicationContext(), R.color.imageTint));
+                        user_indexes.remove(data.get("uid"));
+
+                        if (Objects.equals(data.get("uid"), auth.getUid())) {
+                            user_appbar_home.setImageTintList(
+                                    ContextCompat.getColorStateList(
+                                            getApplicationContext(),
+                                            R.color.imageTint
+                                    )
+                            );
+
                             user_appbar_home.setImageResource(R.drawable.ic_account_circle);
                         }
-                        adapter.notifyDataSetChanged();
+
                         break;
                 }
+
+                adapter.notifyDataSetChanged();
             }
         });
 
         musics_db.collection("musics").addSnapshotListener((value, error) -> {
-
             if (value == null) {
                 Toast.makeText(HomeActivity.this, "An error occurred whilst trying to update musics: value is null", Toast.LENGTH_SHORT).show();
-
                 return;
             }
 
@@ -220,20 +220,23 @@ public class HomeActivity extends AppCompatActivity {
                     case ADDED:
                         musics_entries.add(data);
                         musics_indexes.add(dc.getDocument().getId());
-                        adapter.notifyDataSetChanged();
+
                         break;
 
                     case MODIFIED:
-                        musics_entries.set(musics_indexes
-                                .indexOf(dc.getDocument().getId()), data);
-                        adapter.notifyDataSetChanged();
+                        musics_entries.set(
+                                musics_indexes.indexOf(dc.getDocument().getId()),
+                                data
+                        );
+
                         break;
 
                     case REMOVED:
                         musics_entries.remove(data);
-                        adapter.notifyDataSetChanged();
                         break;
                 }
+
+                adapter.notifyDataSetChanged();
             }
         });
 
@@ -257,10 +260,13 @@ public class HomeActivity extends AppCompatActivity {
     private void initializeVar() {
         ExtraMetadata.setWatermarkColors(binding.textWatermark, binding.watermarkRoot);
         bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.sheet_root));
+
         cv_user_appbar = binding.cvUserAppbar;
         rv_items_home = binding.rvItemsHome;
         user_appbar_home = binding.userAppbarHome;
+
         compactPlayer = findViewById(R.id.compactPlayer);
+
         textView4 = findViewById(R.id.textView4);
         textView6 = findViewById(R.id.textView6);
         textView7 = findViewById(R.id.textView7);
@@ -285,12 +291,15 @@ public class HomeActivity extends AppCompatActivity {
             public void run() {
                 if (exoPlayer.isPlaying()) {
                     seekBar.setProgress((int) exoPlayer.getCurrentPosition() / 100);
+
                     imageView5.setImageResource(R.drawable.ic_pause);
                     imageView8.setImageResource(R.drawable.ic_pause);
+
                 } else {
                     imageView5.setImageResource(R.drawable.ic_play_arrow);
                     imageView8.setImageResource(R.drawable.ic_play_arrow);
                 }
+
                 seekBar.setSecondaryProgress(exoPlayer.getBufferedPercentage() * (int)exoPlayer.getDuration() / 10000);
                 progressBar3.setSecondaryProgress(exoPlayer.getBufferedPercentage() * (int)exoPlayer.getDuration() / 10000);
                 handler.postDelayed(this, 100);
@@ -305,6 +314,7 @@ public class HomeActivity extends AppCompatActivity {
         audioAttributes = new AudioAttributes.Builder()
                 .setUsage(C.USAGE_MEDIA)
                 .setContentType(C.CONTENT_TYPE_MUSIC).build();
+
         exoPlayer.setAudioAttributes(audioAttributes, true);
         playbackStateListener = new PlaybackStateListener();
         exoPlayer.addListener(playbackStateListener);
@@ -314,7 +324,9 @@ public class HomeActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         musics_db = FirebaseFirestore.getInstance();
         users_db = FirebaseFirestore.getInstance();
+
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
         textView4.setSelected(true);
         textView7.setSelected(true);
     }
@@ -323,37 +335,48 @@ public class HomeActivity extends AppCompatActivity {
         if (currentPlaylist != null && currentPos > -1) {
             handler.removeCallbacks(runnable);
             exoPlayer.stop();
+
             isReady = false;
-            exoPlayer.setMediaItem(MediaItem.fromUri((String) currentPlaylist.get(currentPos)
-                    .get("music_url")));
+            exoPlayer.setMediaItem(MediaItem.fromUri((String) currentPlaylist.get(currentPos).get("music_url")));
             exoPlayer.prepare();
+
             textView7.setText((String) currentPlaylist.get(currentPos).get("title"));
             textView8.setText(user_indexes.containsKey((String) currentPlaylist
                     .get(currentPos).get("author")) ? user_indexes.get((String) currentPlaylist
                     .get(currentPos).get("author")) : (String) currentPlaylist.get(currentPos)
                     .get("author"));
+
             textView4.setText((String) currentPlaylist.get(currentPos).get("title"));
             textView6.setText(user_indexes.containsKey((String) currentPlaylist
                     .get(currentPos).get("author")) ? user_indexes.get((String) currentPlaylist
                     .get(currentPos).get("author")) : (String) currentPlaylist.get(currentPos)
                     .get("author"));
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 seekBar.setProgress(0, true);
             } else {
                 seekBar.setProgress(0);
             }
+
             textView9.setText("--:--");
             textView10.setText("--:--");
+
             if (currentPlaylist.get(currentPos).get("thumb").equals("")) {
                 imageView3.setImageResource(R.drawable.ic_zrytezene);
                 imageView7.setImageResource(R.drawable.ic_zrytezene);
+
             } else {
                 Glide.with(getApplicationContext())
-                        .load((String) currentPlaylist.get(currentPos).get("thumb")).into(imageView3);
+                     .load((String) currentPlaylist.get(currentPos).get("thumb"))
+                     .into(imageView3);
+
                 Glide.with(getApplicationContext())
-                        .load((String) currentPlaylist.get(currentPos).get("thumb")).into(imageView7);
+                     .load((String) currentPlaylist.get(currentPos).get("thumb"))
+                     .into(imageView7);
             }
+
             seekBar.setEnabled(false);
+
             if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN)
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         } else {
@@ -361,6 +384,11 @@ public class HomeActivity extends AppCompatActivity {
                     "An error occurred while trying to play a music, playlist is empty",
                     Toast.LENGTH_LONG).show();
         }
+    }
+
+    private void togglePlay() {
+        if (exoPlayer.isPlaying()) exoPlayer.pause();
+        else exoPlayer.play();
     }
 
     private void playNext() {
@@ -383,10 +411,13 @@ public class HomeActivity extends AppCompatActivity {
 
     private void stop() {
         handler.removeCallbacks(runnable);
+
         exoPlayer.stop();
         isReady = false;
+
         currentPos = -1;
         currentPlaylist = null;
+
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
     }
 
@@ -397,24 +428,34 @@ public class HomeActivity extends AppCompatActivity {
                 case ExoPlayer.STATE_READY:
                     if (!isReady) {
                         handler.post(runnable);
+
                         textView9.setText("0:00");
                         textView10.setText(HelperClass.parseDuration(exoPlayer.getDuration()));
+
                         seekBar.setMax((int) exoPlayer.getDuration() / 100);
                         seekBar.setEnabled(true);
+
                         progressBar3.setMax((int) exoPlayer.getDuration() / 100);
                         isReady = true;
                     }
+
                     progressBar.setVisibility(View.INVISIBLE);
                     progressBar2.setVisibility(View.INVISIBLE);
+
                     imageView5.setVisibility(View.VISIBLE);
                     imageView8.setVisibility(View.VISIBLE);
+
                     break;
+
                 case ExoPlayer.STATE_BUFFERING:
                     imageView5.setVisibility(View.INVISIBLE);
                     imageView8.setVisibility(View.INVISIBLE);
+
                     progressBar.setVisibility(View.VISIBLE);
                     progressBar2.setVisibility(View.VISIBLE);
+
                     break;
+
                 case ExoPlayer.STATE_ENDED:
                     playNext();
                     break;

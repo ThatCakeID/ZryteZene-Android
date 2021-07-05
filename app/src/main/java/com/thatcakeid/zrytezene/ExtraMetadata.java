@@ -15,15 +15,27 @@ public class ExtraMetadata {
 
     @SuppressWarnings("ALL")
     public static void setWatermarkColors(TextView watermark, LinearLayout root) {
-        if (BUILD_INFO.equals("dev")) {
-            watermark.setBackgroundColor(Color.parseColor("#B71C1C"));
+        int color;
+
+        switch (BUILD_INFO) {
+            case "dev":
+                color = 0xFFB71C1C;
+                break;
+
+            case "beta":
+                color = 0xFFE65100;
+                break;
+
+            case "stable":
+                color = 0xFF2196F3;
+                break;
+
+            default:
+                throw new IllegalStateException("Unexpected value: " + BUILD_INFO);
         }
-        if (BUILD_INFO.equals("beta")) {
-            watermark.setBackgroundColor(Color.parseColor("#E65100"));
-        }
-        if (BUILD_INFO.equals("stable")) {
-            watermark.setBackgroundColor(Color.parseColor("#2196F3"));
-        }
+
+        watermark.setBackgroundColor(color);
+
         watermark.setTextColor(Color.parseColor("#FFFFFF"));
         root.setVisibility(SHOW_WATERMARK ? View.VISIBLE : View.GONE);
         watermark.setText(BUILD_INFO);
