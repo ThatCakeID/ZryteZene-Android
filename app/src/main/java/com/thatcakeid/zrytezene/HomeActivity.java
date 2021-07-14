@@ -251,6 +251,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onSlide(@NonNull View bottomSheet, float slideOffset) {
                 imageView2.setRotation(slideOffset >= 0 ? slideOffset * 180 : 0);
+
                 compactPlayer.setAlpha(slideOffset >= 0 ? 1 - slideOffset : slideOffset + 1);
                 compactPlayer.setVisibility(slideOffset < 1 && slideOffset > -1 ? View.VISIBLE : View.INVISIBLE);
             }
@@ -318,7 +319,6 @@ public class HomeActivity extends AppCompatActivity {
         exoPlayer.setAudioAttributes(audioAttributes, true);
         playbackStateListener = new PlaybackStateListener();
         exoPlayer.addListener(playbackStateListener);
-        exoPlayer.setPlayWhenReady(true);
 
         FirebaseApp.initializeApp(this);
         auth = FirebaseAuth.getInstance();
@@ -352,11 +352,7 @@ public class HomeActivity extends AppCompatActivity {
                     .get(currentPos).get("author")) : (String) currentPlaylist.get(currentPos)
                     .get("author"));
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                seekBar.setProgress(0, true);
-            } else {
-                seekBar.setProgress(0);
-            }
+            resetProgressBar();
 
             textView9.setText("--:--");
             textView10.setText("--:--");
@@ -421,14 +417,26 @@ public class HomeActivity extends AppCompatActivity {
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
     }
 
+    private void resetProgressBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            seekBar.setProgress(0, true);
+        } else {
+            seekBar.setProgress(0);
+        }
+
+        seekBar.setMax(100);
+        seekBar.setSecondaryProgress(0);
+
+        progressBar3.setMax(100);
+        progressBar3.setSecondaryProgress(0);
+    }
+
     private class PlaybackStateListener implements Player.Listener {
         @Override
         public void onPlaybackStateChanged(int state) {
             switch(state) {
                 case ExoPlayer.STATE_READY:
                     if (!isReady) {
-                        handler.post(runnable);
-
                         textView9.setText("0:00");
                         textView10.setText(HelperClass.parseDuration(exoPlayer.getDuration()));
 
@@ -437,6 +445,9 @@ public class HomeActivity extends AppCompatActivity {
 
                         progressBar3.setMax((int) exoPlayer.getDuration() / 100);
                         isReady = true;
+
+                        handler.post(runnable);
+                        exoPlayer.play();
                     }
 
                     progressBar.setVisibility(View.INVISIBLE);
