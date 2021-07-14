@@ -16,6 +16,7 @@
 
     <string name="app_name">ZryteZene</string>
     <string name="action_settings">Settings</string>
+    <string name="action_profile">Profile</string>
     <string name="new_update">New update is available</string>
     <string name="version">Version:</string>
     <string name="released_in">Released in:</string>
