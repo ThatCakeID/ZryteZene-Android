@@ -39,25 +39,17 @@
                 android:layout_height="match_parent">
 
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cardView"
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/user_profile_picture"
                     android:layout_width="72dp"
                     android:layout_height="72dp"
                     android:layout_marginStart="32dp"
                     android:layout_marginTop="16dp"
-                    app:cardBackgroundColor="#00000000"
-                    app:cardCornerRadius="36dp"
-                    app:cardElevation="0dp"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <ImageView
-                        android:id="@+id/user_profile_picture"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:srcCompat="@drawable/ic_account_circle"
-                        app:tint="@color/imageTint" />
-                </androidx.cardview.widget.CardView>
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Circle"
+                    app:srcCompat="@drawable/ic_account_circle"
+                    app:tint="@color/imageTint" />
 
                 <TextView
                     android:id="@+id/user_name"
@@ -73,8 +65,8 @@
                     android:textColor="@color/titleText"
                     android:textSize="24sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/cardView"
-                    app:layout_constraintTop_toTopOf="@id/cardView" />
+                    app:layout_constraintStart_toEndOf="@id/user_profile_picture"
+                    app:layout_constraintTop_toTopOf="@id/user_profile_picture" />
 
                 <TextView
                     android:id="@+id/user_bio"

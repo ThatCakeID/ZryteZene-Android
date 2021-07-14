@@ -63,31 +63,23 @@
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:padding="6dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/cv_user_appbar"
+                    app:layout_constraintEnd_toStartOf="@id/user_appbar_home"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/ic_search"
                     app:tint="@color/imageTint" />
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/cv_user_appbar"
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/user_appbar_home"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:layout_marginEnd="8dp"
-                    android:foreground="?attr/selectableItemBackgroundBorderless"
-                    app:cardBackgroundColor="#00000000"
-                    app:cardCornerRadius="18dp"
-                    app:cardElevation="0dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
-
-                    <ImageView
-                        android:id="@+id/user_appbar_home"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:srcCompat="@drawable/ic_account_circle"
-                        app:tint="@color/imageTint" />
-                </androidx.cardview.widget.CardView>
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Circle"
+                    app:srcCompat="@drawable/ic_account_circle"
+                    app:tint="@color/imageTint" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

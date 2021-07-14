@@ -14,11 +14,12 @@
             android:id="@+id/zz_image"
             android:layout_width="130dp"
             android:layout_height="130dp"
-            app:srcCompat="@drawable/ic_zrytezene"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.Circle"
+            app:srcCompat="@drawable/ic_zrytezene" />
 
         <TextView
             android:id="@+id/zz_text"

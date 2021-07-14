@@ -24,4 +24,13 @@
         <item name='android:fontFamily'>@font/googlesans</item>
     </style>
 
+    <!-- ShapeableImageView styles -->
+    <style name="ShapeAppearanceOverlay.App.Circle" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.App.RoundedSquare" parent="">
+        <item name="cornerSize">7.5%</item>
+    </style>
+
 </resources>

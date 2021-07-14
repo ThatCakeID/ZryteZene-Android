@@ -44,7 +44,6 @@ public class HomeActivity extends AppCompatActivity {
     private View view;
     private ActivityHomeBinding binding;
     private ConstraintLayout compactPlayer;
-    private CardView cv_user_appbar;
     private RecyclerView rv_items_home;
     private TextView textView4, textView6, textView7, textView8, textView9, textView10;
     private ImageView user_appbar_home, imageView2, imageView3, imageView4, imageView5, imageView6,
@@ -79,7 +78,7 @@ public class HomeActivity extends AppCompatActivity {
 
         initializeVar();
 
-        cv_user_appbar.setOnClickListener(v -> {
+        user_appbar_home.setOnClickListener(v -> {
             if (auth.getCurrentUser() == null) {
                 startActivity(new Intent(HomeActivity.this, LoginActivity.class));
             } else {
@@ -262,7 +261,6 @@ public class HomeActivity extends AppCompatActivity {
         ExtraMetadata.setWatermarkColors(binding.textWatermark, binding.watermarkRoot);
         bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.sheet_root));
 
-        cv_user_appbar = binding.cvUserAppbar;
         rv_items_home = binding.rvItemsHome;
         user_appbar_home = binding.userAppbarHome;
 
