@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
                                             .get()
                                             .addOnSuccessListener(snapshot -> {
                                                 startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                                                finish();
                                             })
                                             .addOnFailureListener(e -> {
                                                 //TODO: implement this

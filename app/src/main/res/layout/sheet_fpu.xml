@@ -8,6 +8,7 @@
     android:background="?attr/android:windowBackground"
     android:clickable="true"
     android:elevation="8dp"
+    android:focusable="true"
     app:behavior_hideable="true"
     app:behavior_peekHeight="66dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
@@ -16,8 +17,6 @@
         android:id="@+id/compactPlayer"
         android:layout_width="0dp"
         android:layout_height="66dp"
-        android:alpha="1"
-        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">

@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.FirebaseApp;
@@ -76,8 +77,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             if (password.length() == 0) {
-                //Snackbar.make(view, "Password can't be empty!", Snackbar.LENGTH_LONG);
-                Toast.makeText(LoginActivity.this, "Password can't be empty!", Toast.LENGTH_LONG).show();
+                Snackbar.make(view, "Password can't be empty!", Snackbar.LENGTH_LONG).show();
 
             } else {
                 auth.signInWithEmailAndPassword(email, password).addOnSuccessListener(authResult -> {
@@ -93,11 +93,9 @@ public class LoginActivity extends AppCompatActivity {
                         alertDialog.setMessage("Your email isn't verified. Do you want to re-send a new verification link to your email?");
 
                         alertDialog.setPositiveButton("Yes", (dialog, which) -> auth.getCurrentUser().sendEmailVerification().addOnSuccessListener(aVoid -> {
-                            //Snackbar.make(view, "A verification link has been sent to your email. Please check your inbox or spam box.", Snackbar.LENGTH_LONG);
-                            Toast.makeText(LoginActivity.this, "A verification link has been sent to your email. Please check your inbox or spam box.", Toast.LENGTH_LONG).show();
+                            Snackbar.make(view, "A verification link has been sent to your email. Please check your inbox or spam box.", Snackbar.LENGTH_LONG).show();
                         }).addOnFailureListener(e -> {
-                            //Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG);
-                            Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                            Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG).show();
                         }));
 
                         alertDialog.setNegativeButton("No", (dialog, which) -> auth.signOut());
@@ -106,8 +104,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
 
                 }).addOnFailureListener(e -> {
-                    //Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG);
-                    Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                    Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG).show();
                 });
             }
         });
@@ -121,8 +118,7 @@ public class LoginActivity extends AppCompatActivity {
             }
 
             auth.sendPasswordResetEmail(email);
-            //Snackbar.make(view, "A verification link has been sent to your email. Please check your inbox or spam box.", Snackbar.LENGTH_LONG);
-            Toast.makeText(LoginActivity.this, "A verification link has been sent to your email. Please check your inbox or spam box.", Toast.LENGTH_LONG).show();
+            Snackbar.make(view, "A verification link has been sent to your email. Please check your inbox or spam box.", Snackbar.LENGTH_LONG).show();
         });
 
         register_text.setOnClickListener(v -> {

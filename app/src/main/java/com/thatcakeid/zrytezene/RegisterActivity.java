@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.FirebaseApp;
@@ -92,23 +93,19 @@ public class RegisterActivity extends AppCompatActivity {
                         assert auth.getCurrentUser() != null;
 
                         auth.getCurrentUser().sendEmailVerification().addOnSuccessListener(aVoid -> {
-                            //Snackbar.make(view, "A verification link has been sent to your email. Please check your inbox or spam box.", Snackbar.LENGTH_LONG);
-                            Toast.makeText(RegisterActivity.this, "A verification link has been sent to your email. Please check your inbox or spam box.", Toast.LENGTH_LONG).show();
+                            Snackbar.make(view, "A verification link has been sent to your email. Please check your inbox or spam box.", Snackbar.LENGTH_LONG).show();
 
                         }).addOnFailureListener(e -> {
-                            //Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG);
-                            Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                            Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG).show();
                         });
 
                         auth.signOut();
 
                     }).addOnFailureListener(e -> {
-                        //Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG);
-                        Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                        Snackbar.make(view, e.getMessage(), Snackbar.LENGTH_LONG).show();
                     });
             } else {
-                //Snackbar.make(view, "Invalid email!", Snackbar.LENGTH_LONG);
-                Toast.makeText(RegisterActivity.this, "Invalid email!", Toast.LENGTH_LONG).show();
+                Snackbar.make(view, "Invalid email!", Snackbar.LENGTH_LONG).show();
             }
         });
 

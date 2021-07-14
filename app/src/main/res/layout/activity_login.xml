@@ -52,10 +52,11 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/login_email_til"
-            style="@style/AppTheme.TextInputLayout.OutlinedBox"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="2dp"
+            app:errorEnabled="true"
             app:layout_constraintBottom_toTopOf="@+id/login_passw_til"
             app:layout_constraintEnd_toEndOf="@id/cardView"
             app:layout_constraintStart_toStartOf="@id/textView3">
@@ -70,7 +71,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/login_passw_til"
-            style="@style/AppTheme.TextInputLayout.OutlinedBox"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
