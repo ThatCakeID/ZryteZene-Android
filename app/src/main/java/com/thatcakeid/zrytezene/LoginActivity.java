@@ -122,9 +122,8 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         register_text.setOnClickListener(v -> {
-            Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
-            i.putExtra("email", email_tie.getText().toString());
-            startActivity(i);
+            startActivity(new Intent(getApplicationContext(), RegisterActivity.class)
+                    .putExtra("email", email_tie.getText().toString()));
         });
     }
 }
