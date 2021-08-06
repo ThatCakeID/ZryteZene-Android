@@ -14,7 +14,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,12 +26,10 @@ import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.audio.AudioAttributes;
+import com.google.android.exoplayer2.database.ExoDatabaseProvider;
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory;
 import com.google.android.exoplayer2.source.MediaSourceFactory;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
-import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.imageview.ShapeableImageView;
@@ -319,9 +316,9 @@ public class HomeActivity extends AppCompatActivity {
         user_indexes = new HashMap<>();
 
         SimpleCache cache = new SimpleCache(ExtraMetadata.getExoPlayerCacheDir(getApplicationContext()),
-                ExtraMetadata.getExoPlayerCacheEvictor());
-        MediaSourceFactory mediaSourceFactory = new DefaultMediaSourceFactory(new CacheDataSourceFactory(cache,
-                new DefaultHttpDataSourceFactory("ZryteZene")));
+                ExtraMetadata.getExoPlayerCacheEvictor(), new ExoDatabaseProvider(getApplicationContext()));
+        MediaSourceFactory mediaSourceFactory = new DefaultMediaSourceFactory(
+                new CacheDataSource.Factory().setCache(cache));
         exoPlayer = new SimpleExoPlayer.Builder(this)
                 .setMediaSourceFactory(mediaSourceFactory).build();
         audioAttributes = new AudioAttributes.Builder()
