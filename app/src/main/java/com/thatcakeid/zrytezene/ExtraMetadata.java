@@ -52,7 +52,7 @@ public class ExtraMetadata {
     }
 
     public static CacheEvictor getExoPlayerCacheEvictor() {
-        int cacheSize = 10 * 1024 * 1024; // 10MB cache size
+        int cacheSize = 50 * 1024 * 1024; // 10MB cache size
         return new LeastRecentlyUsedCacheEvictor(cacheSize);
     }
 }
