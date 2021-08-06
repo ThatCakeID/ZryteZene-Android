@@ -29,6 +29,7 @@ import com.google.android.exoplayer2.audio.AudioAttributes;
 import com.google.android.exoplayer2.database.ExoDatabaseProvider;
 import com.google.android.exoplayer2.source.DefaultMediaSourceFactory;
 import com.google.android.exoplayer2.source.MediaSourceFactory;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
@@ -318,7 +319,9 @@ public class HomeActivity extends AppCompatActivity {
         SimpleCache cache = new SimpleCache(ExtraMetadata.getExoPlayerCacheDir(getApplicationContext()),
                 ExtraMetadata.getExoPlayerCacheEvictor(), new ExoDatabaseProvider(getApplicationContext()));
         MediaSourceFactory mediaSourceFactory = new DefaultMediaSourceFactory(
-                new CacheDataSource.Factory().setCache(cache));
+                new CacheDataSource.Factory().setCache(cache).setUpstreamDataSourceFactory(
+                        new DefaultHttpDataSource.Factory().setUserAgent("ZryteZene")));
+
         exoPlayer = new SimpleExoPlayer.Builder(this)
                 .setMediaSourceFactory(mediaSourceFactory).build();
         audioAttributes = new AudioAttributes.Builder()
