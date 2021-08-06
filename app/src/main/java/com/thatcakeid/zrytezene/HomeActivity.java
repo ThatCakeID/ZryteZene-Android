@@ -1,6 +1,7 @@
 package com.thatcakeid.zrytezene;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -44,7 +45,6 @@ import com.thatcakeid.zrytezene.databinding.ActivityHomeBinding;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -75,6 +75,7 @@ public class HomeActivity extends AppCompatActivity {
     private int currentPos = -1;
     private boolean isReady = false;
     private boolean isDragging = false;
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -356,6 +357,8 @@ public class HomeActivity extends AppCompatActivity {
 
         textView4.setSelected(true);
         textView7.setSelected(true);
+
+        //preferences
     }
 
     private void play() {
