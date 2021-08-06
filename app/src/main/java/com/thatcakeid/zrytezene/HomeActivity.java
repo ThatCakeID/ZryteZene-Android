@@ -27,7 +27,15 @@ import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.audio.AudioAttributes;
+import com.google.android.exoplayer2.source.DefaultMediaSourceFactory;
+import com.google.android.exoplayer2.source.MediaSourceFactory;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
+import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory;
+import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
@@ -46,8 +54,9 @@ public class HomeActivity extends AppCompatActivity {
     private ConstraintLayout compactPlayer;
     private RecyclerView rv_items_home;
     private TextView textView4, textView6, textView7, textView8, textView9, textView10;
-    private ImageView user_appbar_home, imageView2, imageView3, imageView4, imageView5, imageView6,
-            imageView7, imageView8;
+    private ShapeableImageView user_appbar_home;
+    private ImageView imageView2, imageView3, imageView4, imageView5, imageView6, imageView7,
+            imageView8;
     private ProgressBar progressBar, progressBar2, progressBar3;
     private SeekBar seekBar;
 
@@ -309,7 +318,12 @@ public class HomeActivity extends AppCompatActivity {
         musics_indexes = new ArrayList<>();
         user_indexes = new HashMap<>();
 
-        exoPlayer = new SimpleExoPlayer.Builder(this).build();
+        SimpleCache cache = new SimpleCache(ExtraMetadata.getExoPlayerCacheDir(getApplicationContext()),
+                ExtraMetadata.getExoPlayerCacheEvictor());
+        MediaSourceFactory mediaSourceFactory = new DefaultMediaSourceFactory(new CacheDataSourceFactory(cache,
+                new DefaultHttpDataSourceFactory("ZryteZene")));
+        exoPlayer = new SimpleExoPlayer.Builder(this)
+                .setMediaSourceFactory(mediaSourceFactory).build();
         audioAttributes = new AudioAttributes.Builder()
                 .setUsage(C.USAGE_MEDIA)
                 .setContentType(C.CONTENT_TYPE_MUSIC).build();
