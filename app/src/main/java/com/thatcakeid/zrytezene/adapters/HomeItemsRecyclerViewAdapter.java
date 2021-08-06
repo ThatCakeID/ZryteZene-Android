@@ -12,11 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.Timestamp;
+import com.thatcakeid.zrytezene.HelperClass;
 import com.thatcakeid.zrytezene.R;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 public class HomeItemsRecyclerViewAdapter extends RecyclerView.Adapter<HomeItemsRecyclerViewAdapter.ViewHolder> {
@@ -50,12 +49,15 @@ public class HomeItemsRecyclerViewAdapter extends RecyclerView.Adapter<HomeItems
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        String bottomText = (users.containsKey(items.get(position).get("author")) ?
+                users.get(items.get(position).get("author")) :
+                items.get(position).get("author")) + " • " +
+                HelperClass.getPrettyPlaysCount((Number) items.get(position).get("plays")) + " • " +
+                HelperClass.getPrettyDateFormat((Timestamp) items.get(position).get("time"));
+
         holder.musicname_item.setText((String) items.get(position).get("title"));
-        holder.uploader_item.setText(users.containsKey((String) items.get(position).get("author")) ?
-                users.get((String) items.get(position).get("author")) :
-                (String) items.get(position).get("author"));
-        holder.date_text.setText(new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss")
-                .format(((Timestamp)items.get(position).get("time")).toDate()));
+        holder.uploader_item.setText(bottomText);
+
         if (items.get(position).get("thumb").equals("")) {
             holder.image_overlay.setImageResource(R.drawable.ic_zrytezene);
         } else {
@@ -74,7 +76,6 @@ public class HomeItemsRecyclerViewAdapter extends RecyclerView.Adapter<HomeItems
         ImageView image_overlay;
         TextView musicname_item;
         TextView uploader_item;
-        TextView date_text;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -85,7 +86,6 @@ public class HomeItemsRecyclerViewAdapter extends RecyclerView.Adapter<HomeItems
             image_overlay = itemView.findViewById(R.id.image_overlay);
             musicname_item = itemView.findViewById(R.id.musicname_item);
             uploader_item = itemView.findViewById(R.id.uploader_item);
-            date_text = itemView.findViewById(R.id.date_text);
         }
 
         @Override
