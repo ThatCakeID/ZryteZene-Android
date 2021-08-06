@@ -36,6 +36,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.thatcakeid.zrytezene.adapters.HomeItemsRecyclerViewAdapter;
@@ -58,18 +59,17 @@ public class HomeActivity extends AppCompatActivity {
     private ProgressBar progressBar, progressBar2, progressBar3;
     private SeekBar seekBar;
 
-    private ArrayList<HashMap<String, Object>> musics_entries;
-    private ArrayList<String> musics_indexes;
+    private ArrayList<HashMap<String, Object>> musics_entries, currentPlaylist;
+    private ArrayList<String> musics_indexes, playlistIndex;
     private HashMap<String, String> user_indexes;
 
     private FirebaseAuth auth;
-    private FirebaseFirestore musics_db, users_db;
+    private CollectionReference musics_db, users_db;
     private BottomSheetBehavior bottomSheetBehavior;
 
     private SimpleExoPlayer exoPlayer;
     private AudioAttributes audioAttributes;
     private PlaybackStateListener playbackStateListener;
-    private ArrayList<HashMap<String, Object>> currentPlaylist;
     private Handler handler;
     private Runnable runnable;
     private int currentPos = -1;
@@ -119,6 +119,7 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onItemClick(int position, View v) {
                 currentPlaylist = new ArrayList<>(musics_entries);
+                playlistIndex = new ArrayList<>(musics_indexes);
                 currentPos = position;
 
                 play();
@@ -157,7 +158,7 @@ public class HomeActivity extends AppCompatActivity {
         rv_items_home.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         rv_items_home.setAdapter(adapter);
 
-        users_db.collection("users").addSnapshotListener((value, error) -> {
+        users_db.addSnapshotListener((value, error) -> {
             if (value == null) {
                 Toast.makeText(HomeActivity.this, "An error occurred whilst trying to update users: value is null", Toast.LENGTH_SHORT).show();
                 return;
@@ -169,10 +170,10 @@ public class HomeActivity extends AppCompatActivity {
                 switch (dc.getType()) {
                     case ADDED:
                     case MODIFIED:
-                        user_indexes.put((String) data.get("uid"), (String) data.get("username"));
+                        user_indexes.put(dc.getDocument().getId(), (String) data.get("username"));
 
-                        if (Objects.equals(data.get("uid"), auth.getUid())) {
-                            if (data.get("img_url").equals("")) {
+                        if (dc.getDocument().getId().equals(auth.getUid())) {
+                            if (dc.getDocument().getId().equals("")) {
                                 user_appbar_home.setImageTintList(
                                         ContextCompat.getColorStateList(
                                                 getApplicationContext(),
@@ -193,9 +194,9 @@ public class HomeActivity extends AppCompatActivity {
                         break;
 
                     case REMOVED:
-                        user_indexes.remove(data.get("uid"));
+                        user_indexes.remove(dc.getDocument().getId());
 
-                        if (Objects.equals(data.get("uid"), auth.getUid())) {
+                        if (dc.getDocument().getId().equals(auth.getUid())) {
                             user_appbar_home.setImageTintList(
                                     ContextCompat.getColorStateList(
                                             getApplicationContext(),
@@ -213,7 +214,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
-        musics_db.collection("musics").addSnapshotListener((value, error) -> {
+        musics_db.addSnapshotListener((value, error) -> {
             if (value == null) {
                 Toast.makeText(HomeActivity.this, "An error occurred whilst trying to update musics: value is null", Toast.LENGTH_SHORT).show();
                 return;
@@ -235,10 +236,23 @@ public class HomeActivity extends AppCompatActivity {
                                 data
                         );
 
+                        if(currentPlaylist != null)
+                            currentPlaylist.set(
+                                    playlistIndex.indexOf(dc.getDocument().getId()),
+                                    data
+                            );
+
                         break;
 
                     case REMOVED:
                         musics_entries.remove(data);
+                        musics_indexes.remove(dc.getDocument().getId());
+
+                        if (currentPlaylist != null) {
+                            currentPlaylist.remove(data);
+                            playlistIndex.remove(dc.getDocument().getId());
+                        }
+
                         break;
                 }
 
@@ -324,6 +338,7 @@ public class HomeActivity extends AppCompatActivity {
 
         exoPlayer = new SimpleExoPlayer.Builder(this)
                 .setMediaSourceFactory(mediaSourceFactory).build();
+
         audioAttributes = new AudioAttributes.Builder()
                 .setUsage(C.USAGE_MEDIA)
                 .setContentType(C.CONTENT_TYPE_MUSIC).build();
@@ -334,8 +349,8 @@ public class HomeActivity extends AppCompatActivity {
 
         FirebaseApp.initializeApp(this);
         auth = FirebaseAuth.getInstance();
-        musics_db = FirebaseFirestore.getInstance();
-        users_db = FirebaseFirestore.getInstance();
+        musics_db = FirebaseFirestore.getInstance().collection("musics");
+        users_db = FirebaseFirestore.getInstance().collection("users");
 
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 
@@ -425,6 +440,7 @@ public class HomeActivity extends AppCompatActivity {
 
         currentPos = -1;
         currentPlaylist = null;
+        playlistIndex = null;
 
         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
     }
