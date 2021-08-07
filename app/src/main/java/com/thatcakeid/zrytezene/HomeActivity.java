@@ -87,6 +87,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(view);
 
         initializeVar();
+        refreshRepeatState(preferences.getInt("playMode", 0));
 
         user_appbar_home.setOnClickListener(v -> {
             if (auth.getCurrentUser() == null) {
@@ -121,26 +122,7 @@ public class HomeActivity extends AppCompatActivity {
             }
 
             preferences.edit().putInt("playMode", mode).apply();
-            imageView9.setAlpha(1.0f);
-
-            switch(mode) {
-                case 0:
-                    imageView9.setAlpha(0.5f);
-                    imageView9.setImageResource(R.drawable.ic_repeat);
-                    break;
-
-                case 1:
-                    imageView9.setImageResource(R.drawable.ic_repeat);
-                    break;
-
-                case 2:
-                    imageView9.setImageResource(R.drawable.ic_repeat_one);
-                    break;
-
-                case 3:
-                    imageView9.setImageResource(R.drawable.ic_shuffle);
-                    break;
-            }
+            refreshRepeatState(mode);
         });
 
         final HomeItemsRecyclerViewAdapter adapter =
@@ -588,6 +570,29 @@ public class HomeActivity extends AppCompatActivity {
                     playNext();
                     break;
             }
+        }
+    }
+
+    private void refreshRepeatState(int mode) {
+        imageView9.setAlpha(1.0f);
+
+        switch(mode) {
+            case 0:
+                imageView9.setAlpha(0.5f);
+                imageView9.setImageResource(R.drawable.ic_repeat);
+                break;
+
+            case 1:
+                imageView9.setImageResource(R.drawable.ic_repeat);
+                break;
+
+            case 2:
+                imageView9.setImageResource(R.drawable.ic_repeat_one);
+                break;
+
+            case 3:
+                imageView9.setImageResource(R.drawable.ic_shuffle);
+                break;
         }
     }
 }
