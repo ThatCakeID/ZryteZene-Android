@@ -441,6 +441,10 @@ public class HomeActivity extends AppCompatActivity {
 
             if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN)
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+
+            musics_db.document(playlistIndex.get(currentPos)).update("plays",
+                    ((Number) currentPlaylist.get(currentPos).get("plays")).intValue() + 1);
+
         } else {
             Toast.makeText(this,
                     "An error occurred while trying to play a music, playlist is empty",
