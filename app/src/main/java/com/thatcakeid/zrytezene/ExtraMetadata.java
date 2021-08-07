@@ -17,7 +17,7 @@ import java.io.File;
  */
 public class ExtraMetadata {
     public static final boolean SHOW_WATERMARK = true;
-    public static final String BUILD_INFO = "beta";
+    public static final String BUILD_INFO = "dev";
 
     @SuppressWarnings("ALL")
     public static void setWatermarkColors(TextView watermark, LinearLayout root) {

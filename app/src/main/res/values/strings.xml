@@ -32,5 +32,6 @@
     <string name="forgot_pass">Forgot Password?</string>
     <string name="uploaded_musics">Uploaded Music(s)</string>
     <string name="main_preferences_key">data</string>
+    <string name="activity_debug">Debug</string>
 
 </resources>

@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -17,6 +18,8 @@ import com.thatcakeid.zrytezene.databinding.ActivityProfileBinding;
 import java.util.Objects;
 
 public class ProfileActivity extends AppCompatActivity {
+
+    private Toolbar toolbar;
 
     ActivityProfileBinding binding;
 
@@ -35,6 +38,12 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(view);
 
         ExtraMetadata.setWatermarkColors(binding.textWatermark, binding.watermarkRoot);
+
+        toolbar = binding.toolbar;
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
 
         Intent intent = getIntent();
         uid = intent.getStringExtra("uid");

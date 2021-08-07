@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                                                 finish();
                                             })
                                             .addOnFailureListener(e -> {
-                                                //TODO: implement this
+                                                // TODO: implement this
                                             });
 
                                     return;
