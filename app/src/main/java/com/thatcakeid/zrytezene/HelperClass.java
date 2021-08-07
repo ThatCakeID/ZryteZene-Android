@@ -7,6 +7,8 @@ import android.os.Build;
 import com.google.firebase.Timestamp;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 
 public class HelperClass {
     public static String parseDuration(long duration) {
@@ -16,7 +18,7 @@ public class HelperClass {
 
     // TODO: Stub
     public static String getPrettyDateFormat(Timestamp timestamp) {
-        return "0 seconds ago";
+        return new SimpleDateFormat("dd/MM/yyyy").format(timestamp.toDate());
     }
 
     public static String getPrettyPlaysCount(Number plays) {
@@ -25,6 +27,6 @@ public class HelperClass {
                     CompactDecimalFormat.CompactStyle.SHORT).format(plays) + " x played";
         }
         // TODO: Stub
-        return "0 x played";
+        return NumberFormat.getInstance().format(plays) +  " x played";
     }
 }

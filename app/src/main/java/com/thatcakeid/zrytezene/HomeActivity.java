@@ -1,5 +1,6 @@
 package com.thatcakeid.zrytezene;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -45,6 +46,7 @@ import com.thatcakeid.zrytezene.databinding.ActivityHomeBinding;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -55,7 +57,7 @@ public class HomeActivity extends AppCompatActivity {
     private TextView textView4, textView6, textView7, textView8, textView9, textView10;
     private ShapeableImageView user_appbar_home;
     private ImageView imageView2, imageView3, imageView4, imageView5, imageView6, imageView7,
-            imageView8;
+            imageView8, imageView9;
     private ProgressBar progressBar, progressBar2, progressBar3;
     private SeekBar seekBar;
 
@@ -108,6 +110,38 @@ public class HomeActivity extends AppCompatActivity {
 
         imageView5.setOnClickListener(v -> togglePlay());
         imageView8.setOnClickListener(v -> togglePlay());
+
+        imageView9.setOnClickListener(v -> {
+            int mode = preferences.getInt("playMode", 0);
+
+            if (mode < 3) {
+                mode++;
+            } else {
+                mode = 0;
+            }
+
+            preferences.edit().putInt("playMode", mode).apply();
+            imageView9.setAlpha(1.0f);
+
+            switch(mode) {
+                case 0:
+                    imageView9.setAlpha(0.5f);
+                    imageView9.setImageResource(R.drawable.ic_repeat);
+                    break;
+
+                case 1:
+                    imageView9.setImageResource(R.drawable.ic_repeat);
+                    break;
+
+                case 2:
+                    imageView9.setImageResource(R.drawable.ic_repeat_one);
+                    break;
+
+                case 3:
+                    imageView9.setImageResource(R.drawable.ic_shuffle);
+                    break;
+            }
+        });
 
         final HomeItemsRecyclerViewAdapter adapter =
                 new HomeItemsRecyclerViewAdapter(
@@ -301,6 +335,7 @@ public class HomeActivity extends AppCompatActivity {
         imageView6 = findViewById(R.id.imageView6);
         imageView7 = findViewById(R.id.imageView7);
         imageView8 = findViewById(R.id.imageView8);
+        imageView9 = findViewById(R.id.imageView9);
         progressBar = findViewById(R.id.progressBar);
         progressBar2 = findViewById(R.id.progressBar2);
         progressBar3 = findViewById(R.id.progressBar3);
@@ -358,7 +393,8 @@ public class HomeActivity extends AppCompatActivity {
         textView4.setSelected(true);
         textView7.setSelected(true);
 
-        //preferences
+        preferences = getSharedPreferences(getString(R.string.main_preferences_key),
+                Context.MODE_PRIVATE);
     }
 
     private void play() {
@@ -418,20 +454,66 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void playNext() {
-        if (currentPos + 1 < currentPlaylist.size()) {
-            currentPos++;
-            play();
-        } else {
-            stop();
+        switch(preferences.getInt("playMode", 0)) {
+            case 0:
+                if (currentPos + 1 < currentPlaylist.size()) {
+                    currentPos++;
+                    play();
+                } else {
+                    stop();
+                }
+                break;
+
+            case 1: // Repeat
+                if (currentPos + 1 < currentPlaylist.size()) {
+                    currentPos++;
+                } else {
+                    currentPos = 0;
+                }
+                play();
+                break;
+
+            case 2: // Repeat once
+                play();
+                break;
+
+            case 3: // Shuffle
+                currentPos = new Random().nextInt(currentPlaylist.size());
+                play();
+                break;
+
         }
     }
 
     private void playPrevious() {
-        if (currentPos - 1 >= 0) {
-            currentPos--;
-            play();
-        } else {
-            stop();
+        switch(preferences.getInt("playMode", 0)) {
+            case 0:
+                if (currentPos > 0) {
+                    currentPos--;
+                    play();
+                } else {
+                    stop();
+                }
+                break;
+
+            case 1: // Repeat
+                if (currentPos > 0) {
+                    currentPos--;
+                } else {
+                    currentPos = currentPlaylist.size() - 1;
+                }
+                play();
+                break;
+
+            case 2: // Repeat once
+                play();
+                break;
+
+            case 3: // Shuffle
+                currentPos = new Random().nextInt(currentPlaylist.size());
+                play();
+                break;
+
         }
     }
 
