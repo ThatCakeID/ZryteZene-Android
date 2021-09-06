@@ -1,14 +1,15 @@
-apply plugin: 'com.android.application'
-apply plugin: 'com.google.gms.google-services'
+plugins {
+    id 'com.android.application'
+    id 'com.google.gms.google-services'
+}
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
+    compileSdkVersion 31
 
     defaultConfig {
         applicationId "com.thatcakeid.zrytezene"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 301
         versionName "3.0.1"
 
