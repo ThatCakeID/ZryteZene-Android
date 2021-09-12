@@ -1,45 +1,60 @@
-package com.thatcakeid.zrytezene;
+package com.thatcakeid.zrytezene
 
-import android.os.Bundle;
-import android.view.View;
+import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
+import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.auth.FirebaseAuth
+import android.os.Bundle
+import com.thatcakeid.zrytezene.ExtraMetadata
+import android.content.Intent
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.android.gms.tasks.OnFailureListener
+import android.widget.Toast
+import android.widget.EditText
+import android.content.DialogInterface
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
+import com.google.android.material.button.MaterialButton
+import android.widget.TextView
+import com.google.firebase.FirebaseApp
+import android.text.TextWatcher
+import android.text.Editable
+import android.view.View
+import com.google.firebase.auth.AuthResult
+import com.google.android.material.snackbar.Snackbar
+import com.thatcakeid.zrytezene.R
+import android.widget.LinearLayout
+import androidx.appcompat.widget.Toolbar
+import com.thatcakeid.zrytezene.SettingsActivity.SettingsFragment
+import androidx.preference.PreferenceFragmentCompat
+import com.thatcakeid.zrytezene.databinding.ActivitySettingsBinding
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.preference.PreferenceFragmentCompat;
-
-import com.thatcakeid.zrytezene.databinding.ActivitySettingsBinding;
-
-public class SettingsActivity extends AppCompatActivity {
-
-    private ActivitySettingsBinding binding;
-
-    private Toolbar toolbar;
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = ActivitySettingsBinding.inflate(getLayoutInflater());
-        View view = binding.getRoot();
-        setContentView(view);
-
-        ExtraMetadata.setWatermarkColors(findViewById(R.id.text_watermark), findViewById(R.id.watermark_root));
-
-        toolbar = binding.toolbar;
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        toolbar.setNavigationOnClickListener(v -> onBackPressed());
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.settings, new SettingsActivity.SettingsFragment())
-                .commit();
+class SettingsActivity : AppCompatActivity() {
+    private var binding: ActivitySettingsBinding? = null
+    private var toolbar: Toolbar? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivitySettingsBinding.inflate(
+            layoutInflater
+        )
+        val view: View = binding!!.root
+        setContentView(view)
+        setWatermarkColors(findViewById(R.id.text_watermark), findViewById(R.id.watermark_root))
+        toolbar = binding!!.toolbar
+        setSupportActionBar(toolbar)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setDisplayShowHomeEnabled(true)
+        toolbar!!.setNavigationOnClickListener { v: View? -> onBackPressed() }
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.settings, SettingsFragment())
+            .commit()
     }
 
-    public static class SettingsFragment extends PreferenceFragmentCompat {
-        @Override
-        public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-            setPreferencesFromResource(R.xml.root_preferences, rootKey);
+    class SettingsFragment : PreferenceFragmentCompat() {
+        override fun onCreatePreferences(savedInstanceState: Bundle, rootKey: String) {
+            setPreferencesFromResource(R.xml.root_preferences, rootKey)
         }
     }
 }

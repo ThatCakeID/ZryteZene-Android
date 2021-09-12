@@ -1,111 +1,94 @@
-package com.thatcakeid.zrytezene.adapters;
+package com.thatcakeid.zrytezene.adapters
 
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.content.Context
+import com.thatcakeid.zrytezene.HelperClass.Companion.getPrettyPlaysCount
+import com.thatcakeid.zrytezene.HelperClass.Companion.getPrettyDateFormat
+import androidx.recyclerview.widget.RecyclerView
+import android.view.ViewGroup
+import android.view.LayoutInflater
+import android.view.View
+import com.thatcakeid.zrytezene.R
+import com.thatcakeid.zrytezene.HelperClass
+import com.bumptech.glide.Glide
+import android.view.View.OnLongClickListener
+import android.widget.ImageView
+import android.widget.TextView
+import com.google.firebase.Timestamp
+import com.thatcakeid.zrytezene.adapters.HomeItemsRecyclerViewAdapter
+import com.thatcakeid.zrytezene.adapters.HomeItemsRecyclerViewAdapter.ClickListener
+import java.util.ArrayList
+import java.util.HashMap
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.bumptech.glide.Glide;
-import com.google.firebase.Timestamp;
-import com.thatcakeid.zrytezene.HelperClass;
-import com.thatcakeid.zrytezene.R;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
-public class HomeItemsRecyclerViewAdapter extends RecyclerView.Adapter<HomeItemsRecyclerViewAdapter.ViewHolder> {
-
-    private ArrayList<HashMap<String, Object>> items;
-    private HashMap<String, String> users;
-    private Context mContext;
-
-    private static ClickListener clickListener;
-
-    public HomeItemsRecyclerViewAdapter(Context mContext, ArrayList<HashMap<String, Object>> items,
-                                        HashMap<String, String> users) {
-        this.mContext = mContext;
-        this.items = items;
-        this.users = users;
+class HomeItemsRecyclerViewAdapter(
+    private var mContext: Context, private var items: ArrayList<HashMap<String, Any>>,
+    private var users: HashMap<String, String?>
+) : RecyclerView.Adapter<HomeItemsRecyclerViewAdapter.ViewHolder>() {
+    fun updateItems(
+        mContext: Context, items: ArrayList<HashMap<String, Any>>,
+        users: HashMap<String, String?>
+    ) {
+        this.mContext = mContext
+        this.items = items
+        this.users = users
     }
 
-    public void updateItems(Context mContext, ArrayList<HashMap<String, Object>> items,
-                            HashMap<String, String> users) {
-        this.mContext = mContext;
-        this.items = items;
-        this.users = users;
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.home_item, parent, false)
+        return ViewHolder(view)
     }
 
-    @NonNull
-    @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_item, parent, false);
-        return new ViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String bottomText = (users.containsKey(items.get(position).get("author")) ?
-                users.get(items.get(position).get("author")) :
-                items.get(position).get("author")) + " • " +
-                HelperClass.getPrettyPlaysCount((Number) items.get(position).get("plays")) + " • " +
-                HelperClass.getPrettyDateFormat((Timestamp) items.get(position).get("time"));
-
-        holder.musicname_item.setText((String) items.get(position).get("title"));
-        holder.uploader_item.setText(bottomText);
-
-        if (items.get(position).get("thumb").equals("")) {
-            holder.image_overlay.setImageResource(R.drawable.ic_zrytezene);
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val bottomText =
+            (if (users.containsKey(items[position]["author"])) users[items[position]["author"]] else items[position]["author"]).toString() + " • " +
+                    getPrettyPlaysCount(items[position]["plays"] as Number?) + " • " +
+                    getPrettyDateFormat((items[position]["time"] as Timestamp?)!!)
+        holder.musicname_item.text = items[position]["title"] as String?
+        holder.uploader_item.text = bottomText
+        if (items[position]["thumb"] == "") {
+            holder.image_overlay.setImageResource(R.drawable.ic_zrytezene)
         } else {
-             Glide.with(mContext).load((String) items.get(position).get("thumb"))
-                     .into(holder.image_overlay);
+            Glide.with(mContext).load(items[position]["thumb"] as String?)
+                .into(holder.image_overlay)
         }
     }
 
-    @Override
-    public int getItemCount() {
-        return items.size();
+    override fun getItemCount(): Int {
+        return items.size
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
-
-        ImageView image_overlay;
-        TextView musicname_item;
-        TextView uploader_item;
-
-        public ViewHolder(View itemView) {
-            super(itemView);
-
-            itemView.setOnClickListener(this);
-            itemView.setOnLongClickListener(this);
-
-            image_overlay = itemView.findViewById(R.id.image_overlay);
-            musicname_item = itemView.findViewById(R.id.musicname_item);
-            uploader_item = itemView.findViewById(R.id.uploader_item);
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener,
+        OnLongClickListener {
+        var image_overlay: ImageView
+        var musicname_item: TextView
+        var uploader_item: TextView
+        override fun onClick(v: View) {
+            clickListener!!.onItemClick(adapterPosition, v)
         }
 
-        @Override
-        public void onClick(View v) {
-            clickListener.onItemClick(getAdapterPosition(), v);
+        override fun onLongClick(v: View): Boolean {
+            clickListener!!.onItemLongClick(adapterPosition, v)
+            return false
         }
 
-        @Override
-        public boolean onLongClick(View v) {
-            clickListener.onItemLongClick(getAdapterPosition(), v);
-            return false;
+        init {
+            itemView.setOnClickListener(this)
+            itemView.setOnLongClickListener(this)
+            image_overlay = itemView.findViewById(R.id.image_overlay)
+            musicname_item = itemView.findViewById(R.id.musicname_item)
+            uploader_item = itemView.findViewById(R.id.uploader_item)
         }
     }
 
-    public void setOnItemClickListener(ClickListener clickListener) {
-        HomeItemsRecyclerViewAdapter.clickListener = clickListener;
+    fun setOnItemClickListener(clickListener: ClickListener?) {
+        Companion.clickListener = clickListener
     }
 
-    public interface ClickListener {
-        void onItemClick(int position, View v);
-        void onItemLongClick(int position, View v);
+    interface ClickListener {
+        fun onItemClick(position: Int, v: View?)
+        fun onItemLongClick(position: Int, v: View?)
+    }
+
+    companion object {
+        private var clickListener: ClickListener? = null
     }
 }
