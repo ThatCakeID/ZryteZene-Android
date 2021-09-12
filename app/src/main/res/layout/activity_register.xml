@@ -107,7 +107,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="64dp"
             android:text="@string/signup"
-            app:backgroundTint="?attr/colorAccent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/register_passw2_til"
             app:layout_constraintStart_toStartOf="@id/register_passw2_til" />

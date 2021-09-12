@@ -97,7 +97,6 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="64dp"
             android:text="@string/signin"
-            app:backgroundTint="?attr/colorAccent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/login_passw_til"
             app:layout_constraintStart_toStartOf="@id/forgot_password_text" />
