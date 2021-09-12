@@ -190,7 +190,7 @@ public class HomeActivity extends AppCompatActivity {
                         user_indexes.put(dc.getDocument().getId(), (String) data.get("username"));
 
                         if (dc.getDocument().getId().equals(auth.getUid())) {
-                            if (dc.getDocument().getId().equals("")) {
+                            if (data.get("img_url").equals("")) {
                                 user_appbar_home.setImageTintList(
                                         ContextCompat.getColorStateList(
                                                 getApplicationContext(),
