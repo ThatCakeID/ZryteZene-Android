@@ -1,7 +1,6 @@
 package com.thatcakeid.zrytezene
 
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.thatcakeid.zrytezene.databinding.ActivityDebugBinding
@@ -14,16 +13,13 @@ class DebugActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val view: View = binding.root
-        setContentView(view)
-
-        val toolbar = binding.toolbar
-        setSupportActionBar(toolbar)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
 
-        toolbar.setNavigationOnClickListener { onBackPressed() }
+        binding.toolbar.setNavigationOnClickListener { onBackPressed() }
 
         AlertDialog.Builder(this)
             .setTitle("App crashed")
