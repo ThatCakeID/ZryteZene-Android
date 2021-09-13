@@ -64,7 +64,7 @@ class HomeActivity : AppCompatActivity() {
     private val exoPlayer: SimpleExoPlayer by lazy {
         val cache = SimpleCache(
             getExoPlayerCacheDir(applicationContext),
-            getExoPlayerCacheEvictor(),
+            getExoPlayerCacheEvictor,
             ExoDatabaseProvider(applicationContext)
         )
 

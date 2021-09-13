@@ -18,13 +18,13 @@ object ExtraMetadata {
     const val BUILD_INFO = "dev"
 
     fun setWatermarkColors(watermark: TextView, root: LinearLayout) {
-        val color: Int
-        color = when (BUILD_INFO) {
+        val color: Int = when (BUILD_INFO) {
             "dev" -> 0xFFB71C1C.toInt()
             "beta" -> 0xFF2196F3.toInt()
             "stable" -> 0xFF2E7D32.toInt()
             else -> throw IllegalStateException("Unexpected value: $BUILD_INFO")
         }
+
         watermark.setBackgroundColor(color)
         root.visibility = if (SHOW_WATERMARK) View.VISIBLE else View.GONE
         watermark.text = BUILD_INFO
@@ -35,8 +35,7 @@ object ExtraMetadata {
     }
 
     // 50MB cache size
-    fun getExoPlayerCacheEvictor(): CacheEvictor {
-        val cacheSize = 50 * 1024 * 1024 // 50MB cache size
-        return LeastRecentlyUsedCacheEvictor(cacheSize.toLong())
-    }
+    val getExoPlayerCacheEvictor: CacheEvictor =
+        LeastRecentlyUsedCacheEvictor((50 * 1024 * 1024).toLong()) // 50MB cache size
+
 }

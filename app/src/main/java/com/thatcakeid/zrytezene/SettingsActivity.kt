@@ -22,7 +22,7 @@ class SettingsActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
 
-        binding.toolbar.setNavigationOnClickListener { v -> onBackPressed() }
+        binding.toolbar.setNavigationOnClickListener { onBackPressed() }
 
         supportFragmentManager
             .beginTransaction()
