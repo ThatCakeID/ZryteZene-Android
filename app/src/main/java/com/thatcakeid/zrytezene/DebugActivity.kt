@@ -1,30 +1,34 @@
 package com.thatcakeid.zrytezene
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.content.DialogInterface
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.Toolbar
+import androidx.appcompat.app.AppCompatActivity
 import com.thatcakeid.zrytezene.databinding.ActivityDebugBinding
 
 class DebugActivity : AppCompatActivity() {
-    private var binding: ActivityDebugBinding? = null
-    private var toolbar: Toolbar? = null
+    private val binding by lazy {
+        ActivityDebugBinding.inflate(layoutInflater)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityDebugBinding.inflate(layoutInflater)
-        val view: View = binding!!.root
+
+        val view: View = binding.root
         setContentView(view)
-        toolbar = binding!!.toolbar
+
+        val toolbar = binding.toolbar
         setSupportActionBar(toolbar)
+
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
-        toolbar!!.setNavigationOnClickListener { v: View? -> onBackPressed() }
-        val alertDialog = AlertDialog.Builder(this)
-        alertDialog.setTitle("App crashed")
-        alertDialog.setMessage(intent.getStringExtra("error"))
-        alertDialog.setPositiveButton("Exit") { dialog: DialogInterface?, which: Int -> finish() }
-        alertDialog.create().show()
+
+        toolbar.setNavigationOnClickListener { onBackPressed() }
+
+        AlertDialog.Builder(this)
+            .setTitle("App crashed")
+            .setMessage(intent.getStringExtra("error"))
+            .setPositiveButton("Exit") { _, _ -> finish() }
+            .create().show()
     }
 }
