@@ -24,7 +24,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCa
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
-import com.thatcakeid.zrytezene.ExtraMetadata.exoPlayerCacheEvictor
+import com.thatcakeid.zrytezene.ExtraMetadata.getExoPlayerCacheEvictor
 import com.thatcakeid.zrytezene.ExtraMetadata.getExoPlayerCacheDir
 import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
 import com.thatcakeid.zrytezene.HelperClass.Companion.parseDuration
@@ -64,7 +64,7 @@ class HomeActivity : AppCompatActivity() {
     private val exoPlayer: SimpleExoPlayer by lazy {
         val cache = SimpleCache(
             getExoPlayerCacheDir(applicationContext),
-            exoPlayerCacheEvictor,
+            getExoPlayerCacheEvictor(),
             ExoDatabaseProvider(applicationContext)
         )
 

@@ -41,25 +41,22 @@ class HelperClass : Application() {
     }
 
     companion object {
-        @JvmStatic
         fun parseDuration(duration: Long): String {
             return DecimalFormat("0").format(duration / 60000) +
                     ":" + DecimalFormat("00").format(duration / 1000 % 60)
         }
 
         // TODO: Stub
-        @JvmStatic
         fun getPrettyDateFormat(timestamp: Timestamp): String {
             return SimpleDateFormat("dd/MM/yyyy").format(timestamp.toDate())
         }
 
-        @JvmStatic
         fun getPrettyPlaysCount(plays: Number?): String {
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 CompactDecimalFormat.getInstance(ULocale.getDefault(),
                         CompactDecimalFormat.CompactStyle.SHORT).format(plays) + " x played"
-            } else NumberFormat.getInstance().format(plays) + " x played"
-            // TODO: Stub
+            } else
+                NumberFormat.getInstance().format(plays) + " x played" // TODO: Stub
         }
     }
 }
