@@ -24,25 +24,29 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCa
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
-import com.thatcakeid.zrytezene.ExtraMetadata.getExoPlayerCacheEvictor
+import com.thatcakeid.zrytezene.ExtraMetadata.exoPlayerCacheEvictor
 import com.thatcakeid.zrytezene.ExtraMetadata.getExoPlayerCacheDir
 import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
 import com.thatcakeid.zrytezene.HelperClass.Companion.parseDuration
 import com.thatcakeid.zrytezene.adapters.HomeItemsRecyclerViewAdapter
 import com.thatcakeid.zrytezene.adapters.HomeItemsRecyclerViewAdapter.ClickListener
+import com.thatcakeid.zrytezene.data.MusicEntry
 import com.thatcakeid.zrytezene.databinding.ActivityHomeBinding
 import com.thatcakeid.zrytezene.databinding.SheetFpuBinding
 import java.util.*
+import kotlin.collections.HashMap
 
 class HomeActivity : AppCompatActivity() {
     private val binding: ActivityHomeBinding by lazy { ActivityHomeBinding.inflate(layoutInflater) }
     private val fpuBinding: SheetFpuBinding by lazy { SheetFpuBinding.inflate(layoutInflater) }
 
-    private var musicEntries: ArrayList<HashMap<String, Any>> = ArrayList()
-    private var musicIndexes: ArrayList<String> = ArrayList()
+//    private var musicEntries: ArrayList<HashMap<String, Any>> = ArrayList()
+//    private var musicIndexes: ArrayList<String> = ArrayList()
     private var userIndexes: HashMap<String, String> = HashMap()
-    private var currentPlaylist: ArrayList<HashMap<String, Any>>? = null
+    private var currentPlaylist: ArrayList<MusicEntry>? = null
     private var playlistIndex: ArrayList<String>? = null
+
+    private val musics: HashMap<String, MusicEntry> = HashMap()
 
     private val auth: FirebaseAuth by lazy { FirebaseAuth.getInstance() }
     private val musicCollection: CollectionReference by lazy {
@@ -64,7 +68,7 @@ class HomeActivity : AppCompatActivity() {
     private val exoPlayer: SimpleExoPlayer by lazy {
         val cache = SimpleCache(
             getExoPlayerCacheDir(applicationContext),
-            getExoPlayerCacheEvictor(),
+            exoPlayerCacheEvictor,
             ExoDatabaseProvider(applicationContext)
         )
 
@@ -172,14 +176,14 @@ class HomeActivity : AppCompatActivity() {
 
         val adapter = HomeItemsRecyclerViewAdapter(
             applicationContext,
-            musicEntries,
+            musics.values.toList(),
             userIndexes
         )
 
         adapter.setOnItemClickListener(object : ClickListener {
             override fun onItemClick(position: Int, v: View) {
-                currentPlaylist = ArrayList(musicEntries)
-                playlistIndex = ArrayList(musicIndexes)
+                currentPlaylist = ArrayList(musics.values)
+                playlistIndex = ArrayList(musics.keys)
                 currentPos = position
 
                 play()
@@ -217,6 +221,7 @@ class HomeActivity : AppCompatActivity() {
             this.adapter = adapter
         }
 
+        // TODO: 9/13/21 rather than fetching every users, fetch the user when we needed them
         userCollection.addSnapshotListener { value: QuerySnapshot?, _ ->
             if (value == null) {
                 Toast.makeText(
@@ -282,22 +287,20 @@ class HomeActivity : AppCompatActivity() {
             }
 
             for (dc in value.documentChanges) {
-                val data = dc.document.data as HashMap<String, Any>
+                val data = MusicEntry.from(dc.document.data)
                 when (dc.type) {
                     DocumentChange.Type.ADDED -> {
-                        musicEntries.add(data)
-                        musicIndexes.add(dc.document.id)
+                        musics[dc.document.id] = data
                     }
 
                     DocumentChange.Type.MODIFIED -> {
-                        musicEntries[musicIndexes.indexOf(dc.document.id)] = data
+                        musics[dc.document.id] = data
 
                         if (currentPlaylist != null) currentPlaylist!![playlistIndex!!.indexOf(dc.document.id)] = data
                     }
 
                     DocumentChange.Type.REMOVED -> {
-                        musicEntries.remove(data)
-                        musicIndexes.remove(dc.document.id)
+                        musics.remove(dc.document.id)
 
                         if (currentPlaylist != null) {
                             currentPlaylist!!.remove(data)
@@ -348,31 +351,31 @@ class HomeActivity : AppCompatActivity() {
             exoPlayer.stop()
             isReady = false
 
-            exoPlayer.setMediaItem(MediaItem.fromUri((currentPlaylist!![currentPos]["music_url"] as String?)!!))
+            exoPlayer.setMediaItem(MediaItem.fromUri((currentPlaylist!![currentPos].musicUrl)!!))
             exoPlayer.prepare()
 
             fpuBinding.apply {
-                textView7.text = currentPlaylist!![currentPos]["title"] as String?
-                textView8.text = if (userIndexes.containsKey(currentPlaylist!![currentPos]["author"] as String?)) userIndexes[currentPlaylist!![currentPos]["author"] as String?] else currentPlaylist!![currentPos]["author"] as String?
-                textView4.text = currentPlaylist!![currentPos]["title"] as String?
-                textView6.text = if (userIndexes.containsKey(currentPlaylist!![currentPos]["author"] as String?)) userIndexes[currentPlaylist!![currentPos]["author"] as String?] else currentPlaylist!![currentPos]["author"] as String?
+                textView7.text = currentPlaylist!![currentPos].title
+                textView8.text = if (userIndexes.containsKey(currentPlaylist!![currentPos].authorUserId)) userIndexes[currentPlaylist!![currentPos].authorUserId] else currentPlaylist!![currentPos].authorUserId
+                textView4.text = currentPlaylist!![currentPos].title
+                textView6.text = if (userIndexes.containsKey(currentPlaylist!![currentPos].authorUserId)) userIndexes[currentPlaylist!![currentPos].authorUserId] else currentPlaylist!![currentPos].authorUserId
 
                 resetProgressBar()
 
                 textView9.text = "--:--"
                 textView10.text = "--:--"
 
-                if (currentPlaylist!![currentPos]["thumb"] == "") {
+                if (currentPlaylist!![currentPos].thumb == null) {
                     imageView3.setImageResource(R.drawable.ic_zrytezene)
                     imageView7.setImageResource(R.drawable.ic_zrytezene)
 
                 } else {
                     Glide.with(applicationContext)
-                        .load(currentPlaylist!![currentPos]["thumb"] as String?)
+                        .load(currentPlaylist!![currentPos].thumb)
                         .into(imageView3)
 
                     Glide.with(applicationContext)
-                        .load(currentPlaylist!![currentPos]["thumb"] as String?)
+                        .load(currentPlaylist!![currentPos].thumb)
                         .into(imageView7)
                 }
 
@@ -383,7 +386,7 @@ class HomeActivity : AppCompatActivity() {
 
                 musicCollection
                     .document(playlistIndex!![currentPos])
-                    .update("plays", (currentPlaylist!![currentPos]["plays"] as Number).toInt() + 1)
+                    .update("plays", currentPlaylist!![currentPos].plays + 1)
             }
 
         } else {

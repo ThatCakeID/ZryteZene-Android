@@ -13,19 +13,20 @@ import android.view.View.OnLongClickListener
 import android.widget.ImageView
 import android.widget.TextView
 import com.google.firebase.Timestamp
+import com.thatcakeid.zrytezene.data.MusicEntry
 import java.util.ArrayList
 import java.util.HashMap
 
 class HomeItemsRecyclerViewAdapter(
     private var mContext: Context,
-    private var items: ArrayList<HashMap<String, Any>>,
-    private var users: HashMap<String, String>
+    private var items: List<MusicEntry>,
+    private var users: Map<String, String>
 ) : RecyclerView.Adapter<HomeItemsRecyclerViewAdapter.ViewHolder>() {
 
     fun updateItems(
         mContext: Context,
-        items: ArrayList<HashMap<String, Any>>,
-        users: HashMap<String, String>
+        items: List<MusicEntry>,
+        users: Map<String, String>
     ) {
         this.mContext = mContext.applicationContext
         this.items = items
@@ -39,26 +40,25 @@ class HomeItemsRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val bottomText = (
-                if (users.containsKey(items[position]["author"])) users[items[position]["author"]]
-                else items[position]["author"]).toString() + " • " +
+                if (users.containsKey(items[position].authorUserId)) users[items[position].authorUserId]
+                else items[position].authorUserId).toString() + " • " +
 
-                getPrettyPlaysCount(items[position]["plays"] as Number) + " • " +
-                getPrettyDateFormat(items[position]["time"] as Timestamp)
+                getPrettyPlaysCount(items[position].plays) + " • " +
+                getPrettyDateFormat(items[position].time)
 
-        holder.musicNameItem.text = items[position]["title"] as String
+        holder.musicNameItem.text = items[position].title
         holder.uploaderItem.text = bottomText
 
-        if (items[position]["thumb"] == "") {
+        if (items[position].thumb == null) {
             holder.imageOverlay.setImageResource(R.drawable.ic_zrytezene)
         } else {
-            Glide.with(mContext).load(items[position]["thumb"] as String)
+            Glide.with(mContext)
+                .load(items[position].thumb)
                 .into(holder.imageOverlay)
         }
     }
 
-    override fun getItemCount(): Int {
-        return items.size
-    }
+    override fun getItemCount(): Int = items.size
 
     class ViewHolder(itemView: View)
         : RecyclerView.ViewHolder(itemView), View.OnClickListener, OnLongClickListener {
