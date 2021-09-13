@@ -221,7 +221,6 @@ class HomeActivity : AppCompatActivity() {
             this.adapter = adapter
         }
 
-        // TODO: 9/13/21 rather than fetching every users, fetch the user when we needed them
         userCollection.addSnapshotListener { value: QuerySnapshot?, _ ->
             if (value == null) {
                 Toast.makeText(
