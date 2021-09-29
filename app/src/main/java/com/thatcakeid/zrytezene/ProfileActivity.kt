@@ -27,8 +27,8 @@ class ProfileActivity : AppCompatActivity() {
         ActivityProfileBinding.inflate(layoutInflater)
     }
 
-    var auth = FirebaseAuth.getInstance()
-    var database = FirebaseFirestore.getInstance()
+    private var auth = FirebaseAuth.getInstance()
+    private var database = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
