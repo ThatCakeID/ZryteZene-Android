@@ -1,26 +1,15 @@
 package com.thatcakeid.zrytezene
 
-import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
-import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.auth.FirebaseAuth
 import android.os.Bundle
-import com.google.firebase.firestore.DocumentSnapshot
-import android.widget.Toast
-import android.widget.EditText
-import android.content.DialogInterface
 import android.view.View
-import com.thatcakeid.zrytezene.R
-import android.widget.LinearLayout
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.Toolbar
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.thatcakeid.zrytezene.SettingsActivity.SettingsFragment
-import androidx.preference.PreferenceFragmentCompat
 import com.bumptech.glide.Glide
-import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
 import com.thatcakeid.zrytezene.databinding.ActivityProfileBinding
-import java.lang.Exception
 
 class ProfileActivity : AppCompatActivity() {
     private val binding by lazy {

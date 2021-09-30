@@ -1,30 +1,22 @@
 package com.thatcakeid.zrytezene
 
-import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
+import android.content.DialogInterface
+import android.content.Intent
+import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.View
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.google.firebase.auth.FirebaseAuth
-import android.os.Bundle
-import com.thatcakeid.zrytezene.ExtraMetadata
-import com.google.android.material.button.MaterialButton
-import android.widget.TextView
 import com.google.firebase.FirebaseApp
-import android.text.TextWatcher
-import android.text.Editable
-import android.widget.Toast
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.auth.AuthResult
-import android.content.Intent
-import com.thatcakeid.zrytezene.MainActivity
-import android.content.DialogInterface
-import android.view.View
-import androidx.appcompat.app.AlertDialog
-import com.google.android.gms.tasks.OnFailureListener
-import com.thatcakeid.zrytezene.RegisterActivity
+import com.google.firebase.auth.FirebaseAuth
+import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
 import com.thatcakeid.zrytezene.databinding.ActivityLoginBinding
-import java.lang.Exception
 
 class LoginActivity : AppCompatActivity() {
     private var email_tie: TextInputEditText? = null
@@ -52,7 +44,7 @@ class LoginActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 if (email_tie!!.text.toString().trim { it <= ' ' }
-                        .matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
+                        .matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex())) {
                     email_til!!.error = null
                 } else {
                     email_til!!.error = "Invalid email!"
@@ -62,7 +54,7 @@ class LoginActivity : AppCompatActivity() {
         button_continue.setOnClickListener { v: View? ->
             val email = email_tie!!.text.toString().trim { it <= ' ' }
             val password = passw_tie!!.text.toString()
-            if (!email.matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
+            if (!email.matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex())) {
                 Toast.makeText(this@LoginActivity, "Invalid email!", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
@@ -114,7 +106,7 @@ class LoginActivity : AppCompatActivity() {
         }
         forgot_password_text.setOnClickListener { v: View? ->
             val email = email_tie!!.text.toString().trim { it <= ' ' }
-            if (email.matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+")) {
+            if (email.matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex())) {
                 Toast.makeText(this@LoginActivity, "Please enter a valid email!", Toast.LENGTH_LONG)
                     .show()
                 return@setOnClickListener
