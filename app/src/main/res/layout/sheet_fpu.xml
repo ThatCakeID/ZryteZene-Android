@@ -5,7 +5,7 @@
     android:id="@+id/sheet_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/android:windowBackground"
+    android:background="?android:windowBackground"
     android:clickable="true"
     android:elevation="8dp"
     android:focusable="true"
