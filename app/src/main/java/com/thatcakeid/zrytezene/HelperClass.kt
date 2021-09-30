@@ -1,5 +1,6 @@
 package com.thatcakeid.zrytezene
 
+import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.Application
 import android.app.PendingIntent
@@ -16,6 +17,7 @@ import java.text.SimpleDateFormat
 import kotlin.system.exitProcess
 
 class HelperClass : Application() {
+    @SuppressLint("UnspecifiedImmutableFlag")
     override fun onCreate() {
         super.onCreate()
 
@@ -47,6 +49,7 @@ class HelperClass : Application() {
         }
 
         // TODO: Stub
+        @SuppressLint("SimpleDateFormat")
         fun getPrettyDateFormat(timestamp: Timestamp): String {
             return SimpleDateFormat("dd/MM/yyyy").format(timestamp.toDate())
         }

@@ -1,10 +1,12 @@
 package com.thatcakeid.zrytezene
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.*
 import android.widget.SeekBar.OnSeekBarChangeListener
@@ -95,7 +97,7 @@ class HomeActivity : AppCompatActivity() {
 
     private val playbackStateListener = PlaybackStateListener()
 
-    private var handler: Handler = Handler()
+    private var handler: Handler = Handler(Looper.getMainLooper())
     private val runnable: Runnable = object : Runnable {
         override fun run() {
             fpuBinding.apply {
@@ -125,6 +127,7 @@ class HomeActivity : AppCompatActivity() {
 
     private var preferences: SharedPreferences? = null
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -350,7 +353,7 @@ class HomeActivity : AppCompatActivity() {
             exoPlayer.stop()
             isReady = false
 
-            exoPlayer.setMediaItem(MediaItem.fromUri((currentPlaylist!![currentPos].musicUrl)!!))
+            exoPlayer.setMediaItem(MediaItem.fromUri((currentPlaylist!![currentPos].musicUrl)))
             exoPlayer.prepare()
 
             fpuBinding.apply {
@@ -475,6 +478,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private inner class PlaybackStateListener : Player.Listener {
+        @SuppressLint("SetTextI18n")
         override fun onPlaybackStateChanged(state: Int) {
             fpuBinding.apply {
                 when (state) {
@@ -509,6 +513,10 @@ class HomeActivity : AppCompatActivity() {
                     }
 
                     ExoPlayer.STATE_ENDED -> playNext()
+
+                    ExoPlayer.STATE_IDLE -> {
+                        // Do nothing
+                    }
                 }
             }
         }

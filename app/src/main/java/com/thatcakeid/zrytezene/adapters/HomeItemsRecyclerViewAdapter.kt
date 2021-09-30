@@ -1,21 +1,18 @@
 package com.thatcakeid.zrytezene.adapters
 
 import android.content.Context
-import com.thatcakeid.zrytezene.HelperClass.Companion.getPrettyPlaysCount
-import com.thatcakeid.zrytezene.HelperClass.Companion.getPrettyDateFormat
-import androidx.recyclerview.widget.RecyclerView
-import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.view.View
-import com.thatcakeid.zrytezene.R
-import com.bumptech.glide.Glide
 import android.view.View.OnLongClickListener
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.google.firebase.Timestamp
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.thatcakeid.zrytezene.HelperClass.Companion.getPrettyDateFormat
+import com.thatcakeid.zrytezene.HelperClass.Companion.getPrettyPlaysCount
+import com.thatcakeid.zrytezene.R
 import com.thatcakeid.zrytezene.data.MusicEntry
-import java.util.ArrayList
-import java.util.HashMap
 
 class HomeItemsRecyclerViewAdapter(
     private var mContext: Context,
