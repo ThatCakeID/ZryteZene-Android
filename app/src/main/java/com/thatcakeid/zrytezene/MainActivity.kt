@@ -161,6 +161,18 @@ class MainActivity : AppCompatActivity() {
                 }.addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         data["img_url"] = task.result.toString()
+
+                        usersDb.document(auth.uid!!).set(data).addOnSuccessListener {
+                            bottomSheetDialog.dismiss()
+                            startActivity(Intent(applicationContext, HomeActivity::class.java))
+                            finish()
+                        }.addOnFailureListener { e: Exception ->
+                            Toast.makeText(
+                                this@MainActivity,
+                                "An error occured: " + e.message,
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                     } else {
                         Snackbar.make(
                             binding.root,
@@ -169,18 +181,18 @@ class MainActivity : AppCompatActivity() {
                         ).show()
                     }
                 }
-            }
-
-            usersDb.document(auth.uid!!).set(data).addOnSuccessListener {
-                bottomSheetDialog.dismiss()
-                startActivity(Intent(applicationContext, HomeActivity::class.java))
-                finish()
-            }.addOnFailureListener { e: Exception ->
-                Toast.makeText(
-                    this@MainActivity,
-                    "An error occured: " + e.message,
-                    Toast.LENGTH_LONG
-                ).show()
+            } else {
+                usersDb.document(auth.uid!!).set(data).addOnSuccessListener {
+                    bottomSheetDialog.dismiss()
+                    startActivity(Intent(applicationContext, HomeActivity::class.java))
+                    finish()
+                }.addOnFailureListener { e: Exception ->
+                    Toast.makeText(
+                        this@MainActivity,
+                        "An error occured: " + e.message,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
 
         }
