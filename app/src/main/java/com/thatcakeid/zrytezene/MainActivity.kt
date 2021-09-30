@@ -24,7 +24,6 @@ import com.canhub.cropper.options
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Timestamp
 import com.thatcakeid.zrytezene.databinding.ActivityMainBinding
-import java.lang.Exception
 import java.util.HashMap
 import java.util.concurrent.atomic.AtomicReference
 
@@ -99,7 +98,7 @@ class MainActivity : AppCompatActivity() {
                                             showBottomSheet()
                                         }
                                     }
-                                    .addOnFailureListener { e: Exception ->
+                                    .addOnFailureListener { e ->
                                         Toast.makeText(
                                             this@MainActivity,
                                             "An error occured: " + e.message,
@@ -123,7 +122,7 @@ class MainActivity : AppCompatActivity() {
                 } catch (ignored: PackageManager.NameNotFoundException) {
                 } // Ignored, this error shouldn't happen
             } // Set a listener that will listen if there are any errors
-            .addOnFailureListener { e: Exception ->
+            .addOnFailureListener { e ->
                 // Show the error to user
                 Toast.makeText(
                     this@MainActivity,
@@ -166,7 +165,7 @@ class MainActivity : AppCompatActivity() {
                             bottomSheetDialog.dismiss()
                             startActivity(Intent(applicationContext, HomeActivity::class.java))
                             finish()
-                        }.addOnFailureListener { e: Exception ->
+                        }.addOnFailureListener { e ->
                             Toast.makeText(
                                 this@MainActivity,
                                 "An error occured: " + e.message,
@@ -186,7 +185,7 @@ class MainActivity : AppCompatActivity() {
                     bottomSheetDialog.dismiss()
                     startActivity(Intent(applicationContext, HomeActivity::class.java))
                     finish()
-                }.addOnFailureListener { e: Exception ->
+                }.addOnFailureListener { e ->
                     Toast.makeText(
                         this@MainActivity,
                         "An error occured: " + e.message,
