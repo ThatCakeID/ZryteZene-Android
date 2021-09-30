@@ -1,12 +1,10 @@
 package com.thatcakeid.zrytezene
 
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
 import com.thatcakeid.zrytezene.databinding.ActivityProfileBinding
@@ -16,7 +14,6 @@ class ProfileActivity : AppCompatActivity() {
         ActivityProfileBinding.inflate(layoutInflater)
     }
 
-    private var auth = FirebaseAuth.getInstance()
     private var database = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,12 +27,12 @@ class ProfileActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
 
-        binding.toolbar.setNavigationOnClickListener { v: View? -> onBackPressed() }
+        binding.toolbar.setNavigationOnClickListener { onBackPressed() }
         val uid = intent.getStringExtra("uid")
 
-        val user_ref = database.collection("users").document(uid!!)
+        val userRef = database.collection("users").document(uid!!)
 
-        user_ref.addSnapshotListener { value, error ->
+        userRef.addSnapshotListener { value, _ ->
             if (value == null) {
                 Toast.makeText(
                     this@ProfileActivity,
