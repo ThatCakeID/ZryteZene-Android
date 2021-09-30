@@ -30,9 +30,9 @@ class RegisterActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 if (binding.registerEmailTie.text.toString().trim()
                         .matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex())) {
-                    binding.registerEmailTie.error = null
+                    binding.registerEmailTil.error = null
                 } else {
-                    binding.registerEmailTie.error = "Invalid email!"
+                    binding.registerEmailTil.error = "Invalid email!"
                 }
             }
 

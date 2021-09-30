@@ -1,6 +1,5 @@
 package com.thatcakeid.zrytezene
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
@@ -127,7 +126,6 @@ class HomeActivity : AppCompatActivity() {
 
     private var preferences: SharedPreferences? = null
 
-    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -388,7 +386,7 @@ class HomeActivity : AppCompatActivity() {
 
                 musicCollection
                     .document(playlistIndex!![currentPos])
-                    .update("plays", currentPlaylist!![currentPos].plays + 1)
+                    .update("plays", currentPlaylist!![currentPos].plays.toInt() + 1)
             }
 
         } else {
@@ -478,7 +476,6 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private inner class PlaybackStateListener : Player.Listener {
-        @SuppressLint("SetTextI18n")
         override fun onPlaybackStateChanged(state: Int) {
             fpuBinding.apply {
                 when (state) {

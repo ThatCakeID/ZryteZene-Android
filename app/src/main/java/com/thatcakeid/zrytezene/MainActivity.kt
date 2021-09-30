@@ -1,6 +1,5 @@
 package com.thatcakeid.zrytezene
 
-import android.annotation.SuppressLint
 import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -134,10 +133,9 @@ class MainActivity : AppCompatActivity() {
             }
     }
 
-    @SuppressLint("InflateParams")
     private fun showBottomSheet() {
         val view = layoutInflater.inflate(R.layout.sheet_userdata, null, false)
-        view.rootView.setBackgroundColor(0x00000000)
+        (view.parent as View).setBackgroundColor(0x00000000)
         val bottomSheetDialog = BottomSheetDialog(this@MainActivity)
 
         view.findViewById<Button>(R.id.button_ok).setOnClickListener {
