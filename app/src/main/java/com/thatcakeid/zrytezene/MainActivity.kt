@@ -21,6 +21,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.storage.FirebaseStorage
 import com.canhub.cropper.CropImageView.Guidelines
 import com.canhub.cropper.options
+import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Timestamp
 import com.thatcakeid.zrytezene.databinding.ActivityMainBinding
@@ -40,9 +41,13 @@ class MainActivity : AppCompatActivity() {
 
     private val imageUri = AtomicReference<Uri?>()
 
+    private var pfpImgView: ShapeableImageView? = null
+
     private val cropImage = registerForActivityResult(CropImageContract()) { result ->
         if (result.isSuccessful) {
             imageUri.set(result.uriContent)
+            pfpImgView?.setImageURI(result.uriContent)
+            pfpImgView?.imageTintList = null
         }
     }
 
@@ -133,8 +138,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showBottomSheet() {
-        val view = layoutInflater.inflate(R.layout.sheet_userdata, null, false)
-        (view.parent as View).setBackgroundColor(0x00000000)
+        val view = layoutInflater.inflate(R.layout.sheet_userdata, binding.root, false)
         val bottomSheetDialog = BottomSheetDialog(this@MainActivity)
 
         view.findViewById<Button>(R.id.button_ok).setOnClickListener {
@@ -203,6 +207,8 @@ class MainActivity : AppCompatActivity() {
                 }
             )
         }
+
+        pfpImgView = view.findViewById(R.id.user_image)
 
         bottomSheetDialog.setContentView(view)
         bottomSheetDialog.setCancelable(false)
