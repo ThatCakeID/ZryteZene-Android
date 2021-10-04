@@ -4,20 +4,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/splashFragment">
-
-    <activity
+    <fragment
         android:id="@+id/splashFragment"
         android:name="com.thatcakeid.zrytezene.ui.startup.SplashFragment"
         android:label="fragment_splash"
-        tools:layout="@layout/fragment_splash" />
-    <activity
+        tools:layout="@layout/fragment_splash" >
+        <action
+            android:id="@+id/action_splashFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_updateFragment"
+            app:destination="@id/updateFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.thatcakeid.zrytezene.ui.startup.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_home_nav"
+            app:destination="@id/home_nav" />
+    </fragment>
+    <fragment
         android:id="@+id/updateFragment"
         android:name="com.thatcakeid.zrytezene.ui.startup.UpdateFragment"
         android:label="fragment_update"
         tools:layout="@layout/fragment_update" />
-    <activity
-        android:id="@+id/loginFragment"
-        android:name="com.thatcakeid.zrytezene.ui.startup.LoginFragment"
-        android:label="fragment_login"
-        tools:layout="@layout/fragment_login" />
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.thatcakeid.zrytezene.ui.startup.RegisterFragment"
+        android:label="fragment_register"
+        tools:layout="@layout/fragment_register" >
+        <action
+            android:id="@+id/action_registerFragment_to_home_nav"
+            app:destination="@id/home_nav" />
+    </fragment>
+    <include app:graph="@navigation/home_nav" />
 </navigation>
