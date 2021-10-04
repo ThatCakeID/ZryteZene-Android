@@ -1,13 +1,13 @@
-package com.thatcakeid.zrytezene
+package com.thatcakeid.zrytezene.ui.startup
 
 import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.thatcakeid.zrytezene.databinding.ActivityUpdateBinding
+import com.thatcakeid.zrytezene.databinding.FragmentUpdateBinding
 
-class UpdateActivity : AppCompatActivity() {
+class UpdateFragment : AppCompatActivity() {
     private val binding by lazy {
-        ActivityUpdateBinding.inflate(layoutInflater)
+        FragmentUpdateBinding.inflate(layoutInflater)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

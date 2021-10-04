@@ -1,4 +1,4 @@
-package com.thatcakeid.zrytezene
+package com.thatcakeid.zrytezene.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog

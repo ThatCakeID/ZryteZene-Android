@@ -6,13 +6,14 @@
         <entry key="app/src/main/res/drawable/bottomsheet_bg.xml" value="0.20625" />
         <entry key="app/src/main/res/drawable/floating_app_bar_bg.xml" value="0.20625" />
         <entry key="app/src/main/res/layout/activity_debug.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/activity_home.xml" value="0.33" />
+        <entry key="app/src/main/res/layout/activity_home.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.19010416666666666" />
         <entry key="app/src/main/res/layout/activity_profile.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_register.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_settings.xml" value="0.19010416666666666" />
         <entry key="app/src/main/res/layout/activity_update.xml" value="0.19010416666666666" />
+        <entry key="app/src/main/res/layout/fragment_splash.xml" value="0.15806159420289856" />
         <entry key="app/src/main/res/layout/home_item.xml" value="0.19010416666666666" />
         <entry key="app/src/main/res/layout/sheet_fpu.xml" value="0.19010416666666666" />
         <entry key="app/src/main/res/layout/sheet_userdata.xml" value="0.33" />

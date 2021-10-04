@@ -1,4 +1,4 @@
-package com.thatcakeid.zrytezene
+package com.thatcakeid.zrytezene.ui.home
 
 import android.content.Intent
 import android.content.SharedPreferences
@@ -29,16 +29,18 @@ import com.thatcakeid.zrytezene.ExtraMetadata.exoPlayerCacheEvictor
 import com.thatcakeid.zrytezene.ExtraMetadata.getExoPlayerCacheDir
 import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
 import com.thatcakeid.zrytezene.HelperClass.Companion.parseDuration
+import com.thatcakeid.zrytezene.ui.startup.LoginFragment
+import com.thatcakeid.zrytezene.R
 import com.thatcakeid.zrytezene.adapters.HomeItemsRecyclerViewAdapter
 import com.thatcakeid.zrytezene.adapters.HomeItemsRecyclerViewAdapter.ClickListener
 import com.thatcakeid.zrytezene.data.MusicEntry
-import com.thatcakeid.zrytezene.databinding.ActivityHomeBinding
+import com.thatcakeid.zrytezene.databinding.FragmentHomeBinding
 import com.thatcakeid.zrytezene.databinding.SheetFpuBinding
 import java.util.*
 import kotlin.collections.HashMap
 
-class HomeActivity : AppCompatActivity() {
-    private val binding: ActivityHomeBinding by lazy { ActivityHomeBinding.inflate(layoutInflater) }
+class HomeFragment : AppCompatActivity() {
+    private val binding: FragmentHomeBinding by lazy { FragmentHomeBinding.inflate(layoutInflater) }
     private val fpuBinding: SheetFpuBinding by lazy { SheetFpuBinding.inflate(layoutInflater) }
 
 //    private var musicEntries: ArrayList<HashMap<String, Any>> = ArrayList()
@@ -138,9 +140,9 @@ class HomeActivity : AppCompatActivity() {
         binding.userAppbarHome.setOnClickListener {
             startActivity(
                 if (auth.currentUser == null) {
-                    Intent(this@HomeActivity, LoginActivity::class.java)
+                    Intent(this@HomeFragment, LoginFragment::class.java)
                 } else {
-                    Intent(this@HomeActivity, ProfileActivity::class.java).apply {
+                    Intent(this@HomeFragment, ProfileFragment::class.java).apply {
                         putExtra("uid", auth.uid)
                     }
                 }
@@ -225,7 +227,7 @@ class HomeActivity : AppCompatActivity() {
         userCollection.addSnapshotListener { value: QuerySnapshot?, _ ->
             if (value == null) {
                 Toast.makeText(
-                    this@HomeActivity,
+                    this@HomeFragment,
                     "An error occurred whilst trying to update users: value is null",
                     Toast.LENGTH_SHORT
                 ).show()
@@ -244,7 +246,7 @@ class HomeActivity : AppCompatActivity() {
                             if (data["img_url"] == "") {
                                 binding.userAppbarHome.imageTintList = ContextCompat.getColorStateList(
                                         applicationContext,
-                                        R.color.imageTint
+                                    R.color.imageTint
                                 )
 
                                 binding.userAppbarHome.setImageResource(R.drawable.ic_account_circle)
@@ -263,7 +265,7 @@ class HomeActivity : AppCompatActivity() {
                         if (dc.document.id == auth.uid) {
                             binding.userAppbarHome.imageTintList = ContextCompat.getColorStateList(
                                     applicationContext,
-                                    R.color.imageTint
+                                R.color.imageTint
                             )
 
                             binding.userAppbarHome.setImageResource(R.drawable.ic_account_circle)
@@ -278,7 +280,7 @@ class HomeActivity : AppCompatActivity() {
         musicCollection.addSnapshotListener { value: QuerySnapshot?, _ ->
             if (value == null) {
                 Toast.makeText(
-                    this@HomeActivity,
+                    this@HomeFragment,
                     "An error occurred whilst trying to update musics: value is null",
                     Toast.LENGTH_SHORT
                 ).show()

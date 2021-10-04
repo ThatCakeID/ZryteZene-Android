@@ -6,7 +6,7 @@ import android.os.Bundle
 import androidx.preference.PreferenceFragmentCompat
 import com.thatcakeid.zrytezene.databinding.ActivitySettingsBinding
 
-class SettingsActivity : AppCompatActivity() {
+class SettingsFragment : AppCompatActivity() {
     private val binding by lazy {
         ActivitySettingsBinding.inflate(layoutInflater)
     }

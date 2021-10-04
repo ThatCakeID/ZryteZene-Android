@@ -1,4 +1,4 @@
-package com.thatcakeid.zrytezene
+package com.thatcakeid.zrytezene.ui.startup
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,11 +10,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
-import com.thatcakeid.zrytezene.databinding.ActivityLoginBinding
+import com.thatcakeid.zrytezene.databinding.FragmentLoginBinding
 
-class LoginActivity : AppCompatActivity() {
+class LoginFragment : AppCompatActivity() {
     private val binding by lazy {
-        ActivityLoginBinding.inflate(layoutInflater)
+        FragmentLoginBinding.inflate(layoutInflater)
     }
 
     private val auth by lazy { FirebaseAuth.getInstance() }
@@ -44,7 +44,7 @@ class LoginActivity : AppCompatActivity() {
             val password = binding.loginPasswTie.text.toString()
 
             if (!email.matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex())) {
-                Toast.makeText(this@LoginActivity, "Invalid email!", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@LoginFragment, "Invalid email!", Toast.LENGTH_LONG).show()
 
                 return@setOnClickListener
             }
@@ -57,13 +57,13 @@ class LoginActivity : AppCompatActivity() {
 
             auth.signInWithEmailAndPassword(email, password).addOnSuccessListener {
                 if (auth.currentUser!!.isEmailVerified) {
-                    Toast.makeText(this@LoginActivity, "Logged in", Toast.LENGTH_LONG)
+                    Toast.makeText(this@LoginFragment, "Logged in", Toast.LENGTH_LONG)
                         .show()
-                    startActivity(Intent(applicationContext, MainActivity::class.java))
+                    startActivity(Intent(applicationContext, SplashFragment::class.java))
                     finish()
 
                 } else {
-                    val alertDialog = AlertDialog.Builder(this@LoginActivity)
+                    val alertDialog = AlertDialog.Builder(this@LoginFragment)
 
                     alertDialog.setTitle("Unverified Email")
                     alertDialog.setMessage("Your email isn't verified. Do you want to re-send a new verification link to your email?")
@@ -101,7 +101,7 @@ class LoginActivity : AppCompatActivity() {
             val email = binding.loginEmailTie.text.toString().trim()
 
             if (email.matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex())) {
-                Toast.makeText(this@LoginActivity, "Please enter a valid email!", Toast.LENGTH_LONG)
+                Toast.makeText(this@LoginFragment, "Please enter a valid email!", Toast.LENGTH_LONG)
                     .show()
                 return@setOnClickListener
             }
@@ -118,7 +118,7 @@ class LoginActivity : AppCompatActivity() {
         binding.registerText.setOnClickListener {
             startActivity(
                 Intent(
-                    applicationContext, RegisterActivity::class.java
+                    applicationContext, RegisterFragment::class.java
                 ).putExtra("email", binding.loginEmailTie.text.toString())
             )
         }

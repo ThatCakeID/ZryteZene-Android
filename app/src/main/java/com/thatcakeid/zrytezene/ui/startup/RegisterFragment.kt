@@ -1,4 +1,4 @@
-package com.thatcakeid.zrytezene
+package com.thatcakeid.zrytezene.ui.startup
 
 import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
 import androidx.appcompat.app.AppCompatActivity
@@ -7,11 +7,11 @@ import android.os.Bundle
 import android.text.TextWatcher
 import android.text.Editable
 import com.google.android.material.snackbar.Snackbar
-import com.thatcakeid.zrytezene.databinding.ActivityRegisterBinding
+import com.thatcakeid.zrytezene.databinding.FragmentRegisterBinding
 
-class RegisterActivity : AppCompatActivity() {
+class RegisterFragment : AppCompatActivity() {
     private val binding by lazy {
-        ActivityRegisterBinding.inflate(layoutInflater)
+        FragmentRegisterBinding.inflate(layoutInflater)
     }
 
     private val auth by lazy { FirebaseAuth.getInstance() }

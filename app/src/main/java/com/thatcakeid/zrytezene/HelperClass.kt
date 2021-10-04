@@ -10,6 +10,7 @@ import android.icu.util.ULocale
 import android.os.Build
 import android.os.Process
 import com.google.firebase.Timestamp
+import com.thatcakeid.zrytezene.ui.DebugActivity
 import java.text.DecimalFormat
 import java.text.NumberFormat
 import java.text.SimpleDateFormat

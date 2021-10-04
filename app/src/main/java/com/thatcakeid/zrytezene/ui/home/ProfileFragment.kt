@@ -1,4 +1,4 @@
-package com.thatcakeid.zrytezene
+package com.thatcakeid.zrytezene.ui.home
 
 import android.os.Bundle
 import android.widget.Toast
@@ -7,11 +7,12 @@ import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
-import com.thatcakeid.zrytezene.databinding.ActivityProfileBinding
+import com.thatcakeid.zrytezene.R
+import com.thatcakeid.zrytezene.databinding.FragmentProfileBinding
 
-class ProfileActivity : AppCompatActivity() {
+class ProfileFragment : AppCompatActivity() {
     private val binding by lazy {
-        ActivityProfileBinding.inflate(layoutInflater)
+        FragmentProfileBinding.inflate(layoutInflater)
     }
 
     private var database = FirebaseFirestore.getInstance()
@@ -35,7 +36,7 @@ class ProfileActivity : AppCompatActivity() {
         userRef.addSnapshotListener { value, _ ->
             if (value == null) {
                 Toast.makeText(
-                    this@ProfileActivity,
+                    this@ProfileFragment,
                     "An error occured whilst trying to update user: value is null",
                     Toast.LENGTH_LONG
                 ).show()
@@ -49,7 +50,7 @@ class ProfileActivity : AppCompatActivity() {
             if (value.getString("img_url") == "") {
                 binding.userProfilePicture.imageTintList = ContextCompat.getColorStateList(
                         applicationContext,
-                        R.color.imageTint
+                    R.color.imageTint
                 )
 
                 binding.userProfilePicture.setImageResource(R.drawable.ic_account_circle)
