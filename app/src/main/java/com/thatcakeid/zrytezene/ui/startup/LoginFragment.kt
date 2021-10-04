@@ -6,16 +6,16 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
+import com.thatcakeid.zrytezene.R
 import com.thatcakeid.zrytezene.databinding.FragmentLoginBinding
+import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 
-class LoginFragment : AppCompatActivity() {
-    private val binding by lazy {
-        FragmentLoginBinding.inflate(layoutInflater)
-    }
+class LoginFragment : Fragment(R.layout.fragment_login) {
+    private val binding: FragmentLoginBinding by viewBinding(FragmentLoginBinding::bind)
 
     private val auth by lazy { FirebaseAuth.getInstance() }
 

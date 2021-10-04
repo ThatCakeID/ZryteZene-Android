@@ -1,34 +1,33 @@
 package com.thatcakeid.zrytezene.ui.startup
 
-import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
-import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.auth.FirebaseAuth
-import android.os.Bundle
-import com.google.firebase.firestore.FirebaseFirestore
-import com.canhub.cropper.CropImageContract
-import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.firestore.DocumentSnapshot
 import android.app.Activity
 import android.content.Intent
-import android.widget.Toast
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.firebase.storage.FirebaseStorage
+import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView.Guidelines
 import com.canhub.cropper.options
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Timestamp
-import com.thatcakeid.zrytezene.ui.home.HomeFragment
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.storage.FirebaseStorage
+import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
 import com.thatcakeid.zrytezene.R
 import com.thatcakeid.zrytezene.databinding.FragmentSplashBinding
+import com.thatcakeid.zrytezene.ui.home.HomeFragment
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
-import java.util.HashMap
+import java.util.*
 import java.util.concurrent.atomic.AtomicReference
 
 class SplashFragment : Fragment(R.layout.fragment_splash) {

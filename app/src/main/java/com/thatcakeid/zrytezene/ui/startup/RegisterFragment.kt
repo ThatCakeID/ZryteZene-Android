@@ -1,25 +1,24 @@
 package com.thatcakeid.zrytezene.ui.startup
 
-import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
-import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.auth.FirebaseAuth
 import android.os.Bundle
-import android.text.TextWatcher
 import android.text.Editable
+import android.text.TextWatcher
+import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
+import com.thatcakeid.zrytezene.R
 import com.thatcakeid.zrytezene.databinding.FragmentRegisterBinding
+import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 
-class RegisterFragment : AppCompatActivity() {
-    private val binding by lazy {
-        FragmentRegisterBinding.inflate(layoutInflater)
-    }
+class RegisterFragment : Fragment(R.layout.fragment_register) {
+    private val binding: FragmentRegisterBinding by viewBinding(FragmentRegisterBinding::bind)
 
     private val auth by lazy { FirebaseAuth.getInstance() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(binding.root)
         setWatermarkColors(binding.textWatermark, binding.watermarkRoot)
 
         binding.registerEmailTie.addTextChangedListener(object : TextWatcher {

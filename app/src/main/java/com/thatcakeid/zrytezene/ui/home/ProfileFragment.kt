@@ -2,18 +2,17 @@ package com.thatcakeid.zrytezene.ui.home
 
 import android.os.Bundle
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
 import com.thatcakeid.zrytezene.R
 import com.thatcakeid.zrytezene.databinding.FragmentProfileBinding
+import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 
-class ProfileFragment : AppCompatActivity() {
-    private val binding by lazy {
-        FragmentProfileBinding.inflate(layoutInflater)
-    }
+class ProfileFragment : Fragment(R.layout.fragment_profile) {
+    private val binding: FragmentProfileBinding by viewBinding(FragmentProfileBinding::bind)
 
     private var database = FirebaseFirestore.getInstance()
 

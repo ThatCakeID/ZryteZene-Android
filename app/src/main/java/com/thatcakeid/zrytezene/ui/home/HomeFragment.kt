@@ -11,6 +11,7 @@ import android.widget.*
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.exoplayer2.*
@@ -36,11 +37,12 @@ import com.thatcakeid.zrytezene.adapters.HomeItemsRecyclerViewAdapter.ClickListe
 import com.thatcakeid.zrytezene.data.MusicEntry
 import com.thatcakeid.zrytezene.databinding.FragmentHomeBinding
 import com.thatcakeid.zrytezene.databinding.SheetFpuBinding
+import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import java.util.*
 import kotlin.collections.HashMap
 
-class HomeFragment : AppCompatActivity() {
-    private val binding: FragmentHomeBinding by lazy { FragmentHomeBinding.inflate(layoutInflater) }
+class HomeFragment : Fragment(R.layout.fragment_home) {
+    private val binding: FragmentHomeBinding by viewBinding(FragmentHomeBinding::bind)
     private val fpuBinding: SheetFpuBinding by lazy { SheetFpuBinding.inflate(layoutInflater) }
 
 //    private var musicEntries: ArrayList<HashMap<String, Any>> = ArrayList()

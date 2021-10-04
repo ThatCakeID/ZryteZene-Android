@@ -1,19 +1,18 @@
 package com.thatcakeid.zrytezene.ui.startup
 
-import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.Fragment
+import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
+import com.thatcakeid.zrytezene.R
 import com.thatcakeid.zrytezene.databinding.FragmentUpdateBinding
+import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 
-class UpdateFragment : AppCompatActivity() {
-    private val binding by lazy {
-        FragmentUpdateBinding.inflate(layoutInflater)
-    }
+class UpdateFragment : Fragment(R.layout.fragment_update) {
+    private val binding: FragmentUpdateBinding by viewBinding(FragmentUpdateBinding::bind)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(binding.root)
         setWatermarkColors(binding.textWatermark, binding.watermarkRoot)
     }
 }
