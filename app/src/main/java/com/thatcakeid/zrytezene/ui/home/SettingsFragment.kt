@@ -1,15 +1,15 @@
-package com.thatcakeid.zrytezene
+package com.thatcakeid.zrytezene.ui.home
 
-import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceFragmentCompat
-import com.thatcakeid.zrytezene.databinding.ActivitySettingsBinding
+import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
+import com.thatcakeid.zrytezene.R
+import com.thatcakeid.zrytezene.databinding.FragmentSettingsBinding
+import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 
-class SettingsFragment : AppCompatActivity() {
-    private val binding by lazy {
-        ActivitySettingsBinding.inflate(layoutInflater)
-    }
+class SettingsFragment : Fragment(R.layout.fragment_settings) {
+    private val binding: FragmentSettingsBinding by viewBinding(FragmentSettingsBinding::bind)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
