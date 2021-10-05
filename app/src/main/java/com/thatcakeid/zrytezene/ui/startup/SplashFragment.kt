@@ -1,7 +1,5 @@
 package com.thatcakeid.zrytezene.ui.startup
 
-import android.app.Activity
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
@@ -11,6 +9,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView.Guidelines
 import com.canhub.cropper.options
@@ -25,7 +24,6 @@ import com.google.firebase.storage.FirebaseStorage
 import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
 import com.thatcakeid.zrytezene.R
 import com.thatcakeid.zrytezene.databinding.FragmentSplashBinding
-import com.thatcakeid.zrytezene.ui.home.HomeFragment
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 import java.util.*
 import java.util.concurrent.atomic.AtomicReference
@@ -63,45 +61,42 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
                 val document = queryDocumentSnapshots.documents[0]
                 try {
                     // Get the app's package information
-                    val packageInfo = packageManager.getPackageInfo(packageName, 0)
+                    val packageInfo = requireContext().packageManager.getPackageInfo(requireContext().packageName, 0)
 
                     // Frick Android's deprecation
-                    val appVersionCode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                        packageInfo.longVersionCode
-                    } else {
-                        packageInfo.versionCode.toLong()
-                    }
-
-                    val startActivity: Class<out Activity?>
+                    val appVersionCode =
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) packageInfo.longVersionCode
+                        else packageInfo.versionCode.toLong()
 
                     // Get the client's app version and compare it with the one in the server
                     if ((document["version"] as Long) > appVersionCode) {
                         // There's a newer version!
-                        startActivity = UpdateFragment::class.java
+                        findNavController()
+                            .navigate(R.id.action_splashFragment_to_updateFragment)
+
                     } else {
                         if (auth.currentUser == null) {
-                            startActivity = LoginFragment::class.java
+                            // we're not logged in, login then
+                            findNavController()
+                                .navigate(R.id.action_splashFragment_to_loginFragment)
                         } else {
                             if (auth.currentUser!!.isEmailVerified) {
                                 usersDb.document(auth.uid!!)
                                     .get()
                                     .addOnSuccessListener { snapshot: DocumentSnapshot ->
                                         if (snapshot.exists()) {
-                                            startActivity(
-                                                Intent(
-                                                    applicationContext,
-                                                    HomeFragment::class.java
-                                                )
-                                            )
-                                            finish()
+                                            // logged in, open homepage
+                                            findNavController()
+                                                .navigate(R.id.action_splashFragment_to_home_nav)
+
                                         } else {
                                             showBottomSheet()
                                         }
                                     }
                                     .addOnFailureListener { e ->
                                         Toast.makeText(
-                                            this@SplashFragment,
-                                            "An error occured: " + e.message,
+                                            requireContext(),
+                                            "An error occurred: " + e.message,
                                             Toast.LENGTH_LONG
                                         ).show()
                                     }
@@ -109,23 +104,24 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
                             } else {
                                 auth.signOut()
                                 Toast.makeText(
-                                    this@SplashFragment,
+                                    requireContext(),
                                     "You've been signed out because your current account's email is not verified.",
                                     Toast.LENGTH_LONG
                                 ).show()
-                                startActivity = LoginFragment::class.java
+
+                                // go to login page
+                                findNavController()
+                                    .navigate(R.id.action_splashFragment_to_loginFragment)
                             }
                         }
                     }
-                    startActivity(Intent(applicationContext, startActivity))
-                    finish()
                 } catch (ignored: PackageManager.NameNotFoundException) {
                 } // Ignored, this error shouldn't happen
             } // Set a listener that will listen if there are any errors
             .addOnFailureListener { e ->
                 // Show the error to user
                 Toast.makeText(
-                    this@SplashFragment,
+                    requireContext(),
                     "An error occured: " + e.message,
                     Toast.LENGTH_LONG
                 ).show()
@@ -135,7 +131,7 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
     private fun showBottomSheet() {
         val view = layoutInflater.inflate(R.layout.sheet_userdata, null, false)
         (view.parent as View).setBackgroundColor(0x00000000)
-        val bottomSheetDialog = BottomSheetDialog(this@SplashFragment)
+        val bottomSheetDialog = BottomSheetDialog(requireContext())
 
         view.findViewById<Button>(R.id.button_ok).setOnClickListener {
             val data = HashMap<String, Any>()
@@ -163,11 +159,12 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
 
                         usersDb.document(auth.uid!!).set(data).addOnSuccessListener {
                             bottomSheetDialog.dismiss()
-                            startActivity(Intent(applicationContext, HomeFragment::class.java))
-                            finish()
+                            findNavController()
+                                .navigate(R.id.action_splashFragment_to_home_nav)
+
                         }.addOnFailureListener { e ->
                             Toast.makeText(
-                                this@SplashFragment,
+                                requireContext(),
                                 "An error occured: " + e.message,
                                 Toast.LENGTH_LONG
                             ).show()
@@ -183,11 +180,11 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
             } else {
                 usersDb.document(auth.uid!!).set(data).addOnSuccessListener {
                     bottomSheetDialog.dismiss()
-                    startActivity(Intent(applicationContext, HomeFragment::class.java))
-                    finish()
+                    findNavController()
+                        .navigate(R.id.action_splashFragment_to_home_nav)
                 }.addOnFailureListener { e ->
                     Toast.makeText(
-                        this@SplashFragment,
+                        requireContext(),
                         "An error occured: " + e.message,
                         Toast.LENGTH_LONG
                     ).show()
