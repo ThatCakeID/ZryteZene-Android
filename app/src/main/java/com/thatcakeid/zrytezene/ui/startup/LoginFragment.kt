@@ -7,6 +7,8 @@ import android.text.TextWatcher
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
@@ -14,15 +16,14 @@ import com.thatcakeid.zrytezene.R
 import com.thatcakeid.zrytezene.databinding.FragmentLoginBinding
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 
+// TODO: 10/5/21 move stuff to a viewmodel
 class LoginFragment : Fragment(R.layout.fragment_login) {
     private val binding: FragmentLoginBinding by viewBinding(FragmentLoginBinding::bind)
-
     private val auth by lazy { FirebaseAuth.getInstance() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(binding.root)
         setWatermarkColors(binding.textWatermark, binding.watermarkRoot)
 
         binding.loginEmailTie.addTextChangedListener(object : TextWatcher {
@@ -44,7 +45,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             val password = binding.loginPasswTie.text.toString()
 
             if (!email.matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex())) {
-                Toast.makeText(this@LoginFragment, "Invalid email!", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@LoginFragment.requireContext(), "Invalid email!", Toast.LENGTH_LONG).show()
 
                 return@setOnClickListener
             }
@@ -57,13 +58,14 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
             auth.signInWithEmailAndPassword(email, password).addOnSuccessListener {
                 if (auth.currentUser!!.isEmailVerified) {
-                    Toast.makeText(this@LoginFragment, "Logged in", Toast.LENGTH_LONG)
+                    Toast.makeText(this@LoginFragment.requireContext(), "Logged in", Toast.LENGTH_LONG)
                         .show()
-                    startActivity(Intent(applicationContext, SplashFragment::class.java))
-                    finish()
+
+                    findNavController()
+                        .popBackStack()
 
                 } else {
-                    val alertDialog = AlertDialog.Builder(this@LoginFragment)
+                    val alertDialog = AlertDialog.Builder(this@LoginFragment.requireContext())
 
                     alertDialog.setTitle("Unverified Email")
                     alertDialog.setMessage("Your email isn't verified. Do you want to re-send a new verification link to your email?")
@@ -101,7 +103,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             val email = binding.loginEmailTie.text.toString().trim()
 
             if (email.matches("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+".toRegex())) {
-                Toast.makeText(this@LoginFragment, "Please enter a valid email!", Toast.LENGTH_LONG)
+                Toast.makeText(this@LoginFragment.requireContext(), "Please enter a valid email!", Toast.LENGTH_LONG)
                     .show()
                 return@setOnClickListener
             }
@@ -116,11 +118,12 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
 
         binding.registerText.setOnClickListener {
-            startActivity(
-                Intent(
-                    applicationContext, RegisterFragment::class.java
-                ).putExtra("email", binding.loginEmailTie.text.toString())
-            )
+            findNavController()
+                .navigate(
+                    LoginFragmentDirections.actionLoginFragmentToRegisterFragment(
+                        binding.loginEmailTie.text.toString().trim()
+                    )
+                )
         }
     }
 }

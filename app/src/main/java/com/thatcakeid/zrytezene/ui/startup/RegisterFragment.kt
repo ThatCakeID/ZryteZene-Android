@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
@@ -11,9 +12,9 @@ import com.thatcakeid.zrytezene.R
 import com.thatcakeid.zrytezene.databinding.FragmentRegisterBinding
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 
+// TODO: 10/5/21 move stuff to a viewmodel
 class RegisterFragment : Fragment(R.layout.fragment_register) {
     private val binding: FragmentRegisterBinding by viewBinding(FragmentRegisterBinding::bind)
-
     private val auth by lazy { FirebaseAuth.getInstance() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,8 +37,9 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
 
         })
 
-        if (intent.getStringExtra("email") != "")
-            binding.registerEmailTie.setText(intent.getStringExtra("email"))
+        requireArguments().getString("email")?.let {
+            binding.registerEmailTie.setText(it)
+        }
 
         binding.buttonContinue.setOnClickListener {
 
@@ -100,6 +102,10 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                 ).show()
             }
         }
-        binding.textView5.setOnClickListener { finish() }
+
+        binding.textView5.setOnClickListener {
+            findNavController()
+                .popBackStack()
+        }
     }
 }
