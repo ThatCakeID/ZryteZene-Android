@@ -2,6 +2,7 @@ package com.thatcakeid.zrytezene.ui.home
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceFragmentCompat
 import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
 import com.thatcakeid.zrytezene.R
@@ -14,17 +15,13 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(binding.root)
-
         setWatermarkColors(binding.textWatermark, binding.watermarkRoot)
-        setSupportActionBar(binding.toolbar)
 
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.setDisplayShowHomeEnabled(true)
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
 
-        binding.toolbar.setNavigationOnClickListener { onBackPressed() }
-
-        supportFragmentManager
+        childFragmentManager
             .beginTransaction()
             .replace(R.id.settings, SettingsFragment())
             .commit()
