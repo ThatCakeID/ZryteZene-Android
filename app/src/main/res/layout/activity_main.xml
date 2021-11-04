@@ -15,27 +15,4 @@
         app:navGraph="@navigation/startup_nav"
         tools:layout="@layout/fragment_splash" />
 
-    <LinearLayout
-        android:id="@+id/watermark_root"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="end"
-        android:orientation="horizontal"
-        android:visibility="gone">
-
-        <TextView
-            android:id="@+id/text_watermark"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:background="#000000"
-            android:fontFamily="@font/googlesans"
-            android:rotation="45"
-            android:text="unknown"
-            android:textAlignment="center"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:translationX="60dp"
-            android:translationY="30dp" />
-    </LinearLayout>
-
 </FrameLayout>
