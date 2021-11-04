@@ -6,7 +6,9 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.core.content.ContextCompat
@@ -127,8 +129,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private var preferences: SharedPreferences? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         initializeVar()
         refreshRepeatState(preferences!!.getInt("playMode", 0))

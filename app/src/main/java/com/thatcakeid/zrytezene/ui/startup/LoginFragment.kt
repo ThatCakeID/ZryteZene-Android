@@ -3,6 +3,9 @@ package com.thatcakeid.zrytezene.ui.startup
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -18,8 +21,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private val binding: FragmentLoginBinding by viewBinding(FragmentLoginBinding::bind)
     private val auth by lazy { FirebaseAuth.getInstance() }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         binding.loginEmailTie.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}

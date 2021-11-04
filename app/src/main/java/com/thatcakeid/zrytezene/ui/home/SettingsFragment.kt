@@ -1,6 +1,9 @@
 package com.thatcakeid.zrytezene.ui.home
 
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceFragmentCompat
@@ -11,8 +14,8 @@ import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private val binding: FragmentSettingsBinding by viewBinding(FragmentSettingsBinding::bind)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
