@@ -1,9 +1,7 @@
 package com.thatcakeid.zrytezene.ui.startup
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.thatcakeid.zrytezene.R
 import com.thatcakeid.zrytezene.databinding.FragmentUpdateBinding
