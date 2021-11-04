@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
@@ -17,6 +18,8 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     private var database = FirebaseFirestore.getInstance()
 
+    private val args: ProfileFragmentArgs by navArgs()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -28,7 +31,7 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 //        supportActionBar!!.setDisplayShowHomeEnabled(true)
 
         binding.toolbar.setNavigationOnClickListener { findNavController().popBackStack() }
-        val uid = requireArguments().getString("uid")!!
+        val uid = args.uid
 
         val userRef = database.collection("users").document(uid)
 

@@ -1,6 +1,6 @@
 package com.thatcakeid.zrytezene.ui.home
 
-import android.content.Intent
+import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
@@ -9,9 +9,9 @@ import android.os.Looper
 import android.view.View
 import android.widget.*
 import android.widget.SeekBar.OnSeekBarChangeListener
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.exoplayer2.*
@@ -23,14 +23,12 @@ import com.google.android.exoplayer2.upstream.cache.CacheDataSource
 import com.google.android.exoplayer2.upstream.cache.SimpleCache
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
-import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.thatcakeid.zrytezene.ExtraMetadata.exoPlayerCacheEvictor
 import com.thatcakeid.zrytezene.ExtraMetadata.getExoPlayerCacheDir
 import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
 import com.thatcakeid.zrytezene.HelperClass.Companion.parseDuration
-import com.thatcakeid.zrytezene.ui.startup.LoginFragment
 import com.thatcakeid.zrytezene.R
 import com.thatcakeid.zrytezene.adapters.HomeItemsRecyclerViewAdapter
 import com.thatcakeid.zrytezene.adapters.HomeItemsRecyclerViewAdapter.ClickListener
@@ -64,7 +62,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val bottomSheetBehavior: BottomSheetBehavior<*> by lazy {
         BottomSheetBehavior
-            .from(findViewById(R.id.sheet_root))
+            .from(binding.root) // NOTE: change this
             .also {
                 it.state = BottomSheetBehavior.STATE_HIDDEN
             }
@@ -72,9 +70,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val exoPlayer: SimpleExoPlayer by lazy {
         val cache = SimpleCache(
-            getExoPlayerCacheDir(applicationContext),
+            getExoPlayerCacheDir(requireContext()),
             exoPlayerCacheEvictor,
-            ExoDatabaseProvider(applicationContext)
+            ExoDatabaseProvider(requireContext())
         )
 
         val mediaSourceFactory = DefaultMediaSourceFactory(
@@ -83,7 +81,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             )
         )
 
-        SimpleExoPlayer.Builder(this)
+        SimpleExoPlayer.Builder(requireContext())
             .setMediaSourceFactory(mediaSourceFactory)
             .build()
             .also {
@@ -100,8 +98,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val playbackStateListener = PlaybackStateListener()
 
-    private var handler: Handler = Handler(Looper.getMainLooper())
-    private val runnable: Runnable = object : Runnable {
+    private val handler = Handler(Looper.getMainLooper())
+    private val runnable = object : Runnable {
         override fun run() {
             fpuBinding.apply {
                 if (exoPlayer.isPlaying) {
@@ -132,23 +130,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
 
         initializeVar()
         refreshRepeatState(preferences!!.getInt("playMode", 0))
 
-        FirebaseApp.initializeApp(this)
-
         binding.userAppbarHome.setOnClickListener {
-            startActivity(
-                if (auth.currentUser == null) {
-                    Intent(this@HomeFragment, LoginFragment::class.java)
-                } else {
-                    Intent(this@HomeFragment, ProfileFragment::class.java).apply {
-                        putExtra("uid", auth.uid)
-                    }
-                }
-            )
+            if (auth.currentUser == null) {
+                findNavController()
+                    .navigate(R.id.action_homeFragment_to_loginFragment)
+            } else {
+                findNavController()
+                    .navigate(HomeFragmentDirections.actionHomeFragmentToProfileFragment(auth.uid!!))
+            }
         }
 
         fpuBinding.apply {
@@ -180,7 +173,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         }
 
         val adapter = HomeItemsRecyclerViewAdapter(
-            applicationContext,
+            requireContext(),
             musics.values.toList(),
             userIndexes
         )
@@ -222,14 +215,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         })
 
         binding.rvItemsHome.apply {
-            layoutManager = LinearLayoutManager(applicationContext)
+            layoutManager = LinearLayoutManager(requireContext())
             this.adapter = adapter
         }
 
         userCollection.addSnapshotListener { value: QuerySnapshot?, _ ->
             if (value == null) {
                 Toast.makeText(
-                    this@HomeFragment,
+                    requireContext(),
                     "An error occurred whilst trying to update users: value is null",
                     Toast.LENGTH_SHORT
                 ).show()
@@ -247,14 +240,14 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                         if (dc.document.id == auth.uid) {
                             if (data["img_url"] == "") {
                                 binding.userAppbarHome.imageTintList = ContextCompat.getColorStateList(
-                                        applicationContext,
+                                        requireContext(),
                                     R.color.imageTint
                                 )
 
                                 binding.userAppbarHome.setImageResource(R.drawable.ic_account_circle)
                             } else {
                                 binding.userAppbarHome.imageTintList = null
-                                Glide.with(applicationContext)
+                                Glide.with(requireContext())
                                         .load(data["img_url"] as String?)
                                         .into(binding.userAppbarHome)
                             }
@@ -266,7 +259,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
                         if (dc.document.id == auth.uid) {
                             binding.userAppbarHome.imageTintList = ContextCompat.getColorStateList(
-                                    applicationContext,
+                                requireContext(),
                                 R.color.imageTint
                             )
 
@@ -282,7 +275,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         musicCollection.addSnapshotListener { value: QuerySnapshot?, _ ->
             if (value == null) {
                 Toast.makeText(
-                    this@HomeFragment,
+                    requireContext(),
                     "An error occurred whilst trying to update musics: value is null",
                     Toast.LENGTH_SHORT
                 ).show()
@@ -345,7 +338,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         fpuBinding.textView4.isSelected = true
         fpuBinding.textView7.isSelected = true
 
-        preferences = getSharedPreferences(getString(R.string.main_preferences_key), MODE_PRIVATE)
+        preferences = requireContext().getSharedPreferences(getString(R.string.main_preferences_key), MODE_PRIVATE)
     }
 
     private fun play() {
@@ -374,11 +367,11 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                     imageView7.setImageResource(R.drawable.ic_zrytezene)
 
                 } else {
-                    Glide.with(applicationContext)
+                    Glide.with(requireContext())
                         .load(currentPlaylist!![currentPos].thumb)
                         .into(imageView3)
 
-                    Glide.with(applicationContext)
+                    Glide.with(requireContext())
                         .load(currentPlaylist!![currentPos].thumb)
                         .into(imageView7)
                 }
@@ -394,7 +387,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             }
 
         } else {
-            Toast.makeText(this,
+            Toast.makeText(requireContext(),
                     "An error occurred while trying to play a music, playlist is empty",
                     Toast.LENGTH_LONG).show()
         }

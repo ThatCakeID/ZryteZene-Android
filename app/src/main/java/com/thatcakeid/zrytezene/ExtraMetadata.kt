@@ -36,5 +36,5 @@ object ExtraMetadata {
     }
 
     val exoPlayerCacheEvictor: CacheEvictor =
-        LeastRecentlyUsedCacheEvictor((50 * 1024 * 1024).toLong()) // 50MB cache size
+        LeastRecentlyUsedCacheEvictor((50 * 1024 * 1024).toLong()) // 50MiB cache size
 }

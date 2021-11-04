@@ -76,7 +76,7 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
 
                     } else {
                         if (auth.currentUser == null) {
-                            // we're not logged in, login then
+                            // We're not logged in, login then
                             findNavController()
                                 .navigate(R.id.action_splashFragment_to_loginFragment)
                         } else {
@@ -85,7 +85,7 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
                                     .get()
                                     .addOnSuccessListener { snapshot: DocumentSnapshot ->
                                         if (snapshot.exists()) {
-                                            // logged in, open homepage
+                                            // Logged in, open the homepage
                                             findNavController()
                                                 .navigate(R.id.action_splashFragment_to_home_nav)
 
@@ -109,7 +109,7 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
                                     Toast.LENGTH_LONG
                                 ).show()
 
-                                // go to login page
+                                // Go to login page
                                 findNavController()
                                     .navigate(R.id.action_splashFragment_to_loginFragment)
                             }
