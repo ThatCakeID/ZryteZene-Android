@@ -2,7 +2,6 @@ package com.thatcakeid.zrytezene.ui.startup
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
 import com.thatcakeid.zrytezene.R
 import com.thatcakeid.zrytezene.databinding.FragmentUpdateBinding
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
@@ -12,7 +11,5 @@ class UpdateFragment : Fragment(R.layout.fragment_update) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setWatermarkColors(binding.textWatermark, binding.watermarkRoot)
     }
 }

@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceFragmentCompat
-import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
 import com.thatcakeid.zrytezene.R
 import com.thatcakeid.zrytezene.databinding.FragmentSettingsBinding
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
@@ -14,8 +13,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setWatermarkColors(binding.textWatermark, binding.watermarkRoot)
 
         binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()

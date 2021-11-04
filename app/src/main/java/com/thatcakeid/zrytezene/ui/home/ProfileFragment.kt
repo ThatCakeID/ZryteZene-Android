@@ -8,7 +8,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
-import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
 import com.thatcakeid.zrytezene.R
 import com.thatcakeid.zrytezene.databinding.FragmentProfileBinding
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
@@ -22,8 +21,6 @@ class ProfileFragment : Fragment(R.layout.fragment_profile) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setWatermarkColors(binding.textWatermark, binding.watermarkRoot)
 
 //        setSupportActionBar(binding.toolbar)
 //

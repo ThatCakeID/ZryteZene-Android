@@ -27,7 +27,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.thatcakeid.zrytezene.ExtraMetadata.exoPlayerCacheEvictor
 import com.thatcakeid.zrytezene.ExtraMetadata.getExoPlayerCacheDir
-import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
 import com.thatcakeid.zrytezene.HelperClass.Companion.parseDuration
 import com.thatcakeid.zrytezene.R
 import com.thatcakeid.zrytezene.adapters.HomeItemsRecyclerViewAdapter
@@ -62,7 +61,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private val bottomSheetBehavior: BottomSheetBehavior<*> by lazy {
         BottomSheetBehavior
-            .from(binding.root) // NOTE: change this
+            .from(binding.root) // TODO: change this immediately
             .also {
                 it.state = BottomSheetBehavior.STATE_HIDDEN
             }
@@ -333,8 +332,6 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     }
 
     private fun initializeVar() {
-        setWatermarkColors(binding.textWatermark, binding.watermarkRoot)
-
         fpuBinding.textView4.isSelected = true
         fpuBinding.textView7.isSelected = true
 

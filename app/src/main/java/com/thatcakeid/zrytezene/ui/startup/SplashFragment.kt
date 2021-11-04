@@ -21,7 +21,6 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
-import com.thatcakeid.zrytezene.ExtraMetadata.setWatermarkColors
 import com.thatcakeid.zrytezene.R
 import com.thatcakeid.zrytezene.databinding.FragmentSplashBinding
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding
@@ -47,8 +46,6 @@ class SplashFragment : Fragment(R.layout.fragment_splash) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        setWatermarkColors(binding.textWatermark, binding.watermarkRoot)
 
         // Initialize Firebase
         val versionsDb = FirebaseFirestore.getInstance().collection("versions")
