@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/sheet_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,7 +13,7 @@
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/compactPlayer"
+        android:id="@+id/fpu_compact_player"
         android:layout_width="0dp"
         android:layout_height="66dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/imageView7"
+            android:id="@+id/thumb_fpu_compact_player"
             android:layout_width="47dp"
             android:layout_height="47dp"
             android:layout_marginStart="10dp"
@@ -39,12 +38,12 @@
             android:layout_marginEnd="16dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/imageView8"
-            app:layout_constraintStart_toEndOf="@id/imageView7"
+            app:layout_constraintEnd_toStartOf="@id/play_fpu_compact_player"
+            app:layout_constraintStart_toEndOf="@id/thumb_fpu_compact_player"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/title_fpu_compact_player"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="1dp"
@@ -56,7 +55,7 @@
                 android:textColor="@color/titleText" />
 
             <TextView
-                android:id="@+id/textView6"
+                android:id="@+id/artist_fpu_compact_player"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
@@ -66,7 +65,7 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/imageView8"
+            android:id="@+id/play_fpu_compact_player"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginEnd="56dp"
@@ -79,18 +78,18 @@
             app:tint="@color/imageTint" />
 
         <ProgressBar
-            android:id="@+id/progressBar2"
+            android:id="@+id/buffer_fpu_compact_player"
             style="?android:attr/progressBarStyle"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="@id/imageView8"
-            app:layout_constraintEnd_toEndOf="@id/imageView8"
-            app:layout_constraintStart_toStartOf="@id/imageView8"
-            app:layout_constraintTop_toTopOf="@id/imageView8" />
+            app:layout_constraintBottom_toBottomOf="@id/play_fpu_compact_player"
+            app:layout_constraintEnd_toEndOf="@id/play_fpu_compact_player"
+            app:layout_constraintStart_toStartOf="@id/play_fpu_compact_player"
+            app:layout_constraintTop_toTopOf="@id/play_fpu_compact_player" />
 
         <ProgressBar
-            android:id="@+id/progressBar3"
+            android:id="@+id/progress_fpu_compact_player"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="0dp"
             android:layout_height="5dp"
@@ -101,7 +100,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/arrow_fpu_compact_player"
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_marginTop="15dp"
@@ -114,18 +113,18 @@
         app:tint="@color/imageTint" />
 
     <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/thumb_fpu"
         android:layout_width="250dp"
         android:layout_height="250dp"
         android:layout_marginTop="48dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageView2"
+        app:layout_constraintTop_toBottomOf="@id/arrow_fpu_compact_player"
         app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.RoundedSquare"
         app:srcCompat="@drawable/ic_zrytezene" />
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/title_fpu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -141,10 +140,10 @@
         android:textSize="26sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageView3" />
+        app:layout_constraintTop_toBottomOf="@id/thumb_fpu" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/artist_fpu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -154,54 +153,54 @@
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+        app:layout_constraintTop_toBottomOf="@+id/title_fpu" />
 
     <SeekBar
-        android:id="@+id/seekBar"
+        android:id="@+id/seekbar_fpu"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@id/imageView5"
+        app:layout_constraintBottom_toTopOf="@id/play_fpu"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/textView9"
+        android:id="@+id/current_duration_fpu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="--:--"
-        app:layout_constraintStart_toStartOf="@id/seekBar"
-        app:layout_constraintTop_toBottomOf="@id/seekBar" />
+        app:layout_constraintStart_toStartOf="@id/seekbar_fpu"
+        app:layout_constraintTop_toBottomOf="@id/seekbar_fpu" />
 
     <ImageView
-        android:id="@+id/imageView9"
+        android:id="@+id/repeat_fpu"
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:alpha="0.5"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="6dp"
-        app:layout_constraintLeft_toLeftOf="@id/seekBar"
-        app:layout_constraintTop_toTopOf="@id/imageView4"
+        app:layout_constraintLeft_toLeftOf="@id/seekbar_fpu"
+        app:layout_constraintTop_toTopOf="@id/prev_fpu"
         app:srcCompat="@drawable/ic_repeat"
         app:tint="@color/imageTint" />
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/prev_fpu"
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_marginEnd="6dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="6dp"
-        app:layout_constraintBottom_toBottomOf="@id/imageView5"
-        app:layout_constraintEnd_toStartOf="@id/imageView5"
+        app:layout_constraintBottom_toBottomOf="@id/play_fpu"
+        app:layout_constraintEnd_toStartOf="@id/play_fpu"
         app:srcCompat="@drawable/ic_skip_previous"
         app:tint="@color/imageTint" />
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/play_fpu"
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_marginBottom="50dp"
@@ -214,34 +213,34 @@
         app:tint="@color/imageTint" />
 
     <ProgressBar
-        android:id="@+id/progressBar"
+        android:id="@+id/buffer_fpu"
         style="?android:attr/progressBarStyle"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@id/imageView5"
-        app:layout_constraintEnd_toEndOf="@id/imageView5"
-        app:layout_constraintStart_toStartOf="@id/imageView5"
-        app:layout_constraintTop_toTopOf="@id/imageView5" />
+        app:layout_constraintBottom_toBottomOf="@id/play_fpu"
+        app:layout_constraintEnd_toEndOf="@id/play_fpu"
+        app:layout_constraintStart_toStartOf="@id/play_fpu"
+        app:layout_constraintTop_toTopOf="@id/play_fpu" />
 
     <ImageView
-        android:id="@+id/imageView6"
+        android:id="@+id/rewind_fpu"
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_marginStart="6dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="6dp"
-        app:layout_constraintBottom_toBottomOf="@id/imageView5"
-        app:layout_constraintStart_toEndOf="@id/imageView5"
+        app:layout_constraintBottom_toBottomOf="@id/play_fpu"
+        app:layout_constraintStart_toEndOf="@id/play_fpu"
         app:srcCompat="@drawable/ic_skip_next"
         app:tint="@color/imageTint" />
 
     <TextView
-        android:id="@+id/textView10"
+        android:id="@+id/max_duration_fpu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:text="--:--"
-        app:layout_constraintEnd_toEndOf="@id/seekBar"
-        app:layout_constraintTop_toBottomOf="@id/seekBar" />
+        app:layout_constraintEnd_toEndOf="@id/seekbar_fpu"
+        app:layout_constraintTop_toBottomOf="@id/seekbar_fpu" />
 </androidx.constraintlayout.widget.ConstraintLayout>
