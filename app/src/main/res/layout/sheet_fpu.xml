@@ -183,12 +183,12 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:padding="6dp"
         app:layout_constraintLeft_toLeftOf="@id/seekbar_fpu"
-        app:layout_constraintTop_toTopOf="@id/prev_fpu"
+        app:layout_constraintTop_toTopOf="@id/rewind_fpu"
         app:srcCompat="@drawable/ic_repeat"
         app:tint="@color/imageTint" />
 
     <ImageView
-        android:id="@+id/prev_fpu"
+        android:id="@+id/rewind_fpu"
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_marginEnd="6dp"
@@ -224,7 +224,7 @@
         app:layout_constraintTop_toTopOf="@id/play_fpu" />
 
     <ImageView
-        android:id="@+id/rewind_fpu"
+        android:id="@+id/forward_fpu"
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_marginStart="6dp"

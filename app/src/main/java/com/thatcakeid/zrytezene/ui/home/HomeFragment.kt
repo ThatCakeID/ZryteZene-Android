@@ -3,6 +3,8 @@ package com.thatcakeid.zrytezene.ui.home
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.google.firebase.auth.FirebaseAuth
 import com.thatcakeid.zrytezene.R
 import com.thatcakeid.zrytezene.databinding.FragmentHomeBinding
 import com.zhuinden.fragmentviewbindingdelegatekt.viewBinding

@@ -1,8 +1,11 @@
 package com.thatcakeid.zrytezene.services
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.support.v4.media.MediaBrowserCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
@@ -15,6 +18,8 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
 import com.google.android.exoplayer2.upstream.cache.CacheDataSource
 import com.google.android.exoplayer2.upstream.cache.SimpleCache
 import com.thatcakeid.zrytezene.ExtraMetadata
+import com.thatcakeid.zrytezene.R
+import com.thatcakeid.zrytezene.data.MusicEntry
 
 class MusicService : MediaBrowserServiceCompat() {
     private var mMediaSession: MediaSessionCompat? = null
@@ -24,15 +29,37 @@ class MusicService : MediaBrowserServiceCompat() {
     private var audioSpeed = 0f
 
     private val playbackStateListener = PlaybackStateListener()
+    private var playerState = 0
 
-    private var oldUri: Uri? = null
+    private val handler = Handler(Looper.getMainLooper())
+    private val runnable = object : Runnable {
+        override fun run() {
+            mMediaSession?.setPlaybackState(
+                PlaybackStateCompat.Builder().setState(
+                    playerState,
+                    mExoPlayer!!.currentPosition,
+                    audioSpeed
+                ).build()
+            )
+            handler.postDelayed(this, 100)
+        }
+    }
+
+    private lateinit var preferences: SharedPreferences
+    private var playlist : ArrayList<MusicEntry> = ArrayList()
+
     private val mMediaSessionCallback = object : MediaSessionCompat.Callback() {
-        override fun onPlayFromUri(uri: Uri?, extras: Bundle?) {
-            super.onPlayFromUri(uri, extras)
-            if (uri != oldUri)
-                play(uri!!)
-            else play()
-            oldUri = uri
+        override fun onCustomAction(action: String?, extras: Bundle?) {
+            super.onCustomAction(action, extras)
+            if (action == "playFromArray") {
+                playlist = extras?.get("array") as ArrayList<MusicEntry>
+                play(extras.getInt("pos"))
+            }
+
+            if (action == "setSpeed") {
+                val speed = extras!!.getFloat("speed", 1f)
+                mExoPlayer?.playbackParameters = PlaybackParameters(speed, speed)
+            }
         }
 
         override fun onPause() {
@@ -49,6 +76,11 @@ class MusicService : MediaBrowserServiceCompat() {
             super.onPlay()
             play()
         }
+
+        override fun onSeekTo(pos: Long) {
+            super.onSeekTo(pos)
+            mExoPlayer?.seekTo(pos)
+        }
     }
 
     private val audioAttributes: AudioAttributes =
@@ -59,6 +91,7 @@ class MusicService : MediaBrowserServiceCompat() {
 
     override fun onCreate() {
         super.onCreate()
+        preferences = getSharedPreferences("data", MODE_PRIVATE)
         initializePlayer()
         mMediaSession = MediaSessionCompat(baseContext, "tag for debugging").apply {
             mStateBuilder = PlaybackStateCompat.Builder()
@@ -94,34 +127,37 @@ class MusicService : MediaBrowserServiceCompat() {
             }
     }
 
-    private fun play(uri: Uri) {
+    private fun play(pos : Int) {
+        handler.removeCallbacks(runnable)
         mExoPlayer?.apply {
-            setMediaItem(MediaItem.fromUri(uri))
+            stop()
+            setMediaItem(MediaItem.fromUri(playlist[pos].musicUrl))
             prepare()
-            updatePlaybackState(PlaybackStateCompat.STATE_BUFFERING)
         }
     }
 
     private fun play() {
-        mExoPlayer?.apply {
-            play()
-            updatePlaybackState(PlaybackStateCompat.STATE_PLAYING)
-            mMediaSession?.isActive = true
-        }
+        mExoPlayer?.play()
+        updatePlaybackState(PlaybackStateCompat.STATE_PLAYING)
+        mMediaSession?.isActive = true
     }
 
     private fun pause() {
-        mExoPlayer?.apply {
-            pause()
-            updatePlaybackState(PlaybackStateCompat.STATE_PAUSED)
-        }
+        mExoPlayer?.pause()
+        updatePlaybackState(PlaybackStateCompat.STATE_PAUSED)
     }
 
     private fun stop() {
+        handler.removeCallbacks(runnable)
+        mExoPlayer?.stop()
+        updatePlaybackState(PlaybackStateCompat.STATE_STOPPED)
+    }
+
+    private fun destroy() {
+        handler.removeCallbacks(runnable)
         mExoPlayer?.stop()
         mExoPlayer?.release()
         mExoPlayer = null
-        updatePlaybackState(PlaybackStateCompat.STATE_NONE)
         mMediaSession?.isActive = false
         mMediaSession?.release()
     }
@@ -132,7 +168,7 @@ class MusicService : MediaBrowserServiceCompat() {
     }
 
     override fun onGetRoot(clientPackageName: String, clientUid: Int, rootHints: Bundle?): BrowserRoot {
-        return BrowserRoot("", null)
+        return BrowserRoot(getString(R.string.app_name), null)
     }
 
     override fun onLoadChildren(parentId: String, result: Result<MutableList<MediaBrowserCompat.MediaItem>>) {
@@ -140,10 +176,11 @@ class MusicService : MediaBrowserServiceCompat() {
 
     override fun onDestroy() {
         super.onDestroy()
-        stop()
+        destroy()
     }
 
     private fun updatePlaybackState(state: Int) {
+        playerState = state
         mMediaSession?.setPlaybackState(
             PlaybackStateCompat.Builder().setState(
                 state,
@@ -156,20 +193,21 @@ class MusicService : MediaBrowserServiceCompat() {
     private inner class PlaybackStateListener : Player.Listener {
         override fun onPlaybackStateChanged(playbackState: Int) {
             super.onPlaybackStateChanged(playbackState)
-
             when(playbackState) {
                 ExoPlayer.STATE_READY -> {
+                    handler.post(runnable)
                     play()
                 }
                 ExoPlayer.STATE_ENDED -> {
-                    stop()
+                    when(preferences.getInt("playMode", 0)) {
+                        0, 1, 3 -> TODO("Implement this")
+                        2 -> play()
+                    }
                 }
-                Player.STATE_BUFFERING -> {
-                    TODO()
+                ExoPlayer.STATE_BUFFERING -> {
+                    updatePlaybackState(PlaybackStateCompat.STATE_BUFFERING)
                 }
-                Player.STATE_IDLE -> {
-                    TODO()
-                }
+                ExoPlayer.STATE_IDLE -> { } // Nothing to do
             }
         }
     }
