@@ -13,6 +13,6 @@
 
         app:defaultNavHost="true"
         app:navGraph="@navigation/startup_nav"
-        tools:layout="@layout/fragment_splash" />
+        tools:layout="@layout/fragment_startup" />
 
 </FrameLayout>
