@@ -31,6 +31,9 @@ class MusicService : MediaBrowserServiceCompat() {
     private val playbackStateListener = PlaybackStateListener()
     private var playerState = 0
 
+    private var playlist : ArrayList<MusicEntry>? = null
+    private var currentPos = -1
+
     private val handler = Handler(Looper.getMainLooper())
     private val runnable = object : Runnable {
         override fun run() {
@@ -46,7 +49,6 @@ class MusicService : MediaBrowserServiceCompat() {
     }
 
     private lateinit var preferences: SharedPreferences
-    private var playlist : ArrayList<MusicEntry> = ArrayList()
 
     private val mMediaSessionCallback = object : MediaSessionCompat.Callback() {
         override fun onCustomAction(action: String?, extras: Bundle?) {
@@ -54,11 +56,6 @@ class MusicService : MediaBrowserServiceCompat() {
             if (action == "playFromArray") {
                 playlist = extras?.get("array") as ArrayList<MusicEntry>
                 play(extras.getInt("pos"))
-            }
-
-            if (action == "setSpeed") {
-                val speed = extras!!.getFloat("speed", 1f)
-                mExoPlayer?.playbackParameters = PlaybackParameters(speed, speed)
             }
         }
 
@@ -81,6 +78,24 @@ class MusicService : MediaBrowserServiceCompat() {
             super.onSeekTo(pos)
             mExoPlayer?.seekTo(pos)
         }
+
+        override fun onSkipToNext() {
+            super.onSkipToNext()
+            playNext()
+        }
+
+        override fun onSkipToPrevious() {
+            super.onSkipToPrevious()
+        }
+
+        override fun onSetPlaybackSpeed(speed: Float) {
+            super.onSetPlaybackSpeed(speed)
+
+            /** Since this method doesn't provide a way to set pitch, we'll just use this method
+             * to call a function to update it
+             **/
+            updateSpeed()
+        }
     }
 
     private val audioAttributes: AudioAttributes =
@@ -93,7 +108,8 @@ class MusicService : MediaBrowserServiceCompat() {
         super.onCreate()
         preferences = getSharedPreferences("data", MODE_PRIVATE)
         initializePlayer()
-        mMediaSession = MediaSessionCompat(baseContext, "tag for debugging").apply {
+        updateSpeed()
+        mMediaSession = MediaSessionCompat(baseContext, "PLAYERSESSION").apply {
             mStateBuilder = PlaybackStateCompat.Builder()
                 .setActions(PlaybackStateCompat.ACTION_PLAY or PlaybackStateCompat.ACTION_PLAY_PAUSE)
 
@@ -131,7 +147,7 @@ class MusicService : MediaBrowserServiceCompat() {
         handler.removeCallbacks(runnable)
         mExoPlayer?.apply {
             stop()
-            setMediaItem(MediaItem.fromUri(playlist[pos].musicUrl))
+            setMediaItem(MediaItem.fromUri(playlist!![pos].musicUrl))
             prepare()
         }
     }
@@ -142,24 +158,46 @@ class MusicService : MediaBrowserServiceCompat() {
         mMediaSession?.isActive = true
     }
 
+    private fun playNext() {
+        when(preferences.getInt("playMode", 0)) {
+            0 -> if (playlist!!.size > currentPos + 1) {
+                play(currentPos + 1)
+            } else stop()
+            1 -> if (currentPos > 0) {
+                play(currentPos - 1)
+            } else stop()
+            2 -> play()
+        }
+    }
+
     private fun pause() {
         mExoPlayer?.pause()
         updatePlaybackState(PlaybackStateCompat.STATE_PAUSED)
     }
 
     private fun stop() {
+        currentPos = -1
+        playlist = null
         handler.removeCallbacks(runnable)
         mExoPlayer?.stop()
         updatePlaybackState(PlaybackStateCompat.STATE_STOPPED)
     }
 
     private fun destroy() {
+        currentPos = -1
+        playlist = null
         handler.removeCallbacks(runnable)
         mExoPlayer?.stop()
         mExoPlayer?.release()
         mExoPlayer = null
         mMediaSession?.isActive = false
         mMediaSession?.release()
+    }
+
+    private fun updateSpeed() {
+        val speed = preferences.getFloat("speed", 1.0f)
+        val pitch = preferences.getFloat("pitch", 1.0f)
+        mExoPlayer?.playbackParameters = PlaybackParameters(speed, pitch)
     }
 
     override fun onTaskRemoved(rootIntent: Intent?) {
@@ -198,12 +236,9 @@ class MusicService : MediaBrowserServiceCompat() {
                     handler.post(runnable)
                     play()
                 }
-                ExoPlayer.STATE_ENDED -> {
-                    when(preferences.getInt("playMode", 0)) {
-                        0, 1, 3 -> TODO("Implement this")
-                        2 -> play()
-                    }
-                }
+
+                ExoPlayer.STATE_ENDED -> playNext()
+
                 ExoPlayer.STATE_BUFFERING -> {
                     updatePlaybackState(PlaybackStateCompat.STATE_BUFFERING)
                 }
